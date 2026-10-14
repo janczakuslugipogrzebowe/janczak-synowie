@@ -9,38 +9,68 @@ const response = (data: unknown, status: number) => NextResponse.json(data, {
 });
 
 export async function POST(request: Request) {
-  if (!isSameOrigin(request)) return response({ error: "Nieprawidłowe pochodzenie żądania." }, 403);
-  if (!isAdminConfigured()) return response({ error: "Serwer nie został skonfigurowany." }, 503);
-  if (!request.headers.get("content-type")?.startsWith("application/json"))
-    return response({ error: "Wymagany JSON." }, 415);
+  if (!isSameOrigin(request)) {
+    return response({ error: "Nieprawidłowe pochodzenie żądania." }, 403);
+  }
+  if (!isAdminConfigured()) {
+    console.error("[admin/session] Missing Firebase Admin environment variables or admin UID.");
+    return response({ error: "Brakuje konfiguracji Firebase Admin na serwerze." }, 503);
+  }
+  if (!request.headers.get("content-type")?.startsWith("application/json")) {
+    return response({ error: "Wymagany format JSON." }, 415);
+  }
+
+  let idToken: string;
   try {
     const input = await request.text();
     if (input.length > 6_000) return response({ error: "Zbyt duże żądanie." }, 413);
     const body: unknown = JSON.parse(input);
-    if (!body || typeof body !== "object" || Array.isArray(body) || !("idToken" in body))
+    if (!body || typeof body !== "object" || Array.isArray(body) || !("idToken" in body)) {
       return response({ error: "Brak tokenu logowania." }, 400);
-    const idToken = (body as { idToken: unknown }).idToken;
-    if (typeof idToken !== "string" || idToken.length < 100 || idToken.length > 5_000)
+    }
+    const value = (body as { idToken: unknown }).idToken;
+    if (typeof value !== "string" || value.length < 100 || value.length > 5_000) {
       return response({ error: "Nieprawidłowy token." }, 400);
+    }
+    idToken = value;
+  } catch {
+    return response({ error: "Niepoprawne dane logowania." }, 400);
+  }
 
+  try {
     const decoded = await cmsAuth().verifyIdToken(idToken, true);
-    if (decoded.uid !== process.env.FIREBASE_ADMIN_UID)
+    if (decoded.uid !== process.env.FIREBASE_ADMIN_UID) {
       return response({ error: "Brak uprawnień administratora." }, 403);
+    }
 
-    // Firebase zaleca niedawne logowanie przy wystawianiu długotrwałej sesji.
     const now = Math.floor(Date.now() / 1000);
-    if (typeof decoded.auth_time !== "number" || now - decoded.auth_time > 5 * 60 || decoded.auth_time > now + 60)
-      return response({ error: "Zaloguj się ponownie, aby potwierdzić tożsamość administratora." }, 401);
+    if (typeof decoded.auth_time !== "number" || now - decoded.auth_time > 5 * 60 || decoded.auth_time > now + 60) {
+      return response({ error: "Zaloguj się ponownie, aby potwierdzić tożsamość." }, 401);
+    }
 
     const cookie = await cmsAuth().createSessionCookie(idToken, { expiresIn: SESSION_DURATION_MS });
     const result = response({ ok: true }, 200);
     result.cookies.set({
-      name: ADMIN_COOKIE, value: cookie, httpOnly: true,
-      secure: process.env.NODE_ENV === "production", sameSite: "strict",
-      path: "/", maxAge: Math.floor(SESSION_DURATION_MS / 1000),
+      name: ADMIN_COOKIE,
+      value: cookie,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: Math.floor(SESSION_DURATION_MS / 1000),
     });
     return result;
-  } catch {
-    return response({ error: "Nie udało się rozpocząć sesji. Zaloguj się ponownie." }, 401);
+  } catch (error) {
+    // Never log credentials, ID tokens or session cookies.
+    const code = typeof error === "object" && error !== null && "code" in error
+      ? String((error as { code: unknown }).code)
+      : "unknown";
+    console.error("[admin/session] Firebase session creation failed. Code:", code);
+    const misconfigured = /credential|private.key|invalid.pem|invalid-credential|app\/invalid-credential/i.test(code);
+    return response({
+      error: misconfigured
+        ? "Konfiguracja Firebase Admin jest niepoprawna. Sprawdź klucz serwerowy na Vercelu."
+        : "Nie udało się utworzyć sesji. Sprawdź logi serwera Vercel.",
+    }, misconfigured ? 503 : 500);
   }
 }
