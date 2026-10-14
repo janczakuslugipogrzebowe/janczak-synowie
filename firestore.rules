@@ -1,0 +1,8 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // All website content is accessed on the server with Firebase Admin SDK.
+    // The browser must never read or write CMS documents directly.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

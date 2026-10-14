@@ -43,3 +43,5 @@ next-env.d.ts
 # Local readable code export
 /PROJECT_EXPORT.md
 
+# Local migration backup
+/.v07-backup/

@@ -1,4 +1,34 @@
-/* Tailwind pozostaje dostępny dla /admin/login i przyszłych komponentów CMS.
-   Krytyczne style publicznej strony znajdują się w src/lib/site-styles.ts
-   i są dodawane bezpośrednio do HTML przez layout.tsx. */
 @import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-manrope), Arial, sans-serif;
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --color-forest: #14231d;
+  --color-forest-deep: #0d1814;
+  --color-olive: #2b3d32;
+  --color-champagne: #dfc494;
+  --color-antique: #ad8b5b;
+  --color-ivory: #f6f1e8;
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 160rem;
+}
+
+:root { color-scheme: light; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Global interaction affordance only; component visuals and motion stay local. */
+@layer base {
+  :where(a[href], button:not(:disabled), [role="button"]:not([aria-disabled="true"]), summary,
+    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled)) {
+    @apply cursor-pointer;
+  }
+  :where(button:disabled, [role="button"][aria-disabled="true"],
+    input[type="button"]:disabled, input[type="submit"]:disabled,
+    input[type="reset"]:disabled) {
+    @apply cursor-not-allowed;
+  }
+}
