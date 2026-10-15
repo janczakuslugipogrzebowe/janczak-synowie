@@ -1,7 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { TbArrowLeft, TbExternalLink } from "react-icons/tb";
+import { TbExternalLink } from "react-icons/tb";
 import { useCmsEditor } from "@/components/admin/use-cms-editor";
 import EditorState from "@/components/admin/editor-state";
 import {Field,PageHeading,fieldClass,primaryButton,subtleButton,surfaceClass} from "@/components/ui/admin-fields";
@@ -10,7 +9,7 @@ import {PAGE_DEFAULTS,PAGE_LABELS,isPageSlug,parsePageContent,type PageSlug} fro
 
 function PageEditor({slug}:{slug:PageSlug}){
  const ed=useCmsEditor(`/api/admin/pages/${slug}`,PAGE_DEFAULTS[slug],parsePageContent);
- return <main id="main"><PageHeading eyebrow={`Edytor witryny / ${PAGE_LABELS[slug]}`} title="Sekcja wprowadzająca"><Link href="/admin/site" className={subtleButton}><TbArrowLeft/>Podstrony</Link></PageHeading>
+ return <main id="main"><PageHeading eyebrow={`Edytor witryny / ${PAGE_LABELS[slug]}`} title="Sekcja wprowadzająca"/>
  <EditorState phase={ed.phase} error={ed.error} retry={ed.retry}/>
  {ed.phase==="ready"&&<div className="grid items-start gap-6 xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] 3xl:grid-cols-[minmax(380px,490px)_minmax(0,1fr)]">
   <section className={`${surfaceClass} space-y-5 p-6 3xl:p-8`} aria-label="Edycja sekcji"><h2 className="font-display text-3xl font-semibold">Teksty</h2>

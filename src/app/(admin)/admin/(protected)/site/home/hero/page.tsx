@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import {useEffect,useState} from "react";
-import { TbArrowLeft,TbDeviceDesktop,TbDeviceMobile,TbExternalLink } from "react-icons/tb";
-import HeroSection from "@/components/hero/hero-section";
+import { TbDeviceDesktop,TbDeviceMobile,TbExternalLink } from "react-icons/tb";
+import HeroLivePreview from "@/components/admin/hero-live-preview";
 import {useCmsEditor} from "@/components/admin/use-cms-editor";
 import EditorState from "@/components/admin/editor-state";
 import {Field,PageHeading,fieldClass,primaryButton,subtleButton,surfaceClass} from "@/components/ui/admin-fields";
@@ -28,7 +28,7 @@ export default function HeroEditor(){
  const ed=useCmsEditor("/api/admin/hero",DEFAULT_HERO,parseHero);
  const [settings,setSettings]=useState<SiteSettings>(DEFAULT_SITE_SETTINGS),[phone,setPhone]=useState(false);
  useEffect(()=>{const ac=new AbortController();fetch("/api/admin/settings",{signal:ac.signal,cache:"no-store"}).then(r=>r.json()).then(p=>{if(!ac.signal.aborted&&p.published)setSettings(parseSiteSettings(p.published));}).catch(()=>{});return()=>ac.abort();},[]);
- return <main id="main"><PageHeading eyebrow="Edytor witryny / Strona główna" title="Sekcja Hero"><Link href="/admin/site" className={subtleButton}><TbArrowLeft/>Podstrony</Link></PageHeading>
+ return <main id="main"><PageHeading eyebrow="Edytor witryny / Strona główna" title="Sekcja Hero"/>
  <EditorState phase={ed.phase} error={ed.error} retry={ed.retry}/>
  {ed.phase==="ready"&&<div className="grid items-start gap-6 xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] 3xl:grid-cols-[minmax(380px,490px)_minmax(0,1fr)]">
  <section aria-label="Formularz Hero" className={`${surfaceClass} space-y-5 p-6 3xl:p-8`}><h2 className="font-display text-3xl font-semibold">Teksty</h2>
@@ -46,7 +46,7 @@ export default function HeroEditor(){
  <div className="flex flex-wrap gap-2 border-t border-[#e7e6df] pt-5"><button disabled={ed.busy||!ed.unsaved} className={subtleButton} onClick={()=>void ed.save(false)}>Zapisz szkic</button><button disabled={ed.busy||(!ed.unsaved&&!ed.unpublished)} className={primaryButton} onClick={()=>void ed.save(true)}>Opublikuj</button></div>
  {ed.message&&<p role="status" className="text-sm text-[#64765d]">{ed.message}</p>}
  </section>
- <section aria-label="Podgląd Hero" className="min-w-0 xl:sticky xl:top-5 xl:max-h-[calc(100dvh-2.5rem)] xl:self-start xl:overflow-y-auto xl:[scrollbar-width:thin]"><div className="mb-3 flex flex-wrap items-center justify-between gap-3"><span className="text-xs font-semibold text-[#647067]">Podgląd na żywo</span><div className="flex gap-2"><button onClick={()=>setPhone(v=>!v)} className={subtleButton} type="button">{phone?<TbDeviceDesktop/>:<TbDeviceMobile/>}{phone?"Desktop":"Telefon"}</button><Link href="/" target="_blank" rel="noopener noreferrer" className={subtleButton}><TbExternalLink/>Strona</Link></div></div><div className={`overflow-hidden rounded-xl border border-[#e4e0d6] bg-white shadow-lg ${phone?"mx-auto max-w-[390px]":"w-full"}`}><HeroSection data={ed.draft} settings={settings} preview compact={phone}/></div></section>
+ <section aria-label="Podgląd Hero" className="min-w-0 xl:sticky xl:top-5 xl:max-h-[calc(100dvh-2.5rem)] xl:self-start xl:overflow-y-auto xl:[scrollbar-width:thin]"><div className="mb-3 flex flex-wrap items-center justify-between gap-3"><span className="text-xs font-semibold text-[#647067]">Podgląd na żywo</span><div className="flex gap-2"><button onClick={()=>setPhone(v=>!v)} className={subtleButton} type="button">{phone?<TbDeviceDesktop/>:<TbDeviceMobile/>}{phone?"Desktop":"Telefon"}</button><Link href="/" target="_blank" rel="noopener noreferrer" className={subtleButton}><TbExternalLink/>Strona</Link></div></div><HeroLivePreview hero={ed.draft} settings={settings} phone={phone} /></section>
  </div>}
  </main>;
 }

@@ -11,7 +11,8 @@
     "test:hero": "node --experimental-strip-types --test scripts/tests/hero-schema.test.mjs",
     "test:security": "node --experimental-strip-types --test scripts/tests/admin-origin.test.mjs",
     "test:settings": "node --experimental-strip-types --test scripts/tests/settings-schema.test.mjs",
-    "test:pages": "node --experimental-strip-types --test scripts/tests/pages-schema.test.mjs"
+    "test:pages": "node --experimental-strip-types --test scripts/tests/pages-schema.test.mjs",
+    "test:about": "node --experimental-strip-types --test scripts/tests/home-about-schema.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

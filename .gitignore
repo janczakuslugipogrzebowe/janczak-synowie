@@ -45,3 +45,8 @@ next-env.d.ts
 
 # Local migration backup
 /.v07-backup/
+
+# Firebase service-account credentials must never be committed
+*firebase-adminsdk*.json
+*service-account*.json
+*service_account*.json
