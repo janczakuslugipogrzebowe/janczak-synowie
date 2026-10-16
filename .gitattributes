@@ -1,0 +1,19 @@
+# Keep tracked source files in LF format on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# Native Windows command scripts use CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Explicitly mark common binary formats.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.zip binary

@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="pl" className={`${display.variable} ${body.variable}`}><body className="bg-ivory font-sans text-forest-deep antialiased">{children}</body></html>;
+  return <html lang="pl" data-scroll-behavior="smooth" className={`${display.variable} ${body.variable}`}><body className="bg-ivory font-sans text-forest-deep antialiased">{children}</body></html>;
 }

@@ -19,7 +19,7 @@ const controls = [
 export default function HomeAboutEditor(){
  const ed=useCmsEditor<HomeAboutContent>("/api/admin/home/about",DEFAULT_HOME_ABOUT,parseHomeAbout);
  const [phone,setPhone]=useState(false);
- return <main id="main"><PageHeading eyebrow="Edytor witryny / Strona główna" title="Sekcja O nas" description="Treść, fotografia i układ drugiej sekcji strony głównej."/>
+ return <main id="main"><PageHeading eyebrow="Edytor witryny / Strona główna" title="Sekcja O nas"/>
   <EditorState phase={ed.phase} error={ed.error} retry={ed.retry}/>
   {ed.phase==="ready"&&<div className="grid items-start gap-6 xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] 3xl:grid-cols-[minmax(380px,490px)_minmax(0,1fr)]">
     <section aria-label="Edycja O nas" className={`${surfaceClass} space-y-5 p-6 3xl:p-8`}>

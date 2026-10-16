@@ -8,7 +8,7 @@ import { TbArrowUpRight } from "react-icons/tb";
 import type { HomeAboutContent } from "@/lib/home-about/schema";
 
 /** The same component powers the public homepage and the editor preview. */
-export default function HomeAboutSection({data, preview = false}: {data: HomeAboutContent; preview?: boolean}) {
+export default function HomeAboutSection({data, preview = false, showBottomWave = true}: {data: HomeAboutContent; preview?: boolean; showBottomWave?: boolean}) {
   const reduced = useReducedMotion();
   const enter = (delay: number) => ({
     initial: reduced || preview ? false : {opacity: 0, y: 20},
@@ -63,9 +63,9 @@ export default function HomeAboutSection({data, preview = false}: {data: HomeAbo
       <Image src={data.imageUrl} alt="" fill quality={75} loading={preview?"eager":"lazy"} sizes="100vw" style={photoPosition} className="object-cover saturate-[.86] [mask-image:linear-gradient(to_bottom,transparent_0%,black_23%)]" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#14241c]/20 to-transparent" />
     </div>
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 170" preserveAspectRatio="none" className="pointer-events-none absolute bottom-[-1px] left-0 z-20 h-[72px] w-full fill-[#14241c] sm:h-[100px] lg:h-[clamp(100px,8vw,170px)]">
+    {showBottomWave && <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 170" preserveAspectRatio="none" className="pointer-events-none absolute bottom-[-1px] left-0 z-20 h-[72px] w-full fill-[#14241c] sm:h-[100px] lg:h-[clamp(100px,8vw,170px)]">
       <path d="M0 80 C158 32 278 116 478 100 C678 84 772 37 962 79 C1104 110 1301 121 1440 50 L1440 170 L0 170Z" />
-    </svg>
+    </svg>}
     </section>
   </>;
 }
