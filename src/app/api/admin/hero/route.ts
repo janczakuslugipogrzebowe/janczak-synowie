@@ -10,7 +10,12 @@ const response = (body: unknown, status = 200) => Response.json(body, { status, 
 
 type Authorization = { ok: true; uid: string } | { ok: false; status: number; error: string };
 async function authorize(): Promise<Authorization> {
-  if (!isAdminConfigured()) return { ok: false, status: 503, error: "Brakuje konfiguracji Firebase Admin SDK lub FIREBASE_ADMIN_UID." };
+  if (!isAdminConfigured())
+    return {
+      ok: false,
+      status: 503,
+      error: "Brakuje konfiguracji Firebase Admin SDK lub FIREBASE_ADMIN_UID.",
+    };
   const uid = await getAdminUid();
   if (!uid) return { ok: false, status: 401, error: "Sesja wygasła. Zaloguj się ponownie." };
   return { ok: true, uid };
@@ -22,8 +27,12 @@ export async function GET() {
   try {
     const [hero, settings] = await Promise.all([getAdminHeroState(), getAdminSiteSettings()]);
     return response({ ...hero, settings: settings.published });
+  } catch {
+    return response(
+      { error: "Nie udało się pobrać treści z Firestore. Sprawdź konfigurację i spróbuj ponownie." },
+      500,
+    );
   }
-  catch { return response({ error: "Nie udało się pobrać treści z Firestore. Sprawdź konfigurację i spróbuj ponownie." }, 500); }
 }
 
 async function write(request: Request, publish: boolean) {
@@ -51,5 +60,9 @@ async function write(request: Request, publish: boolean) {
   }
 }
 
-export async function PUT(request: Request) { return write(request, false); }
-export async function POST(request: Request) { return write(request, true); }
+export async function PUT(request: Request) {
+  return write(request, false);
+}
+export async function POST(request: Request) {
+  return write(request, true);
+}

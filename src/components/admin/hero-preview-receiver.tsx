@@ -13,7 +13,12 @@ export default function HeroPreviewReceiver() {
 
   useEffect(() => {
     const receive = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin || event.source !== window.parent || event.data?.type !== MESSAGE_TYPE) return;
+      if (
+        event.origin !== window.location.origin ||
+        event.source !== window.parent ||
+        event.data?.type !== MESSAGE_TYPE
+      )
+        return;
       try {
         setState({
           hero: parseHero(event.data.hero),

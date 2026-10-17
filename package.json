@@ -20,7 +20,9 @@
     "test:florist": "node --experimental-strip-types --test scripts/tests/home-florist-schema.test.mjs",
     "test:obituaries": "node --experimental-strip-types --test scripts/tests/obituaries-schema.test.mjs",
     "test:home-obituaries": "node --experimental-strip-types --test scripts/tests/home-obituaries-schema.test.mjs",
-    "test:ui": "node --test scripts/tests/ui-contract.test.mjs"
+    "test:ui": "node --test scripts/tests/ui-contract.test.mjs",
+    "format": "prettier --write src scripts package.json next.config.ts eslint.config.mjs tsconfig.json",
+    "format:check": "prettier --check src scripts package.json next.config.ts eslint.config.mjs tsconfig.json"
   },
   "dependencies": {
     "firebase": "^13.0.0",
@@ -39,6 +41,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "prettier": "^3.6.2"
   }
 }

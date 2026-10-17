@@ -13,27 +13,56 @@
   --breakpoint-4xl: 160rem;
 }
 
-:root { color-scheme: light; }
-html { scroll-behavior: smooth; }
-body { margin: 0; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+:root {
+  color-scheme: light;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 
 /* Global interaction affordance only; component visuals and motion stay local. */
 @layer base {
-  :where(a[href], button:not(:disabled), [role="button"]:not([aria-disabled="true"]), summary,
-    input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
-    input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
-    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
-    input[type="date"]:not(:disabled), input[type="datetime-local"]:not(:disabled),
-    input[type="time"]:not(:disabled), input[type="color"]:not(:disabled),
-    select:not(:disabled), [role="slider"]:not([aria-disabled="true"]),
-    [role="combobox"]:not([aria-disabled="true"]), [role="option"]:not([aria-disabled="true"])) {
+  :where(
+    a[href],
+    button:not(:disabled),
+    [role="button"]:not([aria-disabled="true"]),
+    summary,
+    input[type="button"]:not(:disabled),
+    input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled),
+    input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled),
+    input[type="range"]:not(:disabled),
+    input[type="date"]:not(:disabled),
+    input[type="datetime-local"]:not(:disabled),
+    input[type="time"]:not(:disabled),
+    input[type="color"]:not(:disabled),
+    select:not(:disabled),
+    [role="slider"]:not([aria-disabled="true"]),
+    [role="combobox"]:not([aria-disabled="true"]),
+    [role="option"]:not([aria-disabled="true"])
+  ) {
     @apply cursor-pointer;
   }
-  :where(button:disabled, [role="button"][aria-disabled="true"],
-    input[type="button"]:disabled, input[type="submit"]:disabled,
-    input[type="reset"]:disabled, select:disabled, input[type="range"]:disabled,
-    input[type="date"]:disabled, input[type="datetime-local"]:disabled) {
+  :where(
+    button:disabled,
+    [role="button"][aria-disabled="true"],
+    input[type="button"]:disabled,
+    input[type="submit"]:disabled,
+    input[type="reset"]:disabled,
+    select:disabled,
+    input[type="range"]:disabled,
+    input[type="date"]:disabled,
+    input[type="datetime-local"]:disabled
+  ) {
     @apply cursor-not-allowed;
   }
 }

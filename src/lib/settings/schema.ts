@@ -25,7 +25,10 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
 };
 
 export class SettingsValidationError extends Error {
-  constructor(message: string) { super(message); this.name = "SettingsValidationError"; }
+  constructor(message: string) {
+    super(message);
+    this.name = "SettingsValidationError";
+  }
 }
 
 export function normalizePhone(value: string): string {
@@ -41,8 +44,18 @@ export function isAllowedMapsUrl(value: string): boolean {
     const u = new URL(value);
     if (u.protocol !== "https:" || u.username || u.password || u.port) return false;
     const h = u.hostname.toLowerCase();
-    return h === "maps.app.goo.gl" || ((h === "www.google.com" || h === "google.com" || h === "maps.google.com" || h === "www.google.pl" || h === "google.pl") && (u.pathname.startsWith("/maps") || u.pathname === "/maps"));
-  } catch { return false; }
+    return (
+      h === "maps.app.goo.gl" ||
+      ((h === "www.google.com" ||
+        h === "google.com" ||
+        h === "maps.google.com" ||
+        h === "www.google.pl" ||
+        h === "google.pl") &&
+        (u.pathname.startsWith("/maps") || u.pathname === "/maps"))
+    );
+  } catch {
+    return false;
+  }
 }
 
 export function directionsUrl(settings: SiteSettings): string | null {
@@ -51,10 +64,12 @@ export function directionsUrl(settings: SiteSettings): string | null {
 
 /** Accept older published documents while strictly validating all new writes. */
 export function parseSiteSettings(value: unknown): SiteSettings {
-  if (!value || typeof value !== "object" || Array.isArray(value)) throw new SettingsValidationError("Nieprawidłowe dane firmy.");
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new SettingsValidationError("Nieprawidłowe dane firmy.");
   const input = value as Record<string, unknown>;
   const allowed = Object.keys(DEFAULT_SITE_SETTINGS);
-  if (Object.keys(input).some(key => !allowed.includes(key))) throw new SettingsValidationError("Niedozwolone pole formularza.");
+  if (Object.keys(input).some((key) => !allowed.includes(key)))
+    throw new SettingsValidationError("Niedozwolone pole formularza.");
   const merged = { ...DEFAULT_SITE_SETTINGS, ...input } as Record<string, unknown>;
   const result = {} as SiteSettings;
   for (const key of allowed as (keyof SiteSettings)[]) {
@@ -62,13 +77,21 @@ export function parseSiteSettings(value: unknown): SiteSettings {
     if (typeof raw !== "string") throw new SettingsValidationError(`Nieprawidłowe pole: ${key}`);
     const v = raw.trim();
     const optional = key === "email" || key === "mapsUrl";
-    if ((!optional && !v) || v.length > (key === "mapsUrl" ? 1800 : key === "companyDescription" ? 240 : 120) || /[\u0000-\u001F\u007F]/u.test(v))
+    if (
+      (!optional && !v) ||
+      v.length > (key === "mapsUrl" ? 1800 : key === "companyDescription" ? 240 : 120) ||
+      /[\u0000-\u001F\u007F]/u.test(v)
+    )
       throw new SettingsValidationError(`Niepoprawna wartość: ${key}`);
     result[key] = v;
   }
   normalizePhone(result.primaryPhone);
   normalizePhone(result.secondaryPhone);
-  if (result.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(result.email)) throw new SettingsValidationError("Nieprawidłowy adres e-mail.");
-  if (!isAllowedMapsUrl(result.mapsUrl)) throw new SettingsValidationError("Wklej prawidłowy link Google Maps (maps.app.goo.gl lub google.com/maps).");
+  if (result.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(result.email))
+    throw new SettingsValidationError("Nieprawidłowy adres e-mail.");
+  if (!isAllowedMapsUrl(result.mapsUrl))
+    throw new SettingsValidationError(
+      "Wklej prawidłowy link Google Maps (maps.app.goo.gl lub google.com/maps).",
+    );
   return result;
 }

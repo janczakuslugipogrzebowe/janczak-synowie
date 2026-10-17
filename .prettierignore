@@ -1,0 +1,19 @@
+# Generated outputs and downloaded files
+.next/
+node_modules/
+coverage/
+dist/
+out/
+build/
+.vercel/
+public/
+
+# Exports, bundled archives, logs
+PROJECT_EXPORT*.md
+*.zip
+*.log
+
+# Package managers own their lockfiles
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

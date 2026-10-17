@@ -5,6 +5,6 @@ import { PAGE_LABELS } from "@/lib/pages/schema";
 
 export const metadata: Metadata = { title: PAGE_LABELS["o-nas"] };
 export default async function Page() {
- const content = await getPublishedPage("o-nas");
- return <SubpageIntro content={content} />;
+  const content = await getPublishedPage("o-nas");
+  return <SubpageIntro content={content} />;
 }

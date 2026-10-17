@@ -54,7 +54,10 @@ export const DEFAULT_HERO: HeroContent = {
 };
 
 export class HeroValidationError extends Error {
-  constructor(message: string) { super(message); this.name = "HeroValidationError"; }
+  constructor(message: string) {
+    super(message);
+    this.name = "HeroValidationError";
+  }
 }
 
 function boundedString(data: Record<string, unknown>, key: keyof HeroContent, max: number) {
@@ -76,18 +79,27 @@ function num(data: Record<string, unknown>, key: keyof HeroContent, min: number,
 /** Optional fields are backward-compatible with Hero documents published before v1.0.2. */
 function designScale(data: Record<string, unknown>, key: keyof HeroContent, min: number, max: number) {
   const value = data[key] === undefined ? DEFAULT_HERO[key] : data[key];
-  if (typeof value !== "number" || !Number.isFinite(value) || !Number.isInteger(value) || value < min || value > max)
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    !Number.isInteger(value) ||
+    value < min ||
+    value > max
+  )
     throw new HeroValidationError(`Pole ${key}: zakres ${min}–${max}%.`);
   return value;
 }
 
 export function safeHref(href: string): boolean {
-  if (href.startsWith("/") && !href.startsWith("//") && !href.includes("\\") && !/[\u0000-\u0020]/.test(href)) return true;
+  if (href.startsWith("/") && !href.startsWith("//") && !href.includes("\\") && !/[\u0000-\u0020]/.test(href))
+    return true;
   if (/^tel:\+?[0-9 ()-]{5,22}$/.test(href)) return true;
   try {
     const url = new URL(href);
     return url.protocol === "https:" && Boolean(url.hostname) && !url.username && !url.password;
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
 export function safeImageUrl(href: string): boolean {
@@ -96,10 +108,17 @@ export function safeImageUrl(href: string): boolean {
   if (href === "/hero.png") return true;
   try {
     const url = new URL(href);
-    return url.protocol === "https:" && !url.username && !url.password &&
-      (url.hostname.endsWith(".public.blob.vercel-storage.com") || url.hostname === "public.blob.vercel-storage.com") &&
-      /\.(png|jpe?g|webp|avif)$/i.test(url.pathname);
-  } catch { return false; }
+    return (
+      url.protocol === "https:" &&
+      !url.username &&
+      !url.password &&
+      (url.hostname.endsWith(".public.blob.vercel-storage.com") ||
+        url.hostname === "public.blob.vercel-storage.com") &&
+      /\.(png|jpe?g|webp|avif)$/i.test(url.pathname)
+    );
+  } catch {
+    return false;
+  }
 }
 
 /** Whitelist known fields, reject dangerous paths and oversized values. */
@@ -136,7 +155,8 @@ export function parseHero(value: unknown): HeroContent {
     detailTwo: boundedString(data, "detailTwo", 50),
     detailThree: boundedString(data, "detailThree", 50),
   };
-  if (!safeImageUrl(hero.imageUrl)) throw new HeroValidationError("Zdjęcie: /hero.png lub publiczny obraz z Vercel Blob.");
+  if (!safeImageUrl(hero.imageUrl))
+    throw new HeroValidationError("Zdjęcie: /hero.png lub publiczny obraz z Vercel Blob.");
   if (!safeHref(hero.primaryHref) || !safeHref(hero.secondaryHref))
     throw new HeroValidationError("Link: dozwolone /ścieżka, tel: lub https://.");
   return hero;

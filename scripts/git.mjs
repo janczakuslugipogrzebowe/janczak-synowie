@@ -17,7 +17,7 @@ function git(args, { capture = false, allowFailure = false } = {}) {
   if (result.status !== 0 && !allowFailure) {
     throw new Error(
       capture
-        ? (result.stderr?.trim() || `Git zakończył się kodem ${result.status}.`)
+        ? result.stderr?.trim() || `Git zakończył się kodem ${result.status}.`
         : `Polecenie git ${args[0]} nie powiodło się (kod ${result.status}).`,
     );
   }
@@ -41,18 +41,23 @@ function verifyProject() {
 
 function checkForSecrets() {
   const staged = git(["diff", "--cached", "--name-only", "-z"], { capture: true })
-    .stdout.split("\0").filter(Boolean);
+    .stdout.split("\0")
+    .filter(Boolean);
 
   const unsafe = staged.filter((file) => {
     const name = file.replaceAll("\\", "/").split("/").at(-1) ?? "";
-    return (/^\.env(?:\..*)?$/i.test(name) && !/^\.env\.(example|sample)$/i.test(name)) ||
+    return (
+      (/^\.env(?:\..*)?$/i.test(name) && !/^\.env\.(example|sample)$/i.test(name)) ||
       /firebase-adminsdk.*\.json$/i.test(name) ||
       /service[-_]account.*\.json$/i.test(name) ||
-      /\.(pem|p12|pfx|key)$/i.test(name);
+      /\.(pem|p12|pfx|key)$/i.test(name)
+    );
   });
 
   if (unsafe.length > 0) {
-    throw new Error(`Wstrzymano commit: wykryto potencjalne sekrety w Git:\n${unsafe.join("\n")}\nUsuń je z indeksu przed ponowną próbą.`);
+    throw new Error(
+      `Wstrzymano commit: wykryto potencjalne sekrety w Git:\n${unsafe.join("\n")}\nUsuń je z indeksu przed ponowną próbą.`,
+    );
   }
 }
 

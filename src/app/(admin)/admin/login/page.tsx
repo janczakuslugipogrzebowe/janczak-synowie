@@ -13,7 +13,7 @@ async function readSessionResponse(response: Response): Promise<{ error?: string
 
   if (!body.trim() || !contentType.includes("application/json")) {
     throw new Error(
-      `Serwer sesji nie odpowiedział prawidłowo (HTTP ${response.status}). Sprawdź zmienne Firebase Admin i logi Functions na Vercelu.`
+      `Serwer sesji nie odpowiedział prawidłowo (HTTP ${response.status}). Sprawdź zmienne Firebase Admin i logi Functions na Vercelu.`,
     );
   }
 
@@ -57,7 +57,9 @@ export default function Login() {
       const payload = await readSessionResponse(response);
 
       if (!response.ok || payload.ok !== true) {
-        throw new Error(payload.error || `Nie udało się utworzyć sesji administratora (HTTP ${response.status}).`);
+        throw new Error(
+          payload.error || `Nie udało się utworzyć sesji administratora (HTTP ${response.status}).`,
+        );
       }
 
       setPassword("");
@@ -67,12 +69,16 @@ export default function Login() {
       // An unsuccessful server-side session must not leave an authenticated
       // Firebase client suggesting that admin access is available.
       if (auth.currentUser) {
-        try { await signOut(auth); } catch { /* Ignore client cleanup failures. */ }
+        try {
+          await signOut(auth);
+        } catch {
+          /* Ignore client cleanup failures. */
+        }
       }
       setError(
         cause instanceof Error && !cause.message.startsWith("Firebase:")
           ? cause.message
-          : "Nie udało się zalogować. Sprawdź dane konta."
+          : "Nie udało się zalogować. Sprawdź dane konta.",
       );
       setPassword("");
     } finally {
@@ -85,7 +91,9 @@ export default function Login() {
       <div className="grid w-full max-w-[970px] overflow-hidden rounded-3xl border border-[#e3ded4] bg-white shadow-[0_24px_90px_-50px_#111d16] md:grid-cols-[.92fr_1.08fr]">
         <div className="flex min-h-[380px] flex-col justify-between bg-[#14241c] p-9 text-ivory md:p-12">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-[.22em] text-champagne">Administracja serwisu</span>
+            <span className="text-[10px] font-bold uppercase tracking-[.22em] text-champagne">
+              Administracja serwisu
+            </span>
             <h1 className="mt-12 font-display text-[clamp(2.75rem,3vw,4.25rem)] font-medium leading-[.98] tracking-[-.035em] text-ivory md:mt-16">
               <span className="block whitespace-nowrap">Janczak</span>
               <span className="block whitespace-nowrap">i Synowie</span>
@@ -94,18 +102,39 @@ export default function Login() {
           <TbShieldCheck className="mt-12 size-10 text-champagne" strokeWidth={1.4} />
         </div>
         <div className="flex flex-col justify-center p-8 md:p-14">
-          <div className="mb-5 inline-flex size-12 items-center justify-center rounded-xl bg-[#f3f0e7] text-[#93754e]"><TbLock size={25} /></div>
+          <div className="mb-5 inline-flex size-12 items-center justify-center rounded-xl bg-[#f3f0e7] text-[#93754e]">
+            <TbLock size={25} />
+          </div>
           <h2 className="font-display text-5xl font-semibold">Logowanie</h2>
           <form onSubmit={submit} className="mt-9 space-y-5">
             <Field label="Adres e-mail">
-              <input className={fieldClass} type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input
+                className={fieldClass}
+                type="email"
+                autoComplete="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </Field>
             <Field label="Hasło">
-              <input className={fieldClass} type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input
+                className={fieldClass}
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </Field>
-            {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+            {error && (
+              <p role="alert" className="text-sm text-red-700">
+                {error}
+              </p>
+            )}
             <button type="submit" disabled={busy} className={`${primaryButton} w-full`}>
-              {busy ? "Logowanie…" : "Zaloguj się"}<TbArrowRight size={19} />
+              {busy ? "Logowanie…" : "Zaloguj się"}
+              <TbArrowRight size={19} />
             </button>
           </form>
         </div>

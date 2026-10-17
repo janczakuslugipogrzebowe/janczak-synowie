@@ -24,7 +24,17 @@ test("only known fields are accepted", () => {
 
 test("previously published Hero documents get responsive defaults", () => {
   const legacy = { ...DEFAULT_HERO };
-  for (const key of ["eyebrowScale","headingScale","descriptionScale","buttonScale","highlightIconScale","highlightTitleScale","highlightDescriptionScale","highlightGapScale"]) delete legacy[key];
+  for (const key of [
+    "eyebrowScale",
+    "headingScale",
+    "descriptionScale",
+    "buttonScale",
+    "highlightIconScale",
+    "highlightTitleScale",
+    "highlightDescriptionScale",
+    "highlightGapScale",
+  ])
+    delete legacy[key];
   const result = parseHero(legacy);
   assert.equal(result.headingScale, 100);
   assert.equal(result.highlightGapScale, 100);

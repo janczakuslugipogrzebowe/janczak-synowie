@@ -62,7 +62,8 @@ export default function HeroLivePreview({
         event.origin === window.location.origin &&
         event.source === frameRef.current?.contentWindow &&
         event.data?.type === READY_TYPE
-      ) sendState();
+      )
+        sendState();
     };
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
@@ -73,12 +74,13 @@ export default function HeroLivePreview({
     sendState();
   }, [sendState]);
 
-  const scale = dimensions.available > 0
-    ? Math.min(1, dimensions.available / dimensions.width)
-    : 0;
+  const scale = dimensions.available > 0 ? Math.min(1, dimensions.available / dimensions.width) : 0;
 
   return (
-    <div ref={hostRef} className="w-full overflow-hidden rounded-xl border border-[#e4e0d6] bg-forest-deep shadow-lg">
+    <div
+      ref={hostRef}
+      className="w-full overflow-hidden rounded-xl border border-[#e4e0d6] bg-forest-deep shadow-lg"
+    >
       <div
         aria-label={phone ? "Podgląd Hero na telefonie" : "Podgląd Hero na desktopie"}
         className="relative mx-auto overflow-hidden"

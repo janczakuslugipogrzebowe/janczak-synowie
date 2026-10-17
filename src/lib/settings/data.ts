@@ -16,7 +16,10 @@ export async function getPublishedSiteSettings(): Promise<SiteSettings> {
   return settings ? parseSiteSettings(settings) : DEFAULT_SITE_SETTINGS;
 }
 
-export async function getAdminSiteSettings(): Promise<{ published: SiteSettings; draft: SiteSettings | null }> {
+export async function getAdminSiteSettings(): Promise<{
+  published: SiteSettings;
+  draft: SiteSettings | null;
+}> {
   const [live, draft] = await Promise.all([liveRef().get(), draftRef().get()]);
   return {
     published: live.data()?.settings ? parseSiteSettings(live.data()?.settings) : DEFAULT_SITE_SETTINGS,

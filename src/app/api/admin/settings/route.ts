@@ -4,7 +4,8 @@ import { isSameOrigin } from "@/lib/admin/origin";
 import { getAdminSiteSettings, publishSiteSettings, saveSiteSettingsDraft } from "@/lib/settings/data";
 import { parseSiteSettings, SettingsValidationError } from "@/lib/settings/schema";
 
-const reply = (body: unknown, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store" } });
+const reply = (body: unknown, status = 200) =>
+  Response.json(body, { status, headers: { "Cache-Control": "private, no-store" } });
 
 async function authorize() {
   if (!isAdminConfigured()) return { error: "Nie skonfigurowano Firebase Admin.", status: 503 } as const;
@@ -16,8 +17,11 @@ async function authorize() {
 export async function GET() {
   const access = await authorize();
   if ("error" in access) return reply({ error: access.error }, access.status);
-  try { return reply(await getAdminSiteSettings()); }
-  catch { return reply({ error: "Nie udało się pobrać ustawień." }, 500); }
+  try {
+    return reply(await getAdminSiteSettings());
+  } catch {
+    return reply({ error: "Nie udało się pobrać ustawień." }, 500);
+  }
 }
 
 async function save(request: Request, publish: boolean) {
@@ -44,5 +48,9 @@ async function save(request: Request, publish: boolean) {
     return reply({ error: "Nie udało się zapisać ustawień." }, 500);
   }
 }
-export async function PUT(request: Request) { return save(request, false); }
-export async function POST(request: Request) { return save(request, true); }
+export async function PUT(request: Request) {
+  return save(request, false);
+}
+export async function POST(request: Request) {
+  return save(request, true);
+}

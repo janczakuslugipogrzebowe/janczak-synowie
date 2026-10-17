@@ -20,7 +20,10 @@ function getPrivateKey(): string {
     ? Buffer.from(encoded, "base64").toString("utf8")
     : (process.env.FIREBASE_PRIVATE_KEY ?? "")
         .trim()
-        .replace(/^(?:"([\s\S]*)"|'([\s\S]*)')$/, (_full, double: string | undefined, single: string | undefined) => double ?? single ?? "")
+        .replace(
+          /^(?:"([\s\S]*)"|'([\s\S]*)')$/,
+          (_full, double: string | undefined, single: string | undefined) => double ?? single ?? "",
+        )
         .replace(/\\n/g, "\n");
 
   const normalized = pem.replace(/\r\n/g, "\n").trim();
@@ -38,14 +41,21 @@ function adminApp(): App {
   const existing = getApps().find((app) => app.name === "janczak-cms");
   if (existing) return existing;
 
-  return initializeApp({
-    credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID!,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
-      privateKey: getPrivateKey(),
-    }),
-  }, "janczak-cms");
+  return initializeApp(
+    {
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID!,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+        privateKey: getPrivateKey(),
+      }),
+    },
+    "janczak-cms",
+  );
 }
 
-export function cmsDb() { return getFirestore(adminApp()); }
-export function cmsAuth() { return getAuth(adminApp()); }
+export function cmsDb() {
+  return getFirestore(adminApp());
+}
+export function cmsAuth() {
+  return getAuth(adminApp());
+}

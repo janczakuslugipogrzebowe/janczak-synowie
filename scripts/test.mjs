@@ -15,6 +15,7 @@ if (!commands.length) {
   process.exit(1);
 }
 
+commands.unshift("format");
 commands.push("lint", "build");
 const npmCli = process.env.npm_execpath;
 if (!npmCli) {
@@ -23,7 +24,9 @@ if (!npmCli) {
 }
 
 for (const [index, command] of commands.entries()) {
-  console.log(`\n${"═".repeat(55)}\n[${index + 1}/${commands.length}] npm run ${command}\n${"═".repeat(55)}\n`);
+  console.log(
+    `\n${"═".repeat(55)}\n[${index + 1}/${commands.length}] npm run ${command}\n${"═".repeat(55)}\n`,
+  );
 
   const result = spawnSync(process.execPath, [npmCli, "run", command], {
     cwd: projectRoot,
@@ -35,10 +38,12 @@ for (const [index, command] of commands.entries()) {
     process.exit(1);
   }
   if (result.status !== 0) {
-    console.error(`\nKontrola zatrzymana: npm run ${command} nie przeszedł. Popraw błąd i uruchom npm run test ponownie.`);
+    console.error(
+      `\nKontrola zatrzymana: npm run ${command} nie przeszedł. Popraw błąd i uruchom npm run test ponownie.`,
+    );
     process.exit(result.status || 1);
   }
 }
 
-console.log("\n✓ Wszystkie testy, ESLint i build zakończone poprawnie.");
+console.log("\n✓ Formatowanie, testy, ESLint i build zakończone poprawnie.");
 console.log("Możesz uruchomić serwer: npm run dev");

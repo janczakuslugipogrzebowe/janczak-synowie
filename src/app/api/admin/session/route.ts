@@ -3,10 +3,11 @@ import { cmsAuth } from "@/lib/firebase/admin";
 import { ADMIN_COOKIE, isAdminConfigured, SESSION_DURATION_MS } from "@/lib/admin/session";
 import { isSameOrigin } from "@/lib/admin/origin";
 
-const response = (data: unknown, status: number) => NextResponse.json(data, {
-  status,
-  headers: { "Cache-Control": "private, no-store" },
-});
+const response = (data: unknown, status: number) =>
+  NextResponse.json(data, {
+    status,
+    headers: { "Cache-Control": "private, no-store" },
+  });
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) {
@@ -44,7 +45,11 @@ export async function POST(request: Request) {
     }
 
     const now = Math.floor(Date.now() / 1000);
-    if (typeof decoded.auth_time !== "number" || now - decoded.auth_time > 5 * 60 || decoded.auth_time > now + 60) {
+    if (
+      typeof decoded.auth_time !== "number" ||
+      now - decoded.auth_time > 5 * 60 ||
+      decoded.auth_time > now + 60
+    ) {
       return response({ error: "Zaloguj się ponownie, aby potwierdzić tożsamość." }, 401);
     }
 
@@ -62,15 +67,20 @@ export async function POST(request: Request) {
     return result;
   } catch (error) {
     // Never log credentials, ID tokens or session cookies.
-    const code = typeof error === "object" && error !== null && "code" in error
-      ? String((error as { code: unknown }).code)
-      : "unknown";
+    const code =
+      typeof error === "object" && error !== null && "code" in error
+        ? String((error as { code: unknown }).code)
+        : "unknown";
     console.error("[admin/session] Firebase session creation failed. Code:", code);
-    const misconfigured = /credential|private.key|invalid.pem|invalid-credential|app\/invalid-credential/i.test(code);
-    return response({
-      error: misconfigured
-        ? "Konfiguracja Firebase Admin jest niepoprawna. Sprawdź klucz serwerowy na Vercelu."
-        : "Nie udało się utworzyć sesji. Sprawdź logi serwera Vercel.",
-    }, misconfigured ? 503 : 500);
+    const misconfigured =
+      /credential|private.key|invalid.pem|invalid-credential|app\/invalid-credential/i.test(code);
+    return response(
+      {
+        error: misconfigured
+          ? "Konfiguracja Firebase Admin jest niepoprawna. Sprawdź klucz serwerowy na Vercelu."
+          : "Nie udało się utworzyć sesji. Sprawdź logi serwera Vercel.",
+      },
+      misconfigured ? 503 : 500,
+    );
   }
 }
