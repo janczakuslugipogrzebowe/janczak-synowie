@@ -1,3 +1,5 @@
+import HomeFloristSection from "@/components/home-florist/home-florist-section";
+import {getPublishedHomeFlorist} from "@/lib/home-florist/data";
 import HomeServicesSection from "@/components/home-services/home-services-section";
 import { getPublishedHomeServices } from "@/lib/home-services/data";
 import HomeGuidanceSection from "@/components/home-guidance/home-guidance-section";
@@ -9,7 +11,7 @@ import { getPublishedHero } from "@/lib/hero/data";
 import { getPublishedSiteSettings } from "@/lib/settings/data";
 
 export default async function Home() {
-  const [hero, settings, about, guidance, services] = await Promise.all([getPublishedHero(), getPublishedSiteSettings(), getPublishedHomeAbout(), getPublishedHomeGuidance(), getPublishedHomeServices()]);
+  const [hero, settings, about, guidance, services, florist] = await Promise.all([getPublishedHero(), getPublishedSiteSettings(), getPublishedHomeAbout(), getPublishedHomeGuidance(), getPublishedHomeServices(), getPublishedHomeFlorist()]);
   return (
     <main id="main" className="min-h-dvh bg-forest-deep">
       <HeroSection data={hero} settings={settings} showWave={false} />
@@ -17,7 +19,8 @@ export default async function Home() {
         <HomeAboutSection data={about} showBottomWave={false} />
       </div>
       <HomeGuidanceSection data={guidance} settings={settings} followedByServices />
-      <HomeServicesSection data={services} joinsGuidance />
+      <HomeServicesSection data={services} joinsGuidance followedByFlorist />
+      <HomeFloristSection data={florist} joinsServices />
     </main>
   );
 }

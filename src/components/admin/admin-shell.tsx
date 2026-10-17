@@ -8,7 +8,7 @@ import {auth} from "@/lib/firebase/client";
 import {
   TbBuildingEstate,TbExternalLink,TbLogout,TbMenu2,TbX,
   TbLayoutDashboard,TbFileText,TbLayoutGrid,TbChevronDown,TbChevronRight,
-  TbHome,TbArticle,TbPhoto,TbNotes,TbHeartHandshake,
+  TbHome,TbArticle,TbPhoto,TbNotes,TbHeartHandshake,TbFlower,
 } from "react-icons/tb";
 import {PAGE_LABELS,PAGE_SLUGS,type PageSlug} from "@/lib/pages/schema";
 
@@ -26,6 +26,7 @@ function SiteTree({pathname,onNavigate}:{pathname:string;onNavigate:()=>void}) {
     {id:"about",label:"O nas",href:"/admin/site/home/about",Icon:TbArticle},
     {id:"guidance",label:"Co zrobić",href:"/admin/site/home/guidance",Icon:TbHeartHandshake},
     {id:"services",label:"Usługi",href:"/admin/site/home/services",Icon:TbLayoutGrid},
+    {id:"florist",label:"Kwiaciarnia",href:"/admin/site/home/florist",Icon:TbFlower},
   ];
   const active = (href:string) => pathname===href;
   const sectionStyle = (href:string) => `flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] transition-colors ${active(href)?"bg-[#e3c997]/16 font-semibold text-champagne":"text-white/65 hover:bg-white/8 hover:text-white"}`;

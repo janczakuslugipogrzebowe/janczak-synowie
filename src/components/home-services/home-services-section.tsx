@@ -8,9 +8,10 @@ import {TbArrowUpRight,TbBuildingChurch,TbTruckDelivery,TbBox,TbFlower} from "re
 import type {HomeServicesContent} from "@/lib/home-services/schema";
 
 const ICONS=[TbBuildingChurch,TbTruckDelivery,TbBox,TbFlower] as const;
+const SERVICES_LOWER_MASK = 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20148%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M0%200%20H1440%20V73%20C1269%20112%201108%2091%20939%2071%20C776%2052%20649%2082%20487%20100%20C315%20115%20172%2055%200%2085%20Z%22%2F%3E%3C%2Fsvg%3E")';
 
-type Props={data:HomeServicesContent;preview?:boolean;joinsGuidance?:boolean};
-export default function HomeServicesSection({data,preview=false,joinsGuidance=false}:Props) {
+type Props={data:HomeServicesContent;preview?:boolean;joinsGuidance?:boolean;followedByFlorist?:boolean};
+export default function HomeServicesSection({data,preview=false,joinsGuidance=false,followedByFlorist=false}:Props) {
   const reduce=useReducedMotion();
   const appear=(delay:number)=>({
     initial:reduce||preview?false:{opacity:0,y:28},
@@ -28,10 +29,19 @@ export default function HomeServicesSection({data,preview=false,joinsGuidance=fa
     "--services-card-description":size(.95,data.cardDescriptionScale,"rem"),
     "--services-photo-height":`${data.cardImageHeightScale/100}`,
     "--services-gap":`${data.cardGapScale/100}`,
+    ...(followedByFlorist ? {
+      "--services-wave-height":"clamp(48px,6.9vw,140px)",
+      maskImage:`linear-gradient(#000,#000), ${SERVICES_LOWER_MASK}`,
+      maskSize:"100% calc(100% - var(--services-wave-height)), 100% var(--services-wave-height)",
+      maskPosition:"top left, bottom left", maskRepeat:"no-repeat",
+      WebkitMaskImage:`linear-gradient(#000,#000), ${SERVICES_LOWER_MASK}`,
+      WebkitMaskSize:"100% calc(100% - var(--services-wave-height)), 100% var(--services-wave-height)",
+      WebkitMaskPosition:"top left, bottom left", WebkitMaskRepeat:"no-repeat",
+    }:{}),
   } as CSSProperties;
 
   return (
-    <section id="uslugi" aria-labelledby="home-services-title" style={vars} className={`@container/services relative isolate overflow-hidden bg-ivory text-forest-deep ${joinsGuidance ? "z-10 -mt-[clamp(50px,6.5vw,135px)]" : ""}`}>
+    <section id="uslugi" aria-labelledby="home-services-title" style={vars} className={`@container/services relative isolate overflow-hidden bg-ivory text-forest-deep ${joinsGuidance ? "z-10 -mt-[clamp(50px,6.5vw,135px)]" : followedByFlorist ? "z-10" : ""}`}>
       {/* On the homepage, the image now extends beneath the actual arch of the preceding section. */}
       <Image src={data.backgroundImageUrl} alt="" fill quality={75} loading={preview?"eager":"lazy"} sizes="100vw" className="pointer-events-none -z-20 object-cover object-center" style={{opacity:data.backgroundOpacity/100}} />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#f6f1e8]/55 via-[#fffaf1]/15 to-[#f6f1e8]/38" />
@@ -66,7 +76,7 @@ export default function HomeServicesSection({data,preview=false,joinsGuidance=fa
         </div>
       </div>
       {/* The lower boundary belongs to the upcoming dark florist section. */}
-      <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 148" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(48px,6.9vw,140px)] w-full fill-forest-deep"><path d="M0 85 C172 55 315 115 487 100 C649 82 776 52 939 71 C1108 91 1269 112 1440 73 L1440 148 L0 148 Z" /></svg>
+      {!followedByFlorist && <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 148" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(48px,6.9vw,140px)] w-full fill-forest-deep"><path d="M0 85 C172 55 315 115 487 100 C649 82 776 52 939 71 C1108 91 1269 112 1440 73 L1440 148 L0 148 Z" /></svg>}
     </section>
   );
 }

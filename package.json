@@ -16,7 +16,8 @@
     "test:pages": "node --experimental-strip-types --test scripts/tests/pages-schema.test.mjs",
     "test:security": "node --experimental-strip-types --test scripts/tests/admin-origin.test.mjs",
     "test:guidance": "node --experimental-strip-types --test scripts/tests/home-guidance-schema.test.mjs",
-    "test:services": "node --experimental-strip-types --test scripts/tests/home-services-schema.test.mjs"
+    "test:services": "node --experimental-strip-types --test scripts/tests/home-services-schema.test.mjs",
+    "test:florist": "node --experimental-strip-types --test scripts/tests/home-florist-schema.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",
