@@ -5,6 +5,7 @@ import {usePathname,useRouter} from "next/navigation";
 import {useState} from "react";
 import {signOut} from "firebase/auth";
 import {auth} from "@/lib/firebase/client";
+import {notify} from "@/components/ui/toast-provider";
 import {
   TbBuildingEstate,TbExternalLink,TbLogout,TbMenu2,TbX,
   TbLayoutDashboard,TbFileText,TbLayoutGrid,TbChevronDown,TbChevronRight,
@@ -27,6 +28,7 @@ function SiteTree({pathname,onNavigate}:{pathname:string;onNavigate:()=>void}) {
     {id:"guidance",label:"Co zrobić",href:"/admin/site/home/guidance",Icon:TbHeartHandshake},
     {id:"services",label:"Usługi",href:"/admin/site/home/services",Icon:TbLayoutGrid},
     {id:"florist",label:"Kwiaciarnia",href:"/admin/site/home/florist",Icon:TbFlower},
+    {id:"obituaries",label:"Nekrologi",href:"/admin/site/home/obituaries",Icon:TbFileText},
   ];
   const active = (href:string) => pathname===href;
   const sectionStyle = (href:string) => `flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] transition-colors ${active(href)?"bg-[#e3c997]/16 font-semibold text-champagne":"text-white/65 hover:bg-white/8 hover:text-white"}`;
@@ -58,7 +60,7 @@ export default function AdminShell({children}:{children:React.ReactNode}) {
   async function logout(){
     if(busy)return;setBusy(true);
     try{const r=await fetch("/api/admin/session/logout",{method:"POST",credentials:"same-origin"});if(!r.ok)throw new Error();await signOut(auth);router.replace("/admin/login");router.refresh();}
-    catch{alert("Nie udało się wylogować. Spróbuj ponownie.");}finally{setBusy(false);}
+    catch{notify.error("Nie udało się wylogować", "Spróbuj ponownie.");}finally{setBusy(false);}
   }
   return <div className="min-h-dvh lg:pl-[270px] 3xl:pl-[320px]">
     {opened&&<button type="button" aria-label="Zamknij nawigację" className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={()=>setOpened(false)}/>}

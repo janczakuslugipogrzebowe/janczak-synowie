@@ -32,16 +32,16 @@ export default function HomeServicesSection({data,preview=false,joinsGuidance=fa
     ...(followedByFlorist ? {
       "--services-wave-height":"clamp(48px,6.9vw,140px)",
       maskImage:`linear-gradient(#000,#000), ${SERVICES_LOWER_MASK}`,
-      maskSize:"100% calc(100% - var(--services-wave-height)), 100% var(--services-wave-height)",
+      maskSize:"100% calc(100% - var(--services-wave-height) + 1px), 100% var(--services-wave-height)",
       maskPosition:"top left, bottom left", maskRepeat:"no-repeat",
       WebkitMaskImage:`linear-gradient(#000,#000), ${SERVICES_LOWER_MASK}`,
-      WebkitMaskSize:"100% calc(100% - var(--services-wave-height)), 100% var(--services-wave-height)",
+      WebkitMaskSize:"100% calc(100% - var(--services-wave-height) + 1px), 100% var(--services-wave-height)",
       WebkitMaskPosition:"top left, bottom left", WebkitMaskRepeat:"no-repeat",
     }:{}),
   } as CSSProperties;
 
   return (
-    <section id="uslugi" aria-labelledby="home-services-title" style={vars} className={`@container/services relative isolate overflow-hidden bg-ivory text-forest-deep ${joinsGuidance ? "z-10 -mt-[clamp(50px,6.5vw,135px)]" : followedByFlorist ? "z-10" : ""}`}>
+    <section id="uslugi" aria-labelledby="home-services-title" style={vars} className={`@container/services relative isolate overflow-hidden bg-ivory text-forest-deep ${followedByFlorist ? "z-20" : "z-10"} ${joinsGuidance ? "-mt-[clamp(50px,6.5vw,135px)]" : ""}`}>
       {/* On the homepage, the image now extends beneath the actual arch of the preceding section. */}
       <Image src={data.backgroundImageUrl} alt="" fill quality={75} loading={preview?"eager":"lazy"} sizes="100vw" className="pointer-events-none -z-20 object-cover object-center" style={{opacity:data.backgroundOpacity/100}} />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#f6f1e8]/55 via-[#fffaf1]/15 to-[#f6f1e8]/38" />

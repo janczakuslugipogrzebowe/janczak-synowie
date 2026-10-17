@@ -1,4 +1,5 @@
 "use client";
+import {AdminSlider} from "@/components/ui/admin-slider";
 import {useState} from "react";
 import Link from "next/link";
 import {TbDeviceDesktop,TbDeviceMobile,TbExternalLink} from "react-icons/tb";
@@ -46,14 +47,14 @@ export default function FloristEditor(){
         </div>
         <div className="space-y-5 border-t border-[#ece9e1] pt-5"><h2 className="font-display text-3xl font-semibold">Fotografia</h2>
           <Field label="Ścieżka zdjęcia"><input className={fieldClass} value={ed.draft.imageUrl} onChange={e=>ed.update("imageUrl",e.target.value)}/></Field>
-          {imageSliders.map(({key,label,min,max})=><label key={key} className="block space-y-2"><span className="flex items-center justify-between text-xs font-semibold text-[#415044]"><span>{label}</span><span className="tabular-nums">{ed.draft[key]}%</span></span><input type="range" min={min} max={max} step={1} className="w-full accent-[#9e835a]" value={ed.draft[key]} onChange={e=>ed.update(key,Number(e.target.value))}/></label>)}
+          {imageSliders.map(({key,label,min,max})=><AdminSlider key={key} label={label} value={ed.draft[key]} min={min} max={max} onChange={v=>ed.update(key,v)}/>)}
         </div>
         <div className="space-y-5 border-t border-[#ece9e1] pt-5"><h2 className="font-display text-3xl font-semibold">Typografia i układ</h2>
-          {sliders.map(({key,label,min,max})=><label key={key} className="block space-y-2"><span className="flex items-center justify-between text-xs font-semibold text-[#415044]"><span>{label}</span><span className="rounded-md bg-[#f1eee7] px-2 py-1 tabular-nums text-[#655137]">{ed.draft[key]}%</span></span><input type="range" min={min} max={max} step={1} className="w-full accent-[#9e835a]" value={ed.draft[key]} onChange={e=>ed.update(key,Number(e.target.value))}/></label>)}
+          {sliders.map(({key,label,min,max})=><AdminSlider key={key} label={label} value={ed.draft[key]} min={min} max={max} onChange={v=>ed.update(key,v)}/>)}
           <button type="button" className={subtleButton} onClick={()=>sliders.forEach(({key})=>ed.update(key,DEFAULT_HOME_FLORIST[key]))}>Przywróć proporcje</button>
         </div>
         <div className="flex flex-wrap gap-2 border-t border-[#e7e6df] pt-5"><button type="button" className={subtleButton} disabled={ed.busy||!ed.unsaved} onClick={()=>void ed.save(false)}>Zapisz szkic</button><button type="button" className={primaryButton} disabled={ed.busy||(!ed.unsaved&&!ed.unpublished)} onClick={()=>void ed.save(true)}>{ed.busy?"Zapisywanie…":"Opublikuj"}</button></div>
-        {ed.message&&<p role="status" className="text-sm text-[#64765d]">{ed.message}</p>}
+        
       </section>
       <section aria-label="Podgląd kwiaciarni" className="min-w-0 xl:sticky xl:top-5 xl:max-h-[calc(100dvh-2.5rem)] xl:self-start xl:overflow-y-auto xl:[scrollbar-width:thin]">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3"><span className="text-xs font-semibold text-[#647067]">Podgląd na żywo</span><div className="flex gap-2"><button type="button" className={subtleButton} onClick={()=>setPhone(x=>!x)}>{phone?<TbDeviceDesktop/>:<TbDeviceMobile/>}{phone?"Desktop":"Telefon"}</button><Link href="/" target="_blank" rel="noopener noreferrer" className={subtleButton}><TbExternalLink/>Strona</Link></div></div>

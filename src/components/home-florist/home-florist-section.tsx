@@ -10,8 +10,9 @@ import type {HomeFloristContent} from "@/lib/home-florist/schema";
 const FEATURE_ICONS=[TbFlower,TbHeartHandshake,TbBuildingStore] as const;
 const unit=(value:number,scale:number,u:"rem"|"cqw")=>`${Number((value*scale/100).toFixed(3))}${u}`;
 
-type Props={data:HomeFloristContent;preview?:boolean;joinsServices?:boolean};
-export default function HomeFloristSection({data,preview=false,joinsServices=false}:Props){
+const FLORIST_LOWER_MASK = 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20150%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M0%200%20H1440%20V78%20C1270%2098%201140%2056%20978%2053%20C813%2050%20651%20113%20495%2079%20C332%2037%20183%2023%200%2078%20Z%22%2F%3E%3C%2Fsvg%3E")';
+type Props={data:HomeFloristContent;preview?:boolean;joinsServices?:boolean;followedByObituaries?:boolean};
+export default function HomeFloristSection({data,preview=false,joinsServices=false,followedByObituaries=false}:Props){
   const reduce=useReducedMotion();
   const reveal=(delay:number)=>({
     initial:reduce||preview?false:{opacity:0,y:22},
@@ -28,12 +29,21 @@ export default function HomeFloristSection({data,preview=false,joinsServices=fal
     "--florist-feature":unit(1,data.featureScale,"rem"),
     "--florist-icon":`${Number((2.55*data.iconScale/100).toFixed(3))}rem`,
     "--florist-gap":data.spacingScale/100,
+    ...(followedByObituaries?{
+      "--florist-wave-height":"clamp(54px,7vw,145px)",
+      maskImage:`linear-gradient(#000,#000), ${FLORIST_LOWER_MASK}`,
+      maskSize:"100% calc(100% - var(--florist-wave-height) + 1px), 100% var(--florist-wave-height)",
+      maskPosition:"top left, bottom left",maskRepeat:"no-repeat",
+      WebkitMaskImage:`linear-gradient(#000,#000), ${FLORIST_LOWER_MASK}`,
+      WebkitMaskSize:"100% calc(100% - var(--florist-wave-height) + 1px), 100% var(--florist-wave-height)",
+      WebkitMaskPosition:"top left, bottom left",WebkitMaskRepeat:"no-repeat",
+    }:{}),
   } as CSSProperties;
   // The left and right gradients protect copy, while the middle remains visually clear.
   // They intentionally sit BEHIND the content and do not obscure the floral centerpiece.
   const leftAlpha=(data.leftShade/100*.91).toFixed(3);
   const rightAlpha=(data.rightShade/100*.84).toFixed(3);
-  return <section aria-labelledby="home-florist-title" style={vars} className={`@container/florist relative isolate overflow-hidden bg-[#0d1814] text-ivory ${joinsServices?"-mt-[clamp(48px,6.9vw,140px)]":""}`}>
+  return <section aria-labelledby="home-florist-title" style={vars} className={`@container/florist relative isolate overflow-hidden bg-[#0d1814] text-ivory ${followedByObituaries?"z-10 ":""}${joinsServices?"-mt-[clamp(48px,6.9vw,140px)]":""}`}>
     <Image src={data.imageUrl} alt="" fill quality={75} loading={preview?"eager":"lazy"} sizes="100vw" style={{objectPosition:`${data.imagePositionX}% ${data.imagePositionY}%`}} className="pointer-events-none -z-30 object-cover"/>
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 bg-[#06100c]" style={{opacity:data.overlayOpacity/100}}/>
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{background:`linear-gradient(90deg,rgba(5,15,11,${leftAlpha}) 0%,rgba(5,15,11,.35) 28%,transparent 49%,rgba(5,15,11,.14) 66%,rgba(5,15,11,${rightAlpha}) 100%)`}}/>
@@ -59,6 +69,6 @@ export default function HomeFloristSection({data,preview=false,joinsServices=fal
       </motion.div>
     </div>
     {/* The next light section will join this lower wave without introducing another mask. */}
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 150" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(54px,7vw,145px)] w-full fill-ivory"><path d="M0 78 C183 23 332 37 495 79 C651 113 813 50 978 53 C1140 56 1270 98 1440 76 L1440 150 L0 150 Z"/></svg>
+    {!followedByObituaries && <svg aria-hidden="true" focusable="false" viewBox="0 0 1440 150" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(54px,7vw,145px)] w-full fill-ivory"><path d="M0 78 C183 23 332 37 495 79 C651 113 813 50 978 53 C1140 56 1270 98 1440 76 L1440 150 L0 150 Z"/></svg>}
   </section>;
 }

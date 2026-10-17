@@ -17,7 +17,10 @@
     "test:security": "node --experimental-strip-types --test scripts/tests/admin-origin.test.mjs",
     "test:guidance": "node --experimental-strip-types --test scripts/tests/home-guidance-schema.test.mjs",
     "test:services": "node --experimental-strip-types --test scripts/tests/home-services-schema.test.mjs",
-    "test:florist": "node --experimental-strip-types --test scripts/tests/home-florist-schema.test.mjs"
+    "test:florist": "node --experimental-strip-types --test scripts/tests/home-florist-schema.test.mjs",
+    "test:obituaries": "node --experimental-strip-types --test scripts/tests/obituaries-schema.test.mjs",
+    "test:home-obituaries": "node --experimental-strip-types --test scripts/tests/home-obituaries-schema.test.mjs",
+    "test:ui": "node --test scripts/tests/ui-contract.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

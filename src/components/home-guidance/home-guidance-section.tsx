@@ -56,7 +56,7 @@ export default function HomeGuidanceSection({data, settings, preview = false, fo
         </clipPath>
       </defs>
     </svg>
-    <section aria-labelledby="home-guidance-title" style={vars} className={`@container/guidance relative isolate z-20 overflow-hidden bg-forest-deep text-ivory ${preview ? "" : "-mt-[clamp(3.25rem,5vw,5.75rem)]"}`}>
+    <section aria-labelledby="home-guidance-title" style={vars} className={`@container/guidance relative isolate z-30 overflow-hidden bg-forest-deep text-ivory ${preview ? "" : "-mt-[clamp(3.25rem,5vw,5.75rem)]"}`}>
 
     <Image src={data.imageUrl} alt="" fill quality={75} loading={preview ? "eager" : "lazy"} sizes="100vw"
       style={{objectPosition:`${data.imagePositionX}% ${data.imagePositionY}%`}} className="pointer-events-none -z-30 object-cover" />

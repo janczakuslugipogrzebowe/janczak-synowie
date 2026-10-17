@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -14,10 +14,21 @@ const links = [
   { href: "/dokumenty", label: "Dokumenty" },
   { href: "/galeria", label: "Galeria" },
 ];
+// Next.js 16 requires URL-dependent client hooks to render within Suspense
+// when a route is prerendered with Cache Components enabled. Keep a complete
+// responsive navbar visible while the pathname-dependent state resolves.
 export default function SiteHeader() {
+  return (
+    <Suspense fallback={<SiteHeaderContent pathname="/" />}>
+      <SiteHeaderWithPathname />
+    </Suspense>
+  );
+}
+
+function SiteHeaderWithPathname() {
   const pathname = usePathname();
-  // Route changes unmount the old header state, closing mobile navigation
-  // even after browser back/forward navigation without an effect-driven setState.
+  // Remount on client-side navigation to close the mobile menu, including
+  // back/forward navigation, without resetting state inside an effect.
   return <SiteHeaderContent key={pathname} pathname={pathname} />;
 }
 

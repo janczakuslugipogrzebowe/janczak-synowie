@@ -1,8 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // All website content is accessed on the server with Firebase Admin SDK.
-    // The browser must never read or write CMS documents directly.
-    match /{document=**} { allow read, write: if false; }
+    // This application reads and writes Firestore only via the authenticated
+    // server-side Firebase Admin SDK. The browser must not access documents
+    // directly, including drafts and unpublished obituary records.
+    match /{document=**} {
+      allow read, write: if false;
+    }
   }
 }

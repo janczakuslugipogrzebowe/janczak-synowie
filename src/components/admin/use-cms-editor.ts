@@ -1,5 +1,6 @@
 "use client";
 import { useCallback,useEffect,useMemo,useState } from "react";
+import {notify} from "@/components/ui/toast-provider";
 export type EditorPhase="loading"|"ready"|"error";
 export function useCmsEditor<T extends object>(endpoint:string,defaults:T,parse:(v:unknown)=>T){
  const [draft,setDraft]=useState<T>(defaults),[saved,setSaved]=useState<T>(defaults),[published,setPublished]=useState<T>(defaults);
@@ -11,6 +12,6 @@ export function useCmsEditor<T extends object>(endpoint:string,defaults:T,parse:
  const unsaved=useMemo(()=>JSON.stringify(draft)!==JSON.stringify(saved),[draft,saved]);
  const unpublished=useMemo(()=>JSON.stringify(draft)!==JSON.stringify(published),[draft,published]);
  const update=useCallback(<K extends keyof T>(key:K,value:T[K])=>{setDraft(prev=>({...prev,[key]:value}));setMessage("");},[]);
- async function save(publish:boolean){if(busy||phase!=="ready")return;setBusy(true);setMessage("");try{const validated=parse(draft);const r=await fetch(endpoint,{method:publish?"POST":"PUT",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(validated),signal:AbortSignal.timeout(20000)});const p=await r.json();if(!r.ok)throw new Error(p.error??"Zapis nie powiódł się.");setDraft(validated);setSaved(validated);if(publish)setPublished(validated);setMessage(publish?"Zmiany opublikowane.":"Zapisano szkic.");}catch(e){setMessage(e instanceof Error?e.message:"Błąd zapisu.");}finally{setBusy(false);}}
+ async function save(publish:boolean){if(busy||phase!=="ready")return;setBusy(true);setMessage("");try{const validated=parse(draft);const r=await fetch(endpoint,{method:publish?"POST":"PUT",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(validated),signal:AbortSignal.timeout(20000)});const p=await r.json();if(!r.ok)throw new Error(p.error??"Zapis nie powiódł się.");setDraft(validated);setSaved(validated);if(publish)setPublished(validated);notify.success(publish?"Zmiany opublikowane":"Szkic zapisany",publish?"Zmiany są widoczne na stronie.":"Zmiany nie są jeszcze opublikowane.");}catch(e){notify.error("Nie udało się zapisać zmian",e instanceof Error?e.message:"Błąd zapisu.");}finally{setBusy(false);}}
  return{draft,phase,error,message,busy,unsaved,unpublished,update,save,retry:()=>setRetry(v=>v+1)};
 }

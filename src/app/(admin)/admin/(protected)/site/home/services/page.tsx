@@ -1,4 +1,5 @@
 "use client";
+import {AdminSlider} from "@/components/ui/admin-slider";
 import {useState} from "react";
 import Link from "next/link";
 import {TbDeviceDesktop,TbDeviceMobile,TbExternalLink} from "react-icons/tb";
@@ -37,19 +38,19 @@ export default function ServicesEditor(){
           <Field label="Tytuł"><input className={fieldClass} value={card.title} onChange={e=>updateService(index,"title",e.target.value)}/></Field>
           <Field label="Opis"><textarea rows={4} className={`${fieldClass} resize-y`} value={card.description} onChange={e=>updateService(index,"description",e.target.value)}/></Field>
           <Field label="Ścieżka zdjęcia"><input className={fieldClass} value={card.imageUrl} onChange={e=>updateService(index,"imageUrl",e.target.value)}/></Field>
-          {(["imagePositionX","imagePositionY"] as const).map(key=><label key={key} className="block space-y-2"><span className="flex items-center justify-between text-xs font-semibold text-[#415044]"><span>{key==="imagePositionX"?"Kadrowanie poziome":"Kadrowanie pionowe"}</span><span className="tabular-nums">{card[key]}%</span></span><input type="range" min="0" max="100" step="1" className="w-full accent-[#9e835a]" value={card[key]} onChange={e=>updateService(index,key,Number(e.target.value))}/></label>)}
+          {(["imagePositionX","imagePositionY"] as const).map(key=><AdminSlider key={key} label={key==="imagePositionX"?"Kadrowanie poziome":"Kadrowanie pionowe"} value={card[key]} min={0} max={100} onChange={v=>updateService(index,key,v)}/>)}
         </div>)}
         </div>
         <div className="space-y-5 border-t border-[#ece9e1] pt-5"><h2 className="font-display text-3xl font-semibold">Tło</h2>
           <Field label="Ścieżka fotografii"><input className={fieldClass} value={ed.draft.backgroundImageUrl} onChange={e=>ed.update("backgroundImageUrl",e.target.value)}/></Field>
-          <label className="block space-y-2"><span className="flex items-center justify-between text-xs font-semibold text-[#415044]"><span>Widoczność tła</span><span>{ed.draft.backgroundOpacity}%</span></span><input type="range" min="35" max="100" step="1" className="w-full accent-[#9e835a]" value={ed.draft.backgroundOpacity} onChange={e=>ed.update("backgroundOpacity",Number(e.target.value))}/></label>
+          <AdminSlider label="Widoczność tła" value={ed.draft.backgroundOpacity} min={35} max={100} onChange={v=>ed.update("backgroundOpacity",v)}/>
         </div>
         <div className="space-y-5 border-t border-[#ece9e1] pt-5"><h2 className="font-display text-3xl font-semibold">Typografia i układ</h2>
-          {typography.map(({key,label,min,max})=><label key={key} className="block space-y-2"><span className="flex items-center justify-between text-xs font-semibold text-[#415044]"><span>{label}</span><span className="rounded-md bg-[#f1eee7] px-2 py-1 tabular-nums text-[#655137]">{ed.draft[key]}%</span></span><input type="range" className="w-full accent-[#9e835a]" min={min} max={max} step={1} value={ed.draft[key]} onChange={e=>ed.update(key,Number(e.target.value))}/></label>)}
+          {typography.map(({key,label,min,max})=><AdminSlider key={key} label={label} value={ed.draft[key]} min={min} max={max} onChange={v=>ed.update(key,v)}/>)}
           <button type="button" className={subtleButton} onClick={()=>typography.forEach(({key})=>ed.update(key,DEFAULT_HOME_SERVICES[key]))}>Przywróć proporcje</button>
         </div>
         <div className="flex flex-wrap gap-2 border-t border-[#e7e6df] pt-5"><button type="button" className={subtleButton} disabled={ed.busy||!ed.unsaved} onClick={()=>void ed.save(false)}>Zapisz szkic</button><button type="button" className={primaryButton} disabled={ed.busy||(!ed.unsaved&&!ed.unpublished)} onClick={()=>void ed.save(true)}>{ed.busy?"Zapisywanie…":"Opublikuj"}</button></div>
-        {ed.message&&<p role="status" className="text-sm text-[#64765d]">{ed.message}</p>}
+        
       </section>
       <section aria-label="Podgląd usług" className="min-w-0 xl:sticky xl:top-5 xl:max-h-[calc(100dvh-2.5rem)] xl:self-start xl:overflow-y-auto xl:[scrollbar-width:thin]">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3"><span className="text-xs font-semibold text-[#647067]">Podgląd na żywo</span><div className="flex gap-2"><button type="button" className={subtleButton} onClick={()=>setPhone(x=>!x)}>{phone?<TbDeviceDesktop/>:<TbDeviceMobile/>}{phone?"Desktop":"Telefon"}</button><Link href="/" target="_blank" rel="noopener noreferrer" className={subtleButton}><TbExternalLink/>Strona</Link></div></div>

@@ -23,12 +23,17 @@ body { margin: 0; }
   :where(a[href], button:not(:disabled), [role="button"]:not([aria-disabled="true"]), summary,
     input[type="button"]:not(:disabled), input[type="submit"]:not(:disabled),
     input[type="reset"]:not(:disabled), input[type="checkbox"]:not(:disabled),
-    input[type="radio"]:not(:disabled)) {
+    input[type="radio"]:not(:disabled), input[type="range"]:not(:disabled),
+    input[type="date"]:not(:disabled), input[type="datetime-local"]:not(:disabled),
+    input[type="time"]:not(:disabled), input[type="color"]:not(:disabled),
+    select:not(:disabled), [role="slider"]:not([aria-disabled="true"]),
+    [role="combobox"]:not([aria-disabled="true"]), [role="option"]:not([aria-disabled="true"])) {
     @apply cursor-pointer;
   }
   :where(button:disabled, [role="button"][aria-disabled="true"],
     input[type="button"]:disabled, input[type="submit"]:disabled,
-    input[type="reset"]:disabled) {
+    input[type="reset"]:disabled, select:disabled, input[type="range"]:disabled,
+    input[type="date"]:disabled, input[type="datetime-local"]:disabled) {
     @apply cursor-not-allowed;
   }
 }
