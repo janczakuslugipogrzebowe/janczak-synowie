@@ -1,3 +1,7 @@
+import HomeDocumentsSection from "@/components/home-documents/home-documents-section";
+import ObituariesDocumentsBoundary from "@/components/home-documents/obituaries-documents-boundary";
+import { getPublishedHomeDocuments } from "@/lib/home-documents/data";
+import { getPublishedDocumentsLibrary } from "@/lib/documents/data";
 import HomeObituariesSection from "@/components/home-obituaries/home-obituaries-section";
 import { getPublishedHomeObituaries } from "@/lib/home-obituaries/data";
 import { getLatestObituaries } from "@/lib/obituaries/data";
@@ -14,6 +18,7 @@ import { getPublishedHero } from "@/lib/hero/data";
 import { getPublishedSiteSettings } from "@/lib/settings/data";
 
 export default async function Home() {
+  const documentsPromise = Promise.all([getPublishedHomeDocuments(), getPublishedDocumentsLibrary()]);
   const [hero, settings, about, guidance, services, florist, obituaries, entries] = await Promise.all([
     getPublishedHero(),
     getPublishedSiteSettings(),
@@ -24,6 +29,8 @@ export default async function Home() {
     getPublishedHomeObituaries(),
     getLatestObituaries(),
   ]);
+  const [homeDocuments, documentsLibrary] = await documentsPromise;
+
   return (
     <main id="main" className="min-h-dvh bg-forest-deep">
       <HeroSection data={hero} settings={settings} showWave={false} />
@@ -33,7 +40,10 @@ export default async function Home() {
       <HomeGuidanceSection data={guidance} settings={settings} followedByServices />
       <HomeServicesSection data={services} joinsGuidance followedByFlorist />
       <HomeFloristSection data={florist} joinsServices followedByObituaries />
-      <HomeObituariesSection data={obituaries} entries={entries} joinsFlorist />
+      <ObituariesDocumentsBoundary>
+        <HomeObituariesSection data={obituaries} entries={entries} joinsFlorist />
+      </ObituariesDocumentsBoundary>
+      <HomeDocumentsSection data={homeDocuments} documents={documentsLibrary} joinsObituaries />
     </main>
   );
 }

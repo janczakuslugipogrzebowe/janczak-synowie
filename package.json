@@ -22,7 +22,9 @@
     "test:home-obituaries": "node --experimental-strip-types --test scripts/tests/home-obituaries-schema.test.mjs",
     "test:ui": "node --test scripts/tests/ui-contract.test.mjs",
     "format": "prettier --write src scripts package.json next.config.ts eslint.config.mjs tsconfig.json",
-    "format:check": "prettier --check src scripts package.json next.config.ts eslint.config.mjs tsconfig.json"
+    "format:check": "prettier --check src scripts package.json next.config.ts eslint.config.mjs tsconfig.json",
+    "test:documents": "node --experimental-strip-types --test scripts/tests/documents-schema.test.mjs",
+    "test:home-documents": "node --experimental-strip-types --test scripts/tests/home-documents-schema.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",
