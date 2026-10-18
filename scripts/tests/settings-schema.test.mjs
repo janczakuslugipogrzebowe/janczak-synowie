@@ -19,7 +19,8 @@ test("trusted Google Maps links can be saved verbatim", () => {
   assert.equal(isAllowedMapsUrl("https://google.com.evil.net/maps/x"), false);
 });
 test("legacy saved settings receive new defaults", () => {
-  const { companyName, companyDescription, email, mapsUrl, ...legacy } = DEFAULT_SITE_SETTINGS;
+  const legacy = { ...DEFAULT_SITE_SETTINGS };
+  for (const field of ["companyName", "companyDescription", "email", "mapsUrl"]) delete legacy[field];
   const res = parseSiteSettings(legacy);
   assert.equal(res.mapsUrl, "");
   assert.equal(res.companyName, DEFAULT_SITE_SETTINGS.companyName);

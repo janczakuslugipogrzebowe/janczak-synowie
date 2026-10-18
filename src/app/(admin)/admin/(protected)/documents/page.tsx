@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   TbArrowDown,
@@ -41,40 +41,52 @@ export default function DocumentsManager() {
   const [saved, setSaved] = useState<PublicDocument[]>(DEFAULT_DOCUMENTS);
   const [published, setPublished] = useState<PublicDocument[]>(DEFAULT_DOCUMENTS);
   const [loading, setLoading] = useState(true);
+  const [reloadKey, setReloadKey] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notification, setNotification] = useState<{ message: string; ok: boolean } | null>(null);
   const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
 
-  const load = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await fetch("/api/admin/documents", {
-        credentials: "same-origin",
-        cache: "no-store",
-        signal,
-      });
-      const state = await response.json();
-      if (!response.ok) throw new Error(state.error ?? "Nie udało się pobrać dokumentów.");
-      const live = parseDocumentLibrary(state.published);
-      const editable = state.draft ? parseDocumentLibrary(state.draft) : live;
-      setDraft(editable);
-      setSaved(editable);
-      setPublished(live);
-    } catch (cause) {
-      if (!signal?.aborted)
-        setError(cause instanceof Error ? cause.message : "Nie udało się pobrać dokumentów.");
-    } finally {
-      if (!signal?.aborted) setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
     const controller = new AbortController();
-    void load(controller.signal);
+
+    // The initial loading state is set on mount. On retries it is set in the
+    // click handler, never synchronously during an effect.
+    const fetchDocuments = async () => {
+      try {
+        const response = await fetch("/api/admin/documents", {
+          credentials: "same-origin",
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        const state = await response.json();
+        if (!response.ok) {
+          throw new Error(state.error ?? "Nie udało się pobrać dokumentów.");
+        }
+        const live = parseDocumentLibrary(state.published);
+        const editable = state.draft ? parseDocumentLibrary(state.draft) : live;
+        if (controller.signal.aborted) return;
+        setDraft(editable);
+        setSaved(editable);
+        setPublished(live);
+      } catch (cause) {
+        if (!controller.signal.aborted) {
+          setError(cause instanceof Error ? cause.message : "Nie udało się pobrać dokumentów.");
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    };
+
+    void fetchDocuments();
     return () => controller.abort();
-  }, [load]);
+  }, [reloadKey]);
+
+  const retryLoad = () => {
+    setLoading(true);
+    setError("");
+    setReloadKey((key) => key + 1);
+  };
 
   useEffect(() => {
     if (!pendingRemoval) return;
@@ -160,7 +172,7 @@ export default function DocumentsManager() {
       ) : error ? (
         <div role="alert" className={`${surfaceClass} max-w-xl space-y-4 p-6`}>
           <p className="text-[#9c403d]">{error}</p>
-          <button onClick={() => void load()} className={subtleButton}>
+          <button onClick={retryLoad} className={subtleButton}>
             Spróbuj ponownie
           </button>
         </div>

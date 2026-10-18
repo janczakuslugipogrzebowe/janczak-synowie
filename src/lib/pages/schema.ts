@@ -18,12 +18,16 @@ export const PAGE_DEFAULTS: Record<PageSlug, PageContent> = {
     title: "Nekrologi",
     description: "Informacje o uroczystościach pożegnalnych oraz pamięć o bliskich.",
   },
+  galeria: {
+    eyebrow: "NASZA PRZESTRZEŃ",
+    title: "Galeria",
+    description: "Zdjęcia firmy i jej otoczenia.",
+  },
   dokumenty: {
     eyebrow: "POMOC W FORMALNOŚCIACH",
     title: "Dokumenty",
     description: "Najważniejsze dokumenty i formularze potrzebne przy organizacji pogrzebu.",
   },
-  galeria: { eyebrow: "NASZA PRZESTRZEŃ", title: "Galeria", description: "Zdjęcia firmy i jej otoczenia." },
   kontakt: {
     eyebrow: "JESTEŚMY DLA PAŃSTWA",
     title: "Kontakt",
@@ -34,8 +38,8 @@ export const PAGE_LABELS: Record<PageSlug, string> = {
   "o-nas": "O nas",
   oferta: "Oferta",
   nekrologi: "Nekrologi",
-  dokumenty: "Dokumenty",
   galeria: "Galeria",
+  dokumenty: "Dokumenty",
   kontakt: "Kontakt",
 };
 export function isPageSlug(v: string): v is PageSlug {
@@ -48,24 +52,27 @@ export class PageValidationError extends Error {
   }
 }
 export function parsePageContent(value: unknown): PageContent {
-  if (!value || typeof value !== "object" || Array.isArray(value))
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new PageValidationError("Niepoprawny format podstrony.");
+  }
   const obj = value as Record<string, unknown>;
   const keys = ["eyebrow", "title", "description"];
-  if (Object.keys(obj).some((key) => !keys.includes(key)))
+  if (Object.keys(obj).some((key) => !keys.includes(key))) {
     throw new PageValidationError("Nieznane pole podstrony.");
+  }
   const out = {} as PageContent;
-  for (const k of keys as (keyof PageContent)[]) {
-    const v = obj[k];
+  for (const key of keys as (keyof PageContent)[]) {
+    const val = obj[key];
     if (
-      typeof v !== "string" ||
-      !v.trim() ||
-      v.trim().length > (k === "description" ? 1800 : k === "title" ? 120 : 120) ||
-      /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(v) ||
-      (k !== "description" && /[\n\r]/.test(v))
-    )
-      throw new PageValidationError(`Niepoprawne pole: ${k}`);
-    out[k] = v.trim();
+      typeof val !== "string" ||
+      !val.trim() ||
+      val.trim().length > (key === "description" ? 1800 : 120) ||
+      /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(val) ||
+      (key !== "description" && /[\n\r]/.test(val))
+    ) {
+      throw new PageValidationError(`Niepoprawne pole: ${key}`);
+    }
+    out[key] = val.trim();
   }
   return out;
 }

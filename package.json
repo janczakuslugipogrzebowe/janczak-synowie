@@ -24,7 +24,10 @@
     "format": "prettier --write src scripts package.json next.config.ts eslint.config.mjs tsconfig.json",
     "format:check": "prettier --check src scripts package.json next.config.ts eslint.config.mjs tsconfig.json",
     "test:documents": "node --experimental-strip-types --test scripts/tests/documents-schema.test.mjs",
-    "test:home-documents": "node --experimental-strip-types --test scripts/tests/home-documents-schema.test.mjs"
+    "test:home-documents": "node --experimental-strip-types --test scripts/tests/home-documents-schema.test.mjs",
+    "test:gallery": "node --experimental-strip-types --test scripts/tests/gallery-schema.test.mjs",
+    "test:home-gallery": "node --experimental-strip-types --test scripts/tests/home-gallery-schema.test.mjs",
+    "test:gallery-ui": "node --test scripts/tests/home-gallery-ui.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

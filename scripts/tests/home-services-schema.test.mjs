@@ -13,7 +13,10 @@ test("four grounded services have valid defaults", () => {
   assert.ok(DEFAULT_HOME_SERVICES.services.every((item) => item.imageUrl.startsWith("/uslugi")));
 });
 test("older records receive responsive controls", () => {
-  const { cardGapScale, cardTitleScale, cardImageHeightScale, ...old } = DEFAULT_HOME_SERVICES;
+  const old = { ...DEFAULT_HOME_SERVICES };
+  delete old.cardGapScale;
+  delete old.cardTitleScale;
+  delete old.cardImageHeightScale;
   const parsed = parseHomeServices(old);
   assert.equal(parsed.cardGapScale, 100);
   assert.equal(parsed.cardImageHeightScale, 100);

@@ -15,6 +15,8 @@ type Props = {
   documents?: PublicDocument[];
   preview?: boolean;
   joinsObituaries?: boolean;
+  /** Gallery owns the shared wavy edge when it follows this section. */
+  followedByGallery?: boolean;
 };
 
 const TOP_WAVE_HEIGHT = "clamp(55px,7vw,130px)";
@@ -23,6 +25,7 @@ export default function HomeDocumentsSection({
   data,
   preview = false,
   joinsObituaries = false,
+  followedByGallery = false,
 }: Props) {
   const reducedMotion = useReducedMotion();
   const vars = {
@@ -161,16 +164,18 @@ export default function HomeDocumentsSection({
         </div>
       </div>
 
-      {/* One concave bottom edge; no additional flat background strips. */}
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        viewBox="0 0 1440 160"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(66px,8vw,160px)] w-full fill-forest-deep"
-      >
-        <path d="M0 96 C240 96 390 47 720 32 C1050 47 1200 96 1440 96 L1440 160 L0 160 Z" />
-      </svg>
+      {/* In the homepage composition, Gallery alone draws the shared edge. */}
+      {!followedByGallery && (
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 1440 160"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(66px,8vw,160px)] w-full fill-forest-deep"
+        >
+          <path d="M0 96 C240 96 390 47 720 32 C1050 47 1200 96 1440 96 L1440 160 L0 160 Z" />
+        </svg>
+      )}
     </section>
   );
 }

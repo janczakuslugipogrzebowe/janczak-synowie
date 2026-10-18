@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import SubpageIntro from "@/components/subpage-intro";
-import { getPublishedPage } from "@/lib/pages/data";
 import { PAGE_LABELS } from "@/lib/pages/schema";
 import { getPublishedDocumentsLibrary } from "@/lib/documents/data";
 import { publishedDocuments } from "@/lib/documents/schema";
@@ -9,10 +7,7 @@ import { TbDownload, TbFileText, TbArrowUpRight } from "react-icons/tb";
 export const metadata: Metadata = { title: PAGE_LABELS.dokumenty };
 
 export default async function DocumentsPage() {
-  const [content, library] = await Promise.all([
-    getPublishedPage("dokumenty"),
-    getPublishedDocumentsLibrary(),
-  ]);
+  const library = await getPublishedDocumentsLibrary();
   const documents = publishedDocuments(library);
   return (
     <>

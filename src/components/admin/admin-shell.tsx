@@ -31,6 +31,7 @@ const mainNav = [
   { href: "/admin/company", label: "Firma i kontakt", Icon: TbBuildingEstate },
   { href: "/admin/obituaries", label: "Nekrologi", Icon: TbFileText },
   { href: "/admin/documents", label: "Dokumenty", Icon: TbFileText },
+  { href: "/admin/gallery", label: "Galeria", Icon: TbPhoto },
 ];
 
 function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () => void }) {
@@ -46,6 +47,7 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
     { id: "florist", label: "Kwiaciarnia", href: "/admin/site/home/florist", Icon: TbFlower },
     { id: "obituaries", label: "Nekrologi", href: "/admin/site/home/obituaries", Icon: TbFileText },
     { id: "documents", label: "Dokumenty", href: "/admin/site/home/documents", Icon: TbFileText },
+    { id: "gallery", label: "Galeria", href: "/admin/site/home/gallery", Icon: TbPhoto },
   ];
   const active = (href: string) => pathname === href;
   const sectionStyle = (href: string) =>

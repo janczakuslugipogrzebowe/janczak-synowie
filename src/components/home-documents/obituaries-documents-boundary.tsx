@@ -13,11 +13,16 @@ export default function ObituariesDocumentsBoundary({ children }: { children: Re
     maskPosition: "top left, bottom left",
     maskRepeat: "no-repeat",
     WebkitMaskImage: `linear-gradient(#000,#000), ${LOWER_EDGE_MASK}`,
-    WebkitMaskSize: "100% calc(100% - var(--obituary-document-wave) + 1px), 100% var(--obituary-document-wave)",
+    WebkitMaskSize:
+      "100% calc(100% - var(--obituary-document-wave) + 1px), 100% var(--obituary-document-wave)",
     WebkitMaskPosition: "top left, bottom left",
     WebkitMaskRepeat: "no-repeat",
   } as CSSProperties;
   // Florist uses z-10; this layer must remain above Documents but below
   // Florist, so the florist's existing clipped wave stays visible.
-  return <div className="relative z-[5]" style={styles}>{children}</div>;
+  return (
+    <div className="relative z-[5]" style={styles}>
+      {children}
+    </div>
+  );
 }
