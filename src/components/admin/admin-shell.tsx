@@ -24,6 +24,7 @@ import {
   TbHeartHandshake,
   TbFlower,
   TbHelpCircle,
+  TbPhoneCall,
 } from "react-icons/tb";
 import { PAGE_LABELS, PAGE_SLUGS, type PageSlug } from "@/lib/pages/schema";
 
@@ -50,6 +51,7 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
     { id: "documents", label: "Dokumenty", href: "/admin/site/home/documents", Icon: TbFileText },
     { id: "gallery", label: "Galeria", href: "/admin/site/home/gallery", Icon: TbPhoto },
     { id: "faq", label: "FAQ", href: "/admin/site/home/faq", Icon: TbHelpCircle },
+    { id: "contact", label: "Kontakt", href: "/admin/site/home/contact", Icon: TbPhoneCall },
   ];
   const active = (href: string) => pathname === href;
   const sectionStyle = (href: string) =>

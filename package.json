@@ -28,7 +28,9 @@
     "test:gallery": "node --experimental-strip-types --test scripts/tests/gallery-schema.test.mjs",
     "test:home-gallery": "node --experimental-strip-types --test scripts/tests/home-gallery-schema.test.mjs",
     "test:gallery-ui": "node --test scripts/tests/home-gallery-ui.test.mjs",
-    "test:faq": "node --experimental-strip-types --test scripts/tests/home-faq-schema.test.mjs scripts/tests/home-faq-integration.test.mjs"
+    "test:faq": "node --experimental-strip-types --test scripts/tests/home-faq-schema.test.mjs scripts/tests/home-faq-integration.test.mjs",
+    "test:contact": "node --experimental-strip-types --test scripts/tests/home-contact-schema.test.mjs",
+    "test:contact-ui": "node --test scripts/tests/home-contact-ui.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

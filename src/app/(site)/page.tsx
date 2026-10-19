@@ -1,3 +1,5 @@
+import HomeContactSection from "@/components/home-contact/home-contact-section";
+import { getPublishedHomeContact } from "@/lib/home-contact/data";
 import HomeFaqSection from "@/components/home-faq/home-faq-section";
 import { getPublishedHomeFaq } from "@/lib/home-faq/data";
 import HomeGallerySection from "@/components/home-gallery/home-gallery-section";
@@ -25,6 +27,7 @@ import { getPublishedSiteSettings } from "@/lib/settings/data";
 export default async function Home() {
   const galleryPromise = Promise.all([getPublishedHomeGallery(), getPublishedGalleryPhotos()]);
   const faqPromise = getPublishedHomeFaq();
+  const contactPromise = getPublishedHomeContact();
   const documentsPromise = Promise.all([getPublishedHomeDocuments(), getPublishedDocumentsLibrary()]);
   const [hero, settings, about, guidance, services, florist, obituaries, entries] = await Promise.all([
     getPublishedHero(),
@@ -40,6 +43,7 @@ export default async function Home() {
 
   const [gallerySettings, galleryPhotos] = await galleryPromise;
   const faq = await faqPromise;
+  const contact = await contactPromise;
 
   return (
     <main id="main" className="min-h-dvh bg-forest-deep">
@@ -55,7 +59,8 @@ export default async function Home() {
       </ObituariesDocumentsBoundary>
       <HomeDocumentsSection data={homeDocuments} documents={documentsLibrary} joinsObituaries followedByGallery />
       <HomeGallerySection data={gallerySettings} photos={galleryPhotos} joinsDocuments followedByFaq />
-      <HomeFaqSection data={faq} joinsGallery />
+      <HomeFaqSection data={faq} joinsGallery followedByContact />
+      <HomeContactSection data={contact} settings={settings} joinsFaq />
     </main>
   );
 }

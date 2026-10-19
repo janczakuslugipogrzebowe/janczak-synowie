@@ -7,7 +7,13 @@ test("real homepage attaches FAQ immediately after Gallery with single wave owne
   const page = read("src/app/(site)/page.tsx");
   const gallery = read("src/components/home-gallery/home-gallery-section.tsx");
   const faq = read("src/components/home-faq/home-faq-section.tsx");
-  assert.match(page, /<HomeGallerySection\b[\s\S]*?followedByFaq\s*\/>\s*<HomeFaqSection\b[\s\S]*?joinsGallery\s*\/>/);
+  const gallerySection = page.match(/<HomeGallerySection\b[\s\S]*?\/>/)?.[0];
+  const faqSection = page.match(/<HomeFaqSection\b[\s\S]*?\/>/)?.[0];
+  assert.ok(gallerySection);
+  assert.ok(faqSection);
+  assert.match(gallerySection, /\bfollowedByFaq\b/);
+  assert.match(faqSection, /\bjoinsGallery\b/);
+  assert.ok(page.indexOf(gallerySection) < page.indexOf(faqSection), "FAQ follows Gallery");
   assert.match(gallery, /!followedByFaq\s*&&/);
   assert.match(faq, /TOP_MASK/);
   assert.match(faq, /C310%20102%20420%20129%20720%20134/);

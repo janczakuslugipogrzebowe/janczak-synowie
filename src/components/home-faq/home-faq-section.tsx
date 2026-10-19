@@ -16,10 +16,12 @@ export default function HomeFaqSection({
   data,
   preview = false,
   joinsGallery = false,
+  followedByContact = false,
 }: {
   data: HomeFaqContent;
   preview?: boolean;
   joinsGallery?: boolean;
+  followedByContact?: boolean;
 }) {
   const reducedMotion = useReducedMotion();
   const [opened, setOpened] = useState<string | null | undefined>(undefined);
@@ -171,9 +173,11 @@ export default function HomeFaqSection({
           </motion.div>
         </div>
       </div>
+{!followedByContact && (
       <svg aria-hidden="true" viewBox="0 0 1440 160" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px inset-x-0 h-[clamp(55px,7vw,160px)] w-full fill-[#f6f0e5]">
         <path d="M0 92 C146 78 271 66 413 72 C559 79 668 103 806 108 C939 112 1064 94 1187 84 C1285 77 1368 78 1440 86 L1440 160 L0 160Z" />
       </svg>
+      )}
     </section>
   );
 }
