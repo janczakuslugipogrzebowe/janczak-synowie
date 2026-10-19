@@ -167,7 +167,7 @@ export default function SiteFooter({
         aria-hidden="true"
       />
 
-      <div className="mx-auto w-full max-w-[1740px] px-6 pb-[calc(clamp(1.5rem,2.3vw,2.5rem)*var(--footer-padding-scale))] pt-[calc(clamp(2.5rem,4.4vw,4.75rem)*var(--footer-padding-scale))] sm:px-10 lg:px-[clamp(3rem,6vw,7rem)]">
+      <div className="mx-auto w-[min(90%,1680px)] pb-[calc(clamp(1.5rem,2.3vw,2.5rem)*var(--footer-padding-scale))] pt-[calc(clamp(2.5rem,4.4vw,4.75rem)*var(--footer-padding-scale))] 3xl:w-[min(88%,2200px)] 4xl:w-[min(85%,3000px)]">
         <div className="text-[.7em] font-semibold uppercase tracking-[.22em] text-[#e3c997]">
           <span>{data.footerEyebrow}</span>
         </div>
