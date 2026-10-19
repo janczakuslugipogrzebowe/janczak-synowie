@@ -20,11 +20,13 @@ export default function HomeGallerySection({
   photos,
   preview = false,
   joinsDocuments = false,
+  followedByFaq = false,
 }: {
   data: HomeGalleryContent;
   photos: GalleryPhoto[];
   preview?: boolean;
   joinsDocuments?: boolean;
+  followedByFaq?: boolean;
 }) {
   const reduced = useReducedMotion();
   const vars = {
@@ -37,11 +39,13 @@ export default function HomeGallerySection({
           "--gallery-top-wave": "clamp(76px, 8.5vw, 170px)",
           maskImage: `linear-gradient(#000,#000),${TOP_MASK}`,
           maskPosition: "bottom left,top left",
-          maskSize: "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
+          maskSize:
+            "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
           maskRepeat: "no-repeat",
           WebkitMaskImage: `linear-gradient(#000,#000),${TOP_MASK}`,
           WebkitMaskPosition: "bottom left,top left",
-          WebkitMaskSize: "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
+          WebkitMaskSize:
+            "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
           WebkitMaskRepeat: "no-repeat",
         }
       : {}),
@@ -142,15 +146,17 @@ export default function HomeGallerySection({
         </motion.div>
       </div>
 
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        viewBox="0 0 1440 150"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(56px,7vw,150px)] w-full fill-[#14241c]"
-      >
-        <path d="M0 65 C310 102 420 129 720 134 C1020 129 1130 102 1440 65 L1440 150 L0 150Z" />
-      </svg>
+      {!followedByFaq && (
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 1440 150"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute -bottom-px left-0 z-20 h-[clamp(56px,7vw,150px)] w-full fill-[#14241c]"
+        >
+          <path d="M0 65 C310 102 420 129 720 134 C1020 129 1130 102 1440 65 L1440 150 L0 150Z" />
+        </svg>
+      )}
     </section>
   );
 }

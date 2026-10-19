@@ -16,7 +16,7 @@ export default function SiteEditorHome() {
           <TbPhoto className="size-8 text-[#a1835e]" />
           <h2 className="mt-6 font-display text-4xl font-semibold">Strona główna</h2>
           <p className="mt-2 text-xs text-[#727d74]">
-            Hero · O nas · Co zrobić · Usługi · Kwiaciarnia · Nekrologi · Dokumenty · Galeria
+            Hero · O nas · Co zrobić · Usługi · Kwiaciarnia · Nekrologi · Dokumenty · Galeria · FAQ
           </p>
           <TbArrowUpRight size={20} className="ml-auto mt-6 text-[#a1835e]" />
         </Link>

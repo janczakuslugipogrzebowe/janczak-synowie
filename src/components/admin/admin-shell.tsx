@@ -23,6 +23,7 @@ import {
   TbNotes,
   TbHeartHandshake,
   TbFlower,
+  TbHelpCircle,
 } from "react-icons/tb";
 import { PAGE_LABELS, PAGE_SLUGS, type PageSlug } from "@/lib/pages/schema";
 
@@ -48,6 +49,7 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
     { id: "obituaries", label: "Nekrologi", href: "/admin/site/home/obituaries", Icon: TbFileText },
     { id: "documents", label: "Dokumenty", href: "/admin/site/home/documents", Icon: TbFileText },
     { id: "gallery", label: "Galeria", href: "/admin/site/home/gallery", Icon: TbPhoto },
+    { id: "faq", label: "FAQ", href: "/admin/site/home/faq", Icon: TbHelpCircle },
   ];
   const active = (href: string) => pathname === href;
   const sectionStyle = (href: string) =>

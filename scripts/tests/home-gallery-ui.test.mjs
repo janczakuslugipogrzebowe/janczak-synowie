@@ -16,7 +16,7 @@ test("document/gallery border has one shape owner in the actual homepage", () =>
   assert.match(documentsSection, /\bfollowedByGallery\b/);
   assert.match(home, /joinsDocuments/);
   // Verify that the SVG is conditional, regardless of Prettier line breaks.
-  assert.match(docs, /\{\s*!followedByGallery\s*&&\s*\(\s*<svg\b/);
+  assert.match(docs, /\{\s*!followedByGallery\s*&&\s*(?:\(\s*)?<svg\b/);
   assert.match(gallery, /maskImage: `linear-gradient\(#000,#000\),\$\{TOP_MASK\}`/);
 });
 
