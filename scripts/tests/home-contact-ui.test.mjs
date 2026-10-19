@@ -29,7 +29,8 @@ test("contact details come from global company settings; no duplicated contact f
 });
 test("admin API enforces auth, origin check, JSON validation, and cache revalidation", () => {
   const api = read("src/app/api/admin/home/contact/route.ts");
-  for (const token of ["getAdminUid", "isSameOrigin", "parseHomeContact", "revalidateTag", "revalidatePath"]) assert.ok(api.includes(token));
+  for (const token of ["getAdminUid", "isSameOrigin", "parseHomeContact", "revalidateTag", "revalidatePath"])
+    assert.ok(api.includes(token));
   const sidebar = read("src/components/admin/admin-shell.tsx");
   assert.match(sidebar, /id: "contact", label: "Kontakt"/);
 });
@@ -44,7 +45,10 @@ test("animated contact cards keep stable list keys and only one direct motion ch
   assert.match(contact, /items\.map\(\(\{ id, Icon, label, description, href \}, index\) => \{/);
   assert.match(contact, /<motion\.div\s+key=\{id\}/);
   assert.match(contact, /className="min-w-0"\s*>\s*\{\/\* One direct child/);
-  assert.match(contact, /<div className="flex min-w-0 items-center justify-center gap-4 text-left lg:gap-5">/);
+  assert.match(
+    contact,
+    /<div className="flex min-w-0 items-center justify-center gap-4 text-left lg:gap-5">/,
+  );
 });
 test("email remains linked, readable and uses a stable break only after @", () => {
   const contact = read("src/components/home-contact/home-contact-section.tsx");

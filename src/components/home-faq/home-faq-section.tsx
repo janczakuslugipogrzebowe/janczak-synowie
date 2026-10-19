@@ -85,9 +85,13 @@ export default function HomeFaqSection({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(5,18,13,.58)_0%,rgba(5,18,13,.28)_43%,rgba(6,19,14,.23)_100%)]"
       />
-      <div className={`relative mx-auto w-[min(90%,1680px)] pb-[clamp(9rem,11vw,15rem)] 3xl:w-[min(88%,2200px)] 4xl:w-[min(85%,3000px)] ${
-        joinsGallery ? "pt-[calc(clamp(56px,7vw,150px)+clamp(5rem,7vw,10rem))]" : "pt-[clamp(7rem,10vw,13rem)]"
-      }`}>
+      <div
+        className={`relative mx-auto w-[min(90%,1680px)] pb-[clamp(9rem,11vw,15rem)] 3xl:w-[min(88%,2200px)] 4xl:w-[min(85%,3000px)] ${
+          joinsGallery
+            ? "pt-[calc(clamp(56px,7vw,150px)+clamp(5rem,7vw,10rem))]"
+            : "pt-[clamp(7rem,10vw,13rem)]"
+        }`}
+      >
         <div className="grid items-start gap-[calc(clamp(3rem,5vw,9rem)*var(--faq-column-gap))] lg:grid-cols-[minmax(0,0.91fr)_minmax(0,1.09fr)]">
           <motion.div {...reveal(0)} className="max-w-[760px]">
             <p className="flex items-center gap-4 text-[clamp(.68rem,.8cqw,.92rem)] font-bold uppercase tracking-[.26em] text-[#e4c791]">
@@ -106,7 +110,8 @@ export default function HomeFaqSection({
             <div className="mt-[calc(clamp(2rem,3vw,4rem)*var(--faq-spacing))]">
               {preview ? (
                 <span className="inline-flex min-h-12 items-center gap-3 rounded-full border border-[#d7b87f] px-7 py-3 text-sm font-semibold text-[#e8ce9c]">
-                  {data.buttonLabel}<TbArrowUpRight size={19} />
+                  {data.buttonLabel}
+                  <TbArrowUpRight size={19} />
                 </span>
               ) : (
                 <Link
@@ -114,21 +119,32 @@ export default function HomeFaqSection({
                   className="group inline-flex min-h-12 cursor-pointer items-center gap-3 rounded-full border border-[#d6bc88]/65 px-7 py-3 text-sm font-semibold text-[#ebd39e] transition-colors hover:bg-[#e4c791] hover:text-[#102017] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e6c994]"
                 >
                   {data.buttonLabel}
-                  <TbArrowUpRight size={19} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  <TbArrowUpRight
+                    size={19}
+                    className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+                  />
                 </Link>
               )}
             </div>
           </motion.div>
 
-          <motion.div {...reveal(0.13)} className="space-y-[calc(clamp(.6rem,.9vw,1.2rem)*var(--faq-spacing))]">
+          <motion.div
+            {...reveal(0.13)}
+            className="space-y-[calc(clamp(.6rem,.9vw,1.2rem)*var(--faq-spacing))]"
+          >
             {items.map((item) => {
               const isOpen = activeId === item.id;
               const answerId = `${headingId}-${item.id}-answer`;
               const buttonId = `${headingId}-${item.id}-button`;
               return (
-                <div key={item.id} className={`overflow-hidden rounded-2xl border transition-colors duration-300 ${
-                  isOpen ? "border-[#dac190]/55 bg-[#091911]/55" : "border-[#d6bb89]/25 bg-[#071910]/30 hover:border-[#dac190]/50"
-                }`}>
+                <div
+                  key={item.id}
+                  className={`overflow-hidden rounded-2xl border transition-colors duration-300 ${
+                    isOpen
+                      ? "border-[#dac190]/55 bg-[#091911]/55"
+                      : "border-[#d6bb89]/25 bg-[#071910]/30 hover:border-[#dac190]/50"
+                  }`}
+                >
                   <h3>
                     <button
                       id={buttonId}
@@ -173,10 +189,15 @@ export default function HomeFaqSection({
           </motion.div>
         </div>
       </div>
-{!followedByContact && (
-      <svg aria-hidden="true" viewBox="0 0 1440 160" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px inset-x-0 h-[clamp(55px,7vw,160px)] w-full fill-[#f6f0e5]">
-        <path d="M0 92 C146 78 271 66 413 72 C559 79 668 103 806 108 C939 112 1064 94 1187 84 C1285 77 1368 78 1440 86 L1440 160 L0 160Z" />
-      </svg>
+      {!followedByContact && (
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1440 160"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute -bottom-px inset-x-0 h-[clamp(55px,7vw,160px)] w-full fill-[#f6f0e5]"
+        >
+          <path d="M0 92 C146 78 271 66 413 72 C559 79 668 103 806 108 C939 112 1064 94 1187 84 C1285 77 1368 78 1440 86 L1440 160 L0 160Z" />
+        </svg>
       )}
     </section>
   );

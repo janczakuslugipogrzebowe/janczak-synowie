@@ -11,5 +11,9 @@ async function Authorized() {
 }
 
 export default function Page() {
-  return <Suspense fallback={<main className="min-h-dvh bg-[#14241c]" />}><Authorized /></Suspense>;
+  return (
+    <Suspense fallback={<main className="min-h-dvh bg-[#14241c]" />}>
+      <Authorized />
+    </Suspense>
+  );
 }

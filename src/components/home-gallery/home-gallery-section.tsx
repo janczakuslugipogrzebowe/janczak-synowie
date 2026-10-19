@@ -39,13 +39,11 @@ export default function HomeGallerySection({
           "--gallery-top-wave": "clamp(76px, 8.5vw, 170px)",
           maskImage: `linear-gradient(#000,#000),${TOP_MASK}`,
           maskPosition: "bottom left,top left",
-          maskSize:
-            "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
+          maskSize: "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
           maskRepeat: "no-repeat",
           WebkitMaskImage: `linear-gradient(#000,#000),${TOP_MASK}`,
           WebkitMaskPosition: "bottom left,top left",
-          WebkitMaskSize:
-            "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
+          WebkitMaskSize: "100% calc(100% - var(--gallery-top-wave) + 1px),100% var(--gallery-top-wave)",
           WebkitMaskRepeat: "no-repeat",
         }
       : {}),

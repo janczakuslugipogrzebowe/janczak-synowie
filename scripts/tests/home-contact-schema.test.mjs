@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { DEFAULT_HOME_CONTACT, HomeContactValidationError, parseHomeContact } from "../../src/lib/home-contact/schema.ts";
+import {
+  DEFAULT_HOME_CONTACT,
+  HomeContactValidationError,
+  parseHomeContact,
+} from "../../src/lib/home-contact/schema.ts";
 
 const valid = () => structuredClone(DEFAULT_HOME_CONTACT);
 test("published contact defaults are valid", () => {
@@ -20,7 +24,16 @@ test("image path and internal CTA only", () => {
   }
 });
 test("photography and scale settings are bounded", () => {
-  for (const key of ["imagePositionX", "imagePositionY", "overlayOpacity", "headingScale", "descriptionScale", "phoneScale", "iconScale", "spacingScale"]) {
+  for (const key of [
+    "imagePositionX",
+    "imagePositionY",
+    "overlayOpacity",
+    "headingScale",
+    "descriptionScale",
+    "phoneScale",
+    "iconScale",
+    "spacingScale",
+  ]) {
     assert.throws(() => parseHomeContact({ ...valid(), [key]: -1 }), HomeContactValidationError);
     assert.throws(() => parseHomeContact({ ...valid(), [key]: "120" }), HomeContactValidationError);
   }

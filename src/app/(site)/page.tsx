@@ -57,7 +57,12 @@ export default async function Home() {
       <ObituariesDocumentsBoundary>
         <HomeObituariesSection data={obituaries} entries={entries} joinsFlorist />
       </ObituariesDocumentsBoundary>
-      <HomeDocumentsSection data={homeDocuments} documents={documentsLibrary} joinsObituaries followedByGallery />
+      <HomeDocumentsSection
+        data={homeDocuments}
+        documents={documentsLibrary}
+        joinsObituaries
+        followedByGallery
+      />
       <HomeGallerySection data={gallerySettings} photos={galleryPhotos} joinsDocuments followedByFaq />
       <HomeFaqSection data={faq} joinsGallery followedByContact />
       <HomeContactSection data={contact} settings={settings} joinsFaq />

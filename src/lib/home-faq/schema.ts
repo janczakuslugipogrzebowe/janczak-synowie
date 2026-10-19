@@ -44,12 +44,48 @@ export const DEFAULT_HOME_FAQ: HomeFaqContent = {
   spacingScale: 100,
   columnGapScale: 100,
   items: [
-    { id: "faq-documents", question: "Jakie dokumenty są potrzebne do organizacji pogrzebu?", answer: "Lista potrzebnych dokumentów zależy od konkretnej sytuacji. Podczas rozmowy wyjaśnimy Państwu, co należy przygotować, i pomożemy w dopełnieniu formalności. Przydatne formularze znajdują się również w zakładce Dokumenty.", visible: true },
-    { id: "faq-benefit", question: "Czy pomagacie w formalnościach związanych z zasiłkiem pogrzebowym?", answer: "Tak. Na życzenie pomagamy w załatwieniu formalności związanych z zasiłkiem pogrzebowym, w tym dokumentów do ZUS i KRUS. Oferujemy również możliwość bezgotówkowego rozliczenia pogrzebu.", visible: true },
-    { id: "faq-transport", question: "Czy organizujecie transport zmarłych z zagranicy?", answer: "Tak, zapewniamy transport zmarłych zarówno na terenie Polski, jak i z zagranicy. Pomagamy również w organizacji związanych z tym formalności.", visible: true },
-    { id: "faq-cremation", question: "Czy można wybrać kremację zamiast tradycyjnego pochówku?", answer: "Tak. Organizujemy uroczystości pogrzebowe zarówno z pochówkiem tradycyjnym, jak i kremacją. Pomagamy rodzinie ustalić przebieg ceremonii zgodnie z jej życzeniami.", visible: true },
-    { id: "faq-florist", question: "Czy można zamówić wieńce i wiązanki na ceremonię?", answer: "Oczywiście. Prowadzimy własną kwiaciarnię Zielona Przystań, w której przygotowujemy wieńce, wiązanki oraz indywidualne kompozycje florystyczne. Dzięki temu wiele spraw związanych z pożegnaniem można załatwić w jednym miejscu.", visible: true },
-    { id: "faq-contact", question: "Czy można kontaktować się z Wami przez całą dobę?", answer: "Tak. Jesteśmy dostępni całodobowo pod numerem 605 043 008. Mogą Państwo skontaktować się z nami, aby uzyskać pomoc i informacje dotyczące kolejnych kroków.", visible: true },
+    {
+      id: "faq-documents",
+      question: "Jakie dokumenty są potrzebne do organizacji pogrzebu?",
+      answer:
+        "Lista potrzebnych dokumentów zależy od konkretnej sytuacji. Podczas rozmowy wyjaśnimy Państwu, co należy przygotować, i pomożemy w dopełnieniu formalności. Przydatne formularze znajdują się również w zakładce Dokumenty.",
+      visible: true,
+    },
+    {
+      id: "faq-benefit",
+      question: "Czy pomagacie w formalnościach związanych z zasiłkiem pogrzebowym?",
+      answer:
+        "Tak. Na życzenie pomagamy w załatwieniu formalności związanych z zasiłkiem pogrzebowym, w tym dokumentów do ZUS i KRUS. Oferujemy również możliwość bezgotówkowego rozliczenia pogrzebu.",
+      visible: true,
+    },
+    {
+      id: "faq-transport",
+      question: "Czy organizujecie transport zmarłych z zagranicy?",
+      answer:
+        "Tak, zapewniamy transport zmarłych zarówno na terenie Polski, jak i z zagranicy. Pomagamy również w organizacji związanych z tym formalności.",
+      visible: true,
+    },
+    {
+      id: "faq-cremation",
+      question: "Czy można wybrać kremację zamiast tradycyjnego pochówku?",
+      answer:
+        "Tak. Organizujemy uroczystości pogrzebowe zarówno z pochówkiem tradycyjnym, jak i kremacją. Pomagamy rodzinie ustalić przebieg ceremonii zgodnie z jej życzeniami.",
+      visible: true,
+    },
+    {
+      id: "faq-florist",
+      question: "Czy można zamówić wieńce i wiązanki na ceremonię?",
+      answer:
+        "Oczywiście. Prowadzimy własną kwiaciarnię Zielona Przystań, w której przygotowujemy wieńce, wiązanki oraz indywidualne kompozycje florystyczne. Dzięki temu wiele spraw związanych z pożegnaniem można załatwić w jednym miejscu.",
+      visible: true,
+    },
+    {
+      id: "faq-contact",
+      question: "Czy można kontaktować się z Wami przez całą dobę?",
+      answer:
+        "Tak. Jesteśmy dostępni całodobowo pod numerem 605 043 008. Mogą Państwo skontaktować się z nami, aby uzyskać pomoc i informacje dotyczące kolejnych kroków.",
+      visible: true,
+    },
   ],
 };
 
@@ -61,7 +97,12 @@ export class HomeFaqValidationError extends Error {
 }
 
 function text(value: unknown, field: string, max: number) {
-  if (typeof value !== "string" || !value.trim() || value.length > max || /[\u0000-\u0009\u000b-\u001f\u007f]/.test(value))
+  if (
+    typeof value !== "string" ||
+    !value.trim() ||
+    value.length > max ||
+    /[\u0000-\u0009\u000b-\u001f\u007f]/.test(value)
+  )
     throw new HomeFaqValidationError(`Nieprawidłowe pole: ${field}.`);
   return value.trim();
 }
@@ -79,7 +120,11 @@ export function parseHomeFaq(raw: unknown): HomeFaqContent {
     return val;
   };
   const imageUrl = text(r.imageUrl, "imageUrl", 500);
-  if (!/^\/[a-z0-9/_-]+\.(png|jpe?g|webp|avif)$/i.test(imageUrl) || imageUrl.includes("..") || imageUrl.includes("//"))
+  if (
+    !/^\/[a-z0-9/_-]+\.(png|jpe?g|webp|avif)$/i.test(imageUrl) ||
+    imageUrl.includes("..") ||
+    imageUrl.includes("//")
+  )
     throw new HomeFaqValidationError("Zdjęcie musi być plikiem z katalogu public.");
   const buttonHref = text(r.buttonHref, "buttonHref", 200);
   if (!/^\/(?!\/)[a-z0-9/_#-]*$/i.test(buttonHref) || buttonHref.includes(".."))
@@ -95,9 +140,15 @@ export function parseHomeFaq(raw: unknown): HomeFaqContent {
       throw new HomeFaqValidationError("Nieznane pole pytania FAQ.");
     if (typeof item.id !== "string" || !/^[a-z0-9_-]{5,80}$/i.test(item.id) || ids.has(item.id))
       throw new HomeFaqValidationError("Nieprawidłowy lub powtórzony identyfikator pytania.");
-    if (typeof item.visible !== "boolean") throw new HomeFaqValidationError("Nieprawidłowa widoczność pytania.");
+    if (typeof item.visible !== "boolean")
+      throw new HomeFaqValidationError("Nieprawidłowa widoczność pytania.");
     ids.add(item.id);
-    return { id: item.id, question: text(item.question, "question", 200), answer: text(item.answer, "answer", 1500), visible: item.visible };
+    return {
+      id: item.id,
+      question: text(item.question, "question", 200),
+      answer: text(item.answer, "answer", 1500),
+      visible: item.visible,
+    };
   });
   return {
     eyebrow: text(r.eyebrow, "eyebrow", 90),

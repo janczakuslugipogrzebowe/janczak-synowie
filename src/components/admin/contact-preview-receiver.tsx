@@ -11,12 +11,25 @@ export default function ContactPreviewReceiver({ settings }: { settings: SiteSet
   const [data, setData] = useState<HomeContactContent | null>(null);
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin || event.source !== window.parent || event.data?.type !== CHANGE) return;
-      try { setData(parseHomeContact(event.data.content)); } catch { /* Ignore incomplete edits. */ }
+      if (
+        event.origin !== window.location.origin ||
+        event.source !== window.parent ||
+        event.data?.type !== CHANGE
+      )
+        return;
+      try {
+        setData(parseHomeContact(event.data.content));
+      } catch {
+        /* Ignore incomplete edits. */
+      }
     };
     window.addEventListener("message", onMessage);
     window.parent.postMessage({ type: READY }, window.location.origin);
     return () => window.removeEventListener("message", onMessage);
   }, []);
-  return <main id="main" className="min-h-dvh bg-[#14241c]">{data && <HomeContactSection data={data} settings={settings} preview joinsFaq />}</main>;
+  return (
+    <main id="main" className="min-h-dvh bg-[#14241c]">
+      {data && <HomeContactSection data={data} settings={settings} preview joinsFaq />}
+    </main>
+  );
 }

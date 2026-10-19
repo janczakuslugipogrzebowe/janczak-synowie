@@ -46,19 +46,27 @@ export class HomeContactValidationError extends Error {
 }
 
 function requiredText(value: unknown, field: string, max: number) {
-  if (typeof value !== "string" || !value.trim() || value.length > max || /[\u0000-\u0009\u000b-\u001f\u007f]/.test(value)) {
+  if (
+    typeof value !== "string" ||
+    !value.trim() ||
+    value.length > max ||
+    /[\u0000-\u0009\u000b-\u001f\u007f]/.test(value)
+  ) {
     throw new HomeContactValidationError(`Nieprawidłowe pole: ${field}.`);
   }
   return value.trim();
 }
 
 export function parseHomeContact(value: unknown): HomeContactContent {
-  if (!value || typeof value !== "object" || Array.isArray(value)) throw new HomeContactValidationError("Nieprawidłowa zawartość sekcji kontaktu.");
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new HomeContactValidationError("Nieprawidłowa zawartość sekcji kontaktu.");
   const r = value as Record<string, unknown>;
-  if (Object.keys(r).some((key) => !(key in DEFAULT_HOME_CONTACT))) throw new HomeContactValidationError("Nieznane pole sekcji kontaktu.");
+  if (Object.keys(r).some((key) => !(key in DEFAULT_HOME_CONTACT)))
+    throw new HomeContactValidationError("Nieznane pole sekcji kontaktu.");
   const num = (key: keyof HomeContactContent, min: number, max: number) => {
     const v = r[key] ?? DEFAULT_HOME_CONTACT[key];
-    if (typeof v !== "number" || !Number.isInteger(v) || v < min || v > max) throw new HomeContactValidationError(`Nieprawidłowy parametr: ${key}.`);
+    if (typeof v !== "number" || !Number.isInteger(v) || v < min || v > max)
+      throw new HomeContactValidationError(`Nieprawidłowy parametr: ${key}.`);
     return v;
   };
   const flag = (key: "showSecondaryPhone" | "showAddress" | "showEmail") => {
@@ -67,9 +75,15 @@ export function parseHomeContact(value: unknown): HomeContactContent {
     return v;
   };
   const imageUrl = requiredText(r.imageUrl, "imageUrl", 500);
-  if (!/^\/[a-z0-9/_-]+\.(png|jpe?g|webp|avif)$/i.test(imageUrl) || imageUrl.includes("..") || imageUrl.includes("//")) throw new HomeContactValidationError("Zdjęcie musi pochodzić z katalogu public.");
+  if (
+    !/^\/[a-z0-9/_-]+\.(png|jpe?g|webp|avif)$/i.test(imageUrl) ||
+    imageUrl.includes("..") ||
+    imageUrl.includes("//")
+  )
+    throw new HomeContactValidationError("Zdjęcie musi pochodzić z katalogu public.");
   const buttonHref = requiredText(r.buttonHref, "buttonHref", 200);
-  if (!/^\/(?!\/)[a-z0-9/_#-]*$/i.test(buttonHref) || buttonHref.includes("..")) throw new HomeContactValidationError("Przycisk musi prowadzić do podstrony serwisu.");
+  if (!/^\/(?!\/)[a-z0-9/_#-]*$/i.test(buttonHref) || buttonHref.includes(".."))
+    throw new HomeContactValidationError("Przycisk musi prowadzić do podstrony serwisu.");
   return {
     eyebrow: requiredText(r.eyebrow, "eyebrow", 90),
     headline: requiredText(r.headline, "headline", 150),

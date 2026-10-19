@@ -25,6 +25,7 @@ import {
   TbFlower,
   TbHelpCircle,
   TbPhoneCall,
+  TbLayoutBottombar,
 } from "react-icons/tb";
 import { PAGE_LABELS, PAGE_SLUGS, type PageSlug } from "@/lib/pages/schema";
 
@@ -37,9 +38,12 @@ const mainNav = [
 ];
 
 function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () => void }) {
-  const current = pathname.startsWith("/admin/site/home")
-    ? "home"
-    : (PAGE_SLUGS.find((slug) => pathname.startsWith(`/admin/site/${slug}`)) ?? "home");
+  const current =
+    pathname === "/admin/site/footer"
+      ? null
+      : pathname.startsWith("/admin/site/home")
+        ? "home"
+        : (PAGE_SLUGS.find((slug) => pathname.startsWith(`/admin/site/${slug}`)) ?? "home");
   const [expanded, setExpanded] = useState<string | null>(current);
   const sections: { id: string; label: string; href: string; Icon: typeof TbPhoto }[] = [
     { id: "hero", label: "Hero", href: "/admin/site/home/hero", Icon: TbPhoto },
@@ -115,6 +119,15 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
           </div>
         );
       })}
+      <Link
+        href="/admin/site/footer"
+        onClick={onNavigate}
+        aria-current={active("/admin/site/footer") ? "page" : undefined}
+        className={`flex min-h-11 items-center gap-2 rounded-lg px-3 text-[13px] font-semibold transition-colors ${active("/admin/site/footer") ? "bg-[#e3c997]/16 text-champagne" : "text-white/85 hover:bg-white/10 hover:text-white"}`}
+      >
+        <TbLayoutBottombar size={18} strokeWidth={1.6} />
+        <span className="flex-1">Stopka</span>
+      </Link>
     </div>
   );
 }

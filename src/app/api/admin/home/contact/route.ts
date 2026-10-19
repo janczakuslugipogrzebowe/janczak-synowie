@@ -21,7 +21,8 @@ async function save(request: Request, publish: boolean) {
   if (!isSameOrigin(request)) return json({ error: "Niedozwolone pochodzenie." }, 403);
   const uid = await getUid();
   if (!uid) return json({ error: "Brak dostępu." }, 401);
-  if (!request.headers.get("content-type")?.startsWith("application/json")) return json({ error: "Oczekiwano JSON." }, 415);
+  if (!request.headers.get("content-type")?.startsWith("application/json"))
+    return json({ error: "Oczekiwano JSON." }, 415);
   try {
     const raw = await request.text();
     if (raw.length > 12000) return json({ error: "Za duży formularz." }, 413);
@@ -33,7 +34,8 @@ async function save(request: Request, publish: boolean) {
     }
     return json({ ok: true });
   } catch (error) {
-    if (error instanceof HomeContactValidationError || error instanceof SyntaxError) return json({ error: error.message }, 400);
+    if (error instanceof HomeContactValidationError || error instanceof SyntaxError)
+      return json({ error: error.message }, 400);
     return json({ error: "Nie udało się zapisać sekcji Kontakt." }, 500);
   }
 }

@@ -28,10 +28,46 @@ export default function HomeContactSection({
   const reduced = useReducedMotion();
   const mapUrl = directionsUrl(settings);
   const items = [
-    { id: "phone", Icon: TbPhoneCall, label: settings.primaryPhone, description: settings.availability, href: `tel:${normalizePhone(settings.primaryPhone)}` },
-    ...(data.showSecondaryPhone ? [{ id: "secondary", Icon: TbPhone, label: settings.secondaryPhone, description: "Drugi numer telefonu", href: `tel:${normalizePhone(settings.secondaryPhone)}` }] : []),
-    ...(data.showAddress ? [{ id: "address", Icon: TbMapPin, label: settings.addressLine, description: settings.postalCity, href: mapUrl }] : []),
-    ...(data.showEmail && settings.email ? [{ id: "email", Icon: TbMail, label: settings.email, description: "Adres e-mail", href: `mailto:${settings.email}` }] : []),
+    {
+      id: "phone",
+      Icon: TbPhoneCall,
+      label: settings.primaryPhone,
+      description: settings.availability,
+      href: `tel:${normalizePhone(settings.primaryPhone)}`,
+    },
+    ...(data.showSecondaryPhone
+      ? [
+          {
+            id: "secondary",
+            Icon: TbPhone,
+            label: settings.secondaryPhone,
+            description: "Drugi numer telefonu",
+            href: `tel:${normalizePhone(settings.secondaryPhone)}`,
+          },
+        ]
+      : []),
+    ...(data.showAddress
+      ? [
+          {
+            id: "address",
+            Icon: TbMapPin,
+            label: settings.addressLine,
+            description: settings.postalCity,
+            href: mapUrl,
+          },
+        ]
+      : []),
+    ...(data.showEmail && settings.email
+      ? [
+          {
+            id: "email",
+            Icon: TbMail,
+            label: settings.email,
+            description: "Adres e-mail",
+            href: `mailto:${settings.email}`,
+          },
+        ]
+      : []),
   ];
   const vars = {
     "--contact-heading-scale": data.headingScale / 100,
@@ -39,17 +75,19 @@ export default function HomeContactSection({
     "--contact-phone-scale": data.phoneScale / 100,
     "--contact-icon-scale": data.iconScale / 100,
     "--contact-spacing-scale": data.spacingScale / 100,
-    ...(joinsFaq ? {
-      "--contact-wave": "clamp(55px,7vw,160px)",
-      maskImage: `linear-gradient(#000,#000),${FAQ_BOTTOM_WAVE}`,
-      maskPosition: "bottom left,top left",
-      maskSize: "100% calc(100% - var(--contact-wave) + 1px),100% var(--contact-wave)",
-      maskRepeat: "no-repeat",
-      WebkitMaskImage: `linear-gradient(#000,#000),${FAQ_BOTTOM_WAVE}`,
-      WebkitMaskPosition: "bottom left,top left",
-      WebkitMaskSize: "100% calc(100% - var(--contact-wave) + 1px),100% var(--contact-wave)",
-      WebkitMaskRepeat: "no-repeat",
-    } : {}),
+    ...(joinsFaq
+      ? {
+          "--contact-wave": "clamp(55px,7vw,160px)",
+          maskImage: `linear-gradient(#000,#000),${FAQ_BOTTOM_WAVE}`,
+          maskPosition: "bottom left,top left",
+          maskSize: "100% calc(100% - var(--contact-wave) + 1px),100% var(--contact-wave)",
+          maskRepeat: "no-repeat",
+          WebkitMaskImage: `linear-gradient(#000,#000),${FAQ_BOTTOM_WAVE}`,
+          WebkitMaskPosition: "bottom left,top left",
+          WebkitMaskSize: "100% calc(100% - var(--contact-wave) + 1px),100% var(--contact-wave)",
+          WebkitMaskRepeat: "no-repeat",
+        }
+      : {}),
   } as CSSProperties;
 
   const animation = (delay: number) => ({
@@ -75,19 +113,33 @@ export default function HomeContactSection({
         className="pointer-events-none -z-30 object-cover"
         style={{ objectPosition: `${data.imagePositionX}% ${data.imagePositionY}%` }}
       />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 bg-[#07160f]" style={{ opacity: data.overlayOpacity / 100 }} />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,19,13,.14),rgba(7,19,13,.26)_57%,rgba(7,19,13,.55))]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-20 bg-[#07160f]"
+        style={{ opacity: data.overlayOpacity / 100 }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,19,13,.14),rgba(7,19,13,.26)_57%,rgba(7,19,13,.55))]"
+      />
 
-      <div className={`relative mx-auto w-[min(90%,1640px)] pb-[clamp(9rem,11vw,15rem)] 3xl:w-[min(88%,2200px)] 4xl:w-[min(85%,3000px)] ${
-        joinsFaq ? "pt-[calc(clamp(55px,7vw,160px)+clamp(5.5rem,8vw,11rem))]" : "pt-[clamp(7rem,10vw,13rem)]"
-      }`}>
+      <div
+        className={`relative mx-auto w-[min(90%,1640px)] pb-[clamp(9rem,11vw,15rem)] 3xl:w-[min(88%,2200px)] 4xl:w-[min(85%,3000px)] ${
+          joinsFaq
+            ? "pt-[calc(clamp(55px,7vw,160px)+clamp(5.5rem,8vw,11rem))]"
+            : "pt-[clamp(7rem,10vw,13rem)]"
+        }`}
+      >
         <motion.div {...animation(0)} className="mx-auto max-w-[1160px] text-center">
           <p className="flex items-center justify-center gap-4 text-[clamp(.68rem,.78cqw,.92rem)] font-bold uppercase tracking-[.32em] text-[#e5ca94]">
             <span aria-hidden="true" className="h-px w-9 bg-[#d7bc87]" />
             {data.eyebrow}
             <span aria-hidden="true" className="h-px w-9 bg-[#d7bc87]" />
           </p>
-          <h2 id={headingId} className="mx-auto mt-[clamp(1.4rem,2.5vw,3rem)] max-w-[19ch] text-balance font-display font-medium leading-[1.08] tracking-[-.04em] [font-size:clamp(calc(2.4rem*var(--contact-heading-scale)),calc(4.1cqw*var(--contact-heading-scale)),calc(6.2rem*var(--contact-heading-scale)))]">
+          <h2
+            id={headingId}
+            className="mx-auto mt-[clamp(1.4rem,2.5vw,3rem)] max-w-[19ch] text-balance font-display font-medium leading-[1.08] tracking-[-.04em] [font-size:clamp(calc(2.4rem*var(--contact-heading-scale)),calc(4.1cqw*var(--contact-heading-scale)),calc(6.2rem*var(--contact-heading-scale)))]"
+          >
             {data.headline}
           </h2>
           <p className="mx-auto mt-[calc(clamp(1.2rem,2vw,2.5rem)*var(--contact-spacing-scale))] max-w-[62ch] leading-[1.85] text-white/85 [font-size:clamp(calc(.95rem*var(--contact-description-scale)),calc(1.05cqw*var(--contact-description-scale)),calc(1.4rem*var(--contact-description-scale)))]">
@@ -126,11 +178,7 @@ export default function HomeContactSection({
             }`;
 
             return (
-              <motion.div
-                key={id}
-                {...animation(0.08 + index * 0.075)}
-                className="min-w-0"
-              >
+              <motion.div key={id} {...animation(0.08 + index * 0.075)} className="min-w-0">
                 {/* One direct child prevents unkeyed child arrays in motion/react. */}
                 <div className="flex min-w-0 items-center justify-center gap-4 text-left lg:gap-5">
                   <span
@@ -148,7 +196,9 @@ export default function HomeContactSection({
                         {displayLabel}
                       </a>
                     ) : (
-                      <span className={`block ${labelClass} ${id === "email" ? "max-w-full" : "break-words"}`}>
+                      <span
+                        className={`block ${labelClass} ${id === "email" ? "max-w-full" : "break-words"}`}
+                      >
                         {displayLabel}
                       </span>
                     )}
@@ -162,21 +212,39 @@ export default function HomeContactSection({
           })}
         </div>
 
-        <motion.div {...animation(0.24)} className="mt-[calc(clamp(3rem,4vw,6rem)*var(--contact-spacing-scale))] flex justify-center">
+        <motion.div
+          {...animation(0.24)}
+          className="mt-[calc(clamp(3rem,4vw,6rem)*var(--contact-spacing-scale))] flex justify-center"
+        >
           {preview ? (
             <span className="inline-flex min-h-12 items-center gap-3 rounded-full bg-[#e3c895] px-8 py-3 text-sm font-semibold text-[#13231a]">
-              <TbMail size={19} />{data.buttonLabel}<TbArrowUpRight size={19} />
+              <TbMail size={19} />
+              {data.buttonLabel}
+              <TbArrowUpRight size={19} />
             </span>
           ) : (
-            <Link href={data.buttonHref} className="group inline-flex min-h-12 cursor-pointer items-center gap-3 rounded-full bg-[#e3c895] px-8 py-3 text-sm font-semibold text-[#13231a] shadow-[8px_14px_28px_-20px_rgba(0,0,0,.8)] transition-colors hover:bg-[#f1ddba] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f1ddba]">
-              <TbMail size={19} />{data.buttonLabel}<TbArrowUpRight size={19} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            <Link
+              href={data.buttonHref}
+              className="group inline-flex min-h-12 cursor-pointer items-center gap-3 rounded-full bg-[#e3c895] px-8 py-3 text-sm font-semibold text-[#13231a] shadow-[8px_14px_28px_-20px_rgba(0,0,0,.8)] transition-colors hover:bg-[#f1ddba] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f1ddba]"
+            >
+              <TbMail size={19} />
+              {data.buttonLabel}
+              <TbArrowUpRight
+                size={19}
+                className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
             </Link>
           )}
         </motion.div>
       </div>
 
       {/* Dark, gently asymmetric finish; the footer will inherit its color. */}
-      <svg aria-hidden="true" viewBox="0 0 1440 150" preserveAspectRatio="none" className="pointer-events-none absolute -bottom-px inset-x-0 h-[clamp(55px,7vw,150px)] w-full fill-[#0f1c16]">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 1440 150"
+        preserveAspectRatio="none"
+        className="pointer-events-none absolute -bottom-px inset-x-0 h-[clamp(55px,7vw,150px)] w-full fill-[#0f1c16]"
+      >
         <path d="M0 105 C154 91 253 78 395 87 C564 98 681 113 832 106 C1004 98 1111 67 1247 78 C1326 85 1391 96 1440 90 L1440 150 L0 150Z" />
       </svg>
     </section>

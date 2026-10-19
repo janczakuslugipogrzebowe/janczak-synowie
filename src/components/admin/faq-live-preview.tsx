@@ -40,26 +40,44 @@ export default function FaqLivePreview({ data, phone }: { data: HomeFaqContent; 
 
   useEffect(() => {
     const ready = (event: MessageEvent) => {
-      if (event.origin === window.location.origin && event.source === frame.current?.contentWindow && event.data?.type === READY)
+      if (
+        event.origin === window.location.origin &&
+        event.source === frame.current?.contentWindow &&
+        event.data?.type === READY
+      )
         send();
     };
     window.addEventListener("message", ready);
     return () => window.removeEventListener("message", ready);
   }, [send]);
 
-  useEffect(() => { send(); }, [send]);
+  useEffect(() => {
+    send();
+  }, [send]);
   const scale = dims.available ? Math.min(1, dims.available / dims.width) : 0;
 
   return (
-    <div ref={host} className="w-full overflow-hidden rounded-xl border border-[#e4e0d6] bg-[#14241c] shadow-lg">
-      <div className="relative mx-auto overflow-hidden" style={{ width: dims.width * scale, height: dims.height * scale }} aria-label={phone ? "Podgląd telefonu" : "Podgląd desktopu"}>
+    <div
+      ref={host}
+      className="w-full overflow-hidden rounded-xl border border-[#e4e0d6] bg-[#14241c] shadow-lg"
+    >
+      <div
+        className="relative mx-auto overflow-hidden"
+        style={{ width: dims.width * scale, height: dims.height * scale }}
+        aria-label={phone ? "Podgląd telefonu" : "Podgląd desktopu"}
+      >
         <iframe
           ref={frame}
           title="Podgląd sekcji FAQ"
           src="/admin/preview/faq"
           onLoad={send}
           className="absolute left-0 top-0 block border-0"
-          style={{ width: dims.width, height: dims.height, transform: `scale(${scale})`, transformOrigin: "top left" }}
+          style={{
+            width: dims.width,
+            height: dims.height,
+            transform: `scale(${scale})`,
+            transformOrigin: "top left",
+          }}
         />
       </div>
     </div>
