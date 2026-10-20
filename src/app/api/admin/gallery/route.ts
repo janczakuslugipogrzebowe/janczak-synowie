@@ -3,6 +3,7 @@ import { getAdminUid, isAdminConfigured } from "@/lib/admin/session";
 import { isSameOrigin } from "@/lib/admin/origin";
 import { getAdminGalleryState, writeGalleryLibrary } from "@/lib/gallery/data";
 import { GalleryValidationError, parseGalleryLibrary } from "@/lib/gallery/schema";
+import { parseGalleryAlbums, galleryPhotoAlbum } from "@/lib/gallery/albums";
 
 const json = (data: unknown, status = 200) =>
   Response.json(data, { status, headers: { "Cache-Control": "private, no-store" } });
@@ -24,19 +25,33 @@ async function save(request: Request, publish: boolean) {
     return json({ error: "Oczekiwano JSON." }, 415);
   try {
     const raw = await request.text();
-    if (raw.length > 130000) return json({ error: "Za duża biblioteka." }, 413);
-    const items = parseGalleryLibrary(JSON.parse(raw));
-    await writeGalleryLibrary(items, uid, publish);
+    if (raw.length > 190000) return json({ error: "Za duża biblioteka." }, 413);
+    const payload: unknown = JSON.parse(raw);
+    const legacy = Array.isArray(payload);
+    const obj =
+      !legacy && typeof payload === "object" && payload !== null
+        ? (payload as Record<string, unknown>)
+        : null;
+    if (!legacy && (!obj || Object.keys(obj).some((k) => !["photos", "albums"].includes(k))))
+      throw new GalleryValidationError("Niepoprawny format galerii.");
+    const photos = parseGalleryLibrary(legacy ? payload : obj?.photos);
+    const albums = legacy ? undefined : parseGalleryAlbums(obj?.albums);
+    if (albums) {
+      const known = new Set(albums.map((a) => a.id));
+      if (photos.some((p) => galleryPhotoAlbum(p) && !known.has(galleryPhotoAlbum(p))))
+        throw new GalleryValidationError("Zdjęcie przypisano do nieistniejącego albumu.");
+    }
+    await writeGalleryLibrary(photos, uid, publish, albums);
     if (publish) {
       revalidateTag("janczak-gallery-library", { expire: 0 });
       revalidatePath("/");
-      revalidatePath("/galeria");
+      revalidatePath("/galeria", "layout");
     }
     return json({ ok: true });
   } catch (error) {
     if (error instanceof GalleryValidationError || error instanceof SyntaxError)
       return json({ error: error.message }, 400);
-    return json({ error: "Nie udało się zapisać zdjęć." }, 500);
+    return json({ error: "Nie udało się zapisać galerii." }, 500);
   }
 }
 export const PUT = (request: Request) => save(request, false);

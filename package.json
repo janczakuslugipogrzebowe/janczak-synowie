@@ -31,7 +31,9 @@
     "test:faq": "node --experimental-strip-types --test scripts/tests/home-faq-schema.test.mjs scripts/tests/home-faq-integration.test.mjs",
     "test:contact": "node --experimental-strip-types --test scripts/tests/home-contact-schema.test.mjs",
     "test:contact-ui": "node --test scripts/tests/home-contact-ui.test.mjs",
-    "test:footer": "node --experimental-strip-types --test scripts/tests/footer-schema.test.mjs scripts/tests/footer-integration.test.mjs scripts/tests/footer-editorial.test.mjs"
+    "test:footer": "node --experimental-strip-types --test scripts/tests/footer-schema.test.mjs scripts/tests/footer-integration.test.mjs scripts/tests/footer-editorial.test.mjs",
+    "test:gallery-pages": "node --test scripts/tests/gallery-pages.test.mjs",
+    "test:gallery-explorer": "node --experimental-strip-types --test scripts/tests/gallery-explorer.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

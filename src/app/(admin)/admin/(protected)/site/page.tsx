@@ -23,12 +23,14 @@ export default function SiteEditorHome() {
         {PAGE_SLUGS.map((slug) => (
           <Link
             key={slug}
-            href={`/admin/site/${slug}`}
+            href={slug === "galeria" ? "/admin/site/galeria/hero" : `/admin/site/${slug}`}
             className={`${surfaceClass} group p-7 transition hover:-translate-y-0.5 hover:shadow-md`}
           >
             <TbLayoutGrid className="size-8 text-[#a1835e]" />
             <h2 className="mt-6 font-display text-4xl font-semibold">{PAGE_LABELS[slug]}</h2>
-            <p className="mt-2 text-xs text-[#727d74]">Sekcja wprowadzająca</p>
+            <p className="mt-2 text-xs text-[#727d74]">
+              {slug === "galeria" ? "4 sekcje · Hero · Albumy · O galerii · CTA" : "Sekcja wprowadzająca"}
+            </p>
             <TbArrowUpRight size={20} className="ml-auto mt-6 text-[#a1835e]" />
           </Link>
         ))}

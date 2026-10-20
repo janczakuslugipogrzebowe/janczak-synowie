@@ -6,6 +6,7 @@ export type GalleryPhoto = {
   imageUrl: string;
   published: boolean;
   createdAt: string;
+  albumId?: string;
 };
 
 export class GalleryValidationError extends Error {
@@ -88,7 +89,8 @@ export function parseGalleryLibrary(value: unknown): GalleryPhoto[] {
     const entry = row as Record<string, unknown>;
     if (
       Object.keys(entry).some(
-        (k) => !["id", "title", "description", "alt", "imageUrl", "published", "createdAt"].includes(k),
+        (k) =>
+          !["id", "title", "description", "alt", "imageUrl", "published", "createdAt", "albumId"].includes(k),
       )
     )
       throw new GalleryValidationError("Nieznane pole zdjęcia.");
@@ -112,8 +114,21 @@ export function parseGalleryLibrary(value: unknown): GalleryPhoto[] {
       new Date(createdAt).toISOString() !== createdAt
     )
       throw new GalleryValidationError("Nieprawidłowa data dodania zdjęcia.");
+    const albumId =
+      entry.albumId === undefined ? undefined : cleanString(entry.albumId, "albumId", 90, false);
+    if (albumId !== undefined && albumId !== "" && !/^[a-z0-9][a-z0-9-]{2,90}$/.test(albumId))
+      throw new GalleryValidationError("Nieprawidłowy album zdjęcia.");
     ids.add(id);
-    return { id, title, description, alt, imageUrl, published: entry.published, createdAt };
+    return {
+      id,
+      title,
+      description,
+      alt,
+      imageUrl,
+      published: entry.published,
+      createdAt,
+      ...(albumId === undefined ? {} : { albumId }),
+    };
   });
 }
 

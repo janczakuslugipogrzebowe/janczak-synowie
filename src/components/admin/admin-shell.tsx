@@ -105,15 +105,37 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
             </button>
             {expanded === slug && (
               <div className="ml-5 border-l border-white/15 py-1 pl-3">
-                <Link
-                  href={href}
-                  onClick={onNavigate}
-                  aria-current={active(href) ? "page" : undefined}
-                  className={sectionStyle(href)}
-                >
-                  <TbArticle size={17} strokeWidth={1.65} />
-                  Wprowadzenie
-                </Link>
+                {slug === "galeria" ? (
+                  (
+                    [
+                      ["hero", "Hero"],
+                      ["albums", "Albumy"],
+                      ["about", "O galerii"],
+                      ["bottom", "Kontaktowe CTA"],
+                    ] as const
+                  ).map(([section, label]) => (
+                    <Link
+                      key={section}
+                      href={`/admin/site/galeria/${section}`}
+                      onClick={onNavigate}
+                      aria-current={active(`/admin/site/galeria/${section}`) ? "page" : undefined}
+                      className={sectionStyle(`/admin/site/galeria/${section}`)}
+                    >
+                      <TbPhoto size={17} strokeWidth={1.65} />
+                      {label}
+                    </Link>
+                  ))
+                ) : (
+                  <Link
+                    href={href}
+                    onClick={onNavigate}
+                    aria-current={active(href) ? "page" : undefined}
+                    className={sectionStyle(href)}
+                  >
+                    <TbArticle size={17} strokeWidth={1.65} />
+                    Wprowadzenie
+                  </Link>
+                )}
               </div>
             )}
           </div>
