@@ -55,6 +55,31 @@ const galleryDefaults: Record<SubpageSection, SubpageBlock> = {
     ctaText: "Przejdź do kontaktu",
   },
 };
+/** Reuse the exact same hero and closing CTA component across subpages,
+ * while allowing dedicated imagery and copy for each page. */
+const documentsDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "bottom"> = {
+  hero: {
+    eyebrow: "POMOC W FORMALNOŚCIACH",
+    title: "Dokumenty",
+    description:
+      "Najważniejsze formularze i informacje związane z organizacją pogrzebu. W trudnych chwilach służymy spokojną i życzliwą pomocą przy formalnościach.",
+    imageUrl: "/hero-dokumenty.png",
+    overlay: 62,
+    headingScale: 100,
+    ctaText: "",
+  },
+  bottom: {
+    eyebrow: "JESTEŚMY DO PAŃSTWA DYSPOZYCJI",
+    title: "Pomożemy przejść przez formalności",
+    description:
+      "Jeśli pojawią się pytania dotyczące dokumentów lub organizacji uroczystości, mogą Państwo liczyć na nasze wsparcie i rzetelną informację.",
+    imageUrl: "/bottom-dokumenty.png",
+    overlay: 70,
+    headingScale: 100,
+    ctaText: "Przejdź do kontaktu",
+  },
+};
+
 /** Migrate only exact v2.0.0 default copy, preserving all custom CMS text. */
 export function migrateGalleryPresentation(
   slug: PageSlug,
@@ -98,6 +123,8 @@ export function migrateGalleryPresentation(
 }
 export function subpageDefault(slug: PageSlug, section: SubpageSection): SubpageBlock {
   if (slug === "galeria") return galleryDefaults[section];
+  if (slug === "dokumenty" && (section === "hero" || section === "bottom"))
+    return documentsDefaults[section];
   return {
     ...galleryDefaults[section],
     title: section === "hero" ? PAGE_LABELS[slug] : galleryDefaults[section].title,

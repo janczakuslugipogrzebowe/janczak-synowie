@@ -33,7 +33,8 @@
     "test:contact-ui": "node --test scripts/tests/home-contact-ui.test.mjs",
     "test:footer": "node --experimental-strip-types --test scripts/tests/footer-schema.test.mjs scripts/tests/footer-integration.test.mjs scripts/tests/footer-editorial.test.mjs",
     "test:gallery-pages": "node --test scripts/tests/gallery-pages.test.mjs",
-    "test:gallery-explorer": "node --experimental-strip-types --test scripts/tests/gallery-explorer.test.mjs"
+    "test:gallery-explorer": "node --experimental-strip-types --test scripts/tests/gallery-explorer.test.mjs",
+    "test:documents-page": "node --experimental-strip-types --test scripts/tests/documents-page.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",

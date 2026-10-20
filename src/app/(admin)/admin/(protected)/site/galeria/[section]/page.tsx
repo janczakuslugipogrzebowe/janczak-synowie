@@ -84,13 +84,15 @@ function SectionEditor({ section }: { section: SubpageSection }) {
         <div className="grid items-start gap-6 xl:grid-cols-[minmax(320px,385px)_minmax(0,1fr)] 3xl:grid-cols-[minmax(400px,500px)_minmax(0,1fr)]">
           <section className={`${surfaceClass} space-y-5 p-6 3xl:p-8`} aria-label="Edycja sekcji">
             <h2 className="font-display text-3xl text-[#1c3026]">Treści</h2>
-            <Field label="Etykieta">
-              <input
-                className={fieldClass}
-                value={ed.draft.eyebrow}
-                onChange={(e) => update("eyebrow", e.target.value)}
-              />
-            </Field>
+            {section !== "hero" && (
+              <Field label="Etykieta">
+                <input
+                  className={fieldClass}
+                  value={ed.draft.eyebrow}
+                  onChange={(e) => update("eyebrow", e.target.value)}
+                />
+              </Field>
+            )}
             <Field label="Nagłówek">
               <input
                 className={fieldClass}

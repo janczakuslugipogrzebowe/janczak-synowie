@@ -125,6 +125,26 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
                       {label}
                     </Link>
                   ))
+                ) : slug === "dokumenty" ? (
+                  (
+                    [
+                      ["hero", "Hero"],
+                      ["downloads", "Dokumenty do pobrania"],
+                      ["guidance", "Pomoc w formalnościach"],
+                      ["bottom", "Kontaktowe CTA"],
+                    ] as const
+                  ).map(([section, label]) => (
+                    <Link
+                      key={section}
+                      href={`/admin/site/dokumenty/${section}`}
+                      onClick={onNavigate}
+                      aria-current={active(`/admin/site/dokumenty/${section}`) ? "page" : undefined}
+                      className={sectionStyle(`/admin/site/dokumenty/${section}`)}
+                    >
+                      <TbFileText size={17} strokeWidth={1.65} />
+                      {label}
+                    </Link>
+                  ))
                 ) : (
                   <Link
                     href={href}

@@ -1,13 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { SubpageBlock } from "@/lib/subpages/schema";
-import SectionEyebrow from "./section-eyebrow";
 import SubpageContainer from "./subpage-container";
 export default function SubpageHero({ data, preview = false }: { data: SubpageBlock; preview?: boolean }) {
-  // The breadcrumb owns the location label. A CMS eyebrow containing the same path
-  // is treated as legacy data, not rendered again.
-  const label = data.eyebrow.trim();
-  const isDuplicate = /^(strona główna\s*[/›>]\s*.+|galeria)$/i.test(label);
   return (
     <section
       aria-label="Wprowadzenie"
@@ -45,11 +40,6 @@ export default function SubpageHero({ data, preview = false }: { data: SubpageBl
           <span aria-hidden="true">/</span>
           <span aria-current="page">{data.title}</span>
         </nav>
-        {!isDuplicate && label && (
-          <SectionEyebrow dark className="mb-5">
-            {label}
-          </SectionEyebrow>
-        )}
         <h1
           className="max-w-5xl font-display font-medium leading-[.98] tracking-[-.045em]"
           style={{
