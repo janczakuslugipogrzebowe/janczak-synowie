@@ -73,7 +73,12 @@ function SaveActions({
 }) {
   return (
     <div className="flex flex-wrap gap-2 border-t border-[#e6e0d4] pt-6">
-      <button type="button" className={subtleButton} disabled={busy || !unsaved} onClick={() => onSave(false)}>
+      <button
+        type="button"
+        className={subtleButton}
+        disabled={busy || !unsaved}
+        onClick={() => onSave(false)}
+      >
         Zapisz szkic
       </button>
       <button
@@ -94,7 +99,11 @@ const COMMON_DEFAULTS = {
 };
 
 export function DocumentsSharedSectionEditor({ section }: { section: "hero" | "bottom" }) {
-  const ed = useCmsEditor(`/api/admin/subpages/dokumenty/${section}`, COMMON_DEFAULTS[section], parseSubpageBlock);
+  const ed = useCmsEditor(
+    `/api/admin/subpages/dokumenty/${section}`,
+    COMMON_DEFAULTS[section],
+    parseSubpageBlock,
+  );
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   useEffect(() => {
     if (section !== "bottom") return;
@@ -116,46 +125,101 @@ export function DocumentsSharedSectionEditor({ section }: { section: "hero" | "b
   if (ed.phase !== "ready")
     return (
       <main id="main">
-        <PageHeading eyebrow="Edytor witryny / Dokumenty" title={section === "hero" ? "Hero" : "Kontaktowe CTA"} />
+        <PageHeading
+          eyebrow="Edytor witryny / Dokumenty"
+          title={section === "hero" ? "Hero" : "Kontaktowe CTA"}
+        />
         <EditorState phase={ed.phase} error={ed.error} retry={ed.retry} />
       </main>
     );
   return (
-    <EditorLayout title={section === "hero" ? "Hero" : "Kontaktowe CTA"} preview={
-      section === "hero" ? <SubpageHero data={ed.draft} preview /> : <SubpageBottomCta data={ed.draft} settings={settings} preview />
-    }>
+    <EditorLayout
+      title={section === "hero" ? "Hero" : "Kontaktowe CTA"}
+      preview={
+        section === "hero" ? (
+          <SubpageHero data={ed.draft} preview />
+        ) : (
+          <SubpageBottomCta data={ed.draft} settings={settings} preview />
+        )
+      }
+    >
       <h2 className="font-display text-3xl text-[#1c3026]">Treści</h2>
       {section === "bottom" && (
         <Field label="Etykieta">
-          <input className={fieldClass} value={ed.draft.eyebrow} onChange={(e) => update("eyebrow", e.target.value)} />
+          <input
+            className={fieldClass}
+            value={ed.draft.eyebrow}
+            onChange={(e) => update("eyebrow", e.target.value)}
+          />
         </Field>
       )}
       <Field label="Nagłówek">
-        <input className={fieldClass} value={ed.draft.title} onChange={(e) => update("title", e.target.value)} />
+        <input
+          className={fieldClass}
+          value={ed.draft.title}
+          onChange={(e) => update("title", e.target.value)}
+        />
       </Field>
       <Field label="Opis">
-        <textarea rows={5} className={fieldClass} value={ed.draft.description} onChange={(e) => update("description", e.target.value)} />
+        <textarea
+          rows={5}
+          className={fieldClass}
+          value={ed.draft.description}
+          onChange={(e) => update("description", e.target.value)}
+        />
       </Field>
       {section === "bottom" && (
         <Field label="Tekst przycisku">
-          <input className={fieldClass} value={ed.draft.ctaText} onChange={(e) => update("ctaText", e.target.value)} />
+          <input
+            className={fieldClass}
+            value={ed.draft.ctaText}
+            onChange={(e) => update("ctaText", e.target.value)}
+          />
         </Field>
       )}
-      <Field label="Zdjęcie w tle" hint={`Oczekiwany plik w public/: ${section === "hero" ? "hero-dokumenty.png" : "bottom-dokumenty.png"}`}>
-        <input className={fieldClass} value={ed.draft.imageUrl} onChange={(e) => update("imageUrl", e.target.value)} />
+      <Field
+        label="Zdjęcie w tle"
+        hint={`Oczekiwany plik w public/: ${section === "hero" ? "hero-dokumenty.png" : "bottom-dokumenty.png"}`}
+      >
+        <input
+          className={fieldClass}
+          value={ed.draft.imageUrl}
+          onChange={(e) => update("imageUrl", e.target.value)}
+        />
       </Field>
       <div className="space-y-5 border-t border-[#e6e0d4] pt-6">
         <h2 className="font-display text-3xl text-[#1c3026]">Wygląd</h2>
-        <AdminSlider label="Wielkość nagłówka" min={65} max={150} value={ed.draft.headingScale} onChange={(v) => update("headingScale", v)} />
-        <AdminSlider label="Przyciemnienie zdjęcia" min={0} max={95} value={ed.draft.overlay} onChange={(v) => update("overlay", v)} />
-        <button type="button" className={subtleButton} onClick={() => {
-          update("headingScale", 100);
-          update("overlay", COMMON_DEFAULTS[section].overlay);
-        }}>
+        <AdminSlider
+          label="Wielkość nagłówka"
+          min={65}
+          max={150}
+          value={ed.draft.headingScale}
+          onChange={(v) => update("headingScale", v)}
+        />
+        <AdminSlider
+          label="Przyciemnienie zdjęcia"
+          min={0}
+          max={95}
+          value={ed.draft.overlay}
+          onChange={(v) => update("overlay", v)}
+        />
+        <button
+          type="button"
+          className={subtleButton}
+          onClick={() => {
+            update("headingScale", 100);
+            update("overlay", COMMON_DEFAULTS[section].overlay);
+          }}
+        >
           Przywróć proporcje
         </button>
       </div>
-      <SaveActions busy={ed.busy} unsaved={ed.unsaved} unpublished={ed.unpublished} onSave={(publish) => void ed.save(publish)} />
+      <SaveActions
+        busy={ed.busy}
+        unsaved={ed.unsaved}
+        unpublished={ed.unpublished}
+        onSave={(publish) => void ed.save(publish)}
+      />
     </EditorLayout>
   );
 }
@@ -179,35 +243,68 @@ export function DocumentsDownloadsEditor() {
       .catch(() => {});
     return () => controller.abort();
   }, []);
-  if (ed.phase !== "ready") return (
-    <main id="main">
-      <PageHeading eyebrow="Edytor witryny / Dokumenty" title="Dokumenty do pobrania" />
-      <EditorState phase={ed.phase} error={ed.error} retry={ed.retry} />
-    </main>
-  );
+  if (ed.phase !== "ready")
+    return (
+      <main id="main">
+        <PageHeading eyebrow="Edytor witryny / Dokumenty" title="Dokumenty do pobrania" />
+        <EditorState phase={ed.phase} error={ed.error} retry={ed.retry} />
+      </main>
+    );
   return (
-    <EditorLayout title="Dokumenty do pobrania" preview={<DocumentsDownloadsSection data={ed.draft} documents={documents} />}>
+    <EditorLayout
+      title="Dokumenty do pobrania"
+      preview={<DocumentsDownloadsSection data={ed.draft} documents={documents} />}
+    >
       <h2 className="font-display text-3xl text-[#1c3026]">Treści sekcji</h2>
       <Field label="Etykieta">
-        <input className={fieldClass} value={ed.draft.eyebrow} onChange={(e) => ed.update("eyebrow", e.target.value)} />
+        <input
+          className={fieldClass}
+          value={ed.draft.eyebrow}
+          onChange={(e) => ed.update("eyebrow", e.target.value)}
+        />
       </Field>
       <Field label="Nagłówek">
-        <input className={fieldClass} value={ed.draft.title} onChange={(e) => ed.update("title", e.target.value)} />
+        <input
+          className={fieldClass}
+          value={ed.draft.title}
+          onChange={(e) => ed.update("title", e.target.value)}
+        />
       </Field>
       <Field label="Opis sekcji">
-        <textarea rows={5} className={fieldClass} value={ed.draft.description} onChange={(e) => ed.update("description", e.target.value)} />
+        <textarea
+          rows={5}
+          className={fieldClass}
+          value={ed.draft.description}
+          onChange={(e) => ed.update("description", e.target.value)}
+        />
       </Field>
       <Field label="Informacja pod dokumentami">
-        <textarea rows={3} className={fieldClass} value={ed.draft.note} onChange={(e) => ed.update("note", e.target.value)} />
+        <textarea
+          rows={3}
+          className={fieldClass}
+          value={ed.draft.note}
+          onChange={(e) => ed.update("note", e.target.value)}
+        />
       </Field>
       <Link href="/admin/documents" className={subtleButton}>
         <TbFileText /> Zarządzaj formularzami PDF
       </Link>
       <div className="space-y-4 border-t border-[#e6e0d4] pt-6">
         <h2 className="font-display text-3xl text-[#1c3026]">Wygląd</h2>
-        <AdminSlider label="Wielkość nagłówka" min={65} max={150} value={ed.draft.headingScale} onChange={(v) => ed.update("headingScale", v)} />
+        <AdminSlider
+          label="Wielkość nagłówka"
+          min={65}
+          max={150}
+          value={ed.draft.headingScale}
+          onChange={(v) => ed.update("headingScale", v)}
+        />
       </div>
-      <SaveActions busy={ed.busy} unsaved={ed.unsaved} unpublished={ed.unpublished} onSave={(publish) => void ed.save(publish)} />
+      <SaveActions
+        busy={ed.busy}
+        unsaved={ed.unsaved}
+        unpublished={ed.unpublished}
+        onSave={(publish) => void ed.save(publish)}
+      />
     </EditorLayout>
   );
 }
@@ -215,26 +312,42 @@ export function DocumentsDownloadsEditor() {
 export function DocumentsGuidanceEditor() {
   const ed = useCmsEditor("/api/admin/documents-page/guidance", DEFAULT_GUIDANCE, parseGuidanceContent);
   const updateStep = (index: number, key: "title" | "description", value: string) => {
-    const steps = ed.draft.steps.map((step, i) => i === index ? { ...step, [key]: value } : step) as GuidanceContent["steps"];
+    const steps = ed.draft.steps.map((step, i) =>
+      i === index ? { ...step, [key]: value } : step,
+    ) as GuidanceContent["steps"];
     ed.update("steps", steps);
   };
-  if (ed.phase !== "ready") return (
-    <main id="main">
-      <PageHeading eyebrow="Edytor witryny / Dokumenty" title="Pomoc w formalnościach" />
-      <EditorState phase={ed.phase} error={ed.error} retry={ed.retry} />
-    </main>
-  );
+  if (ed.phase !== "ready")
+    return (
+      <main id="main">
+        <PageHeading eyebrow="Edytor witryny / Dokumenty" title="Pomoc w formalnościach" />
+        <EditorState phase={ed.phase} error={ed.error} retry={ed.retry} />
+      </main>
+    );
   return (
     <EditorLayout title="Pomoc w formalnościach" preview={<DocumentsGuidanceSection data={ed.draft} />}>
       <h2 className="font-display text-3xl text-[#1c3026]">Treści sekcji</h2>
       <Field label="Etykieta">
-        <input className={fieldClass} value={ed.draft.eyebrow} onChange={(e) => ed.update("eyebrow", e.target.value)} />
+        <input
+          className={fieldClass}
+          value={ed.draft.eyebrow}
+          onChange={(e) => ed.update("eyebrow", e.target.value)}
+        />
       </Field>
       <Field label="Nagłówek">
-        <input className={fieldClass} value={ed.draft.title} onChange={(e) => ed.update("title", e.target.value)} />
+        <input
+          className={fieldClass}
+          value={ed.draft.title}
+          onChange={(e) => ed.update("title", e.target.value)}
+        />
       </Field>
       <Field label="Opis sekcji">
-        <textarea rows={5} className={fieldClass} value={ed.draft.description} onChange={(e) => ed.update("description", e.target.value)} />
+        <textarea
+          rows={5}
+          className={fieldClass}
+          value={ed.draft.description}
+          onChange={(e) => ed.update("description", e.target.value)}
+        />
       </Field>
       <div className="space-y-6 border-t border-[#e6e0d4] pt-6">
         <h2 className="font-display text-3xl text-[#1c3026]">Kroki</h2>
@@ -244,19 +357,39 @@ export function DocumentsGuidanceEditor() {
               Krok {String(index + 1).padStart(2, "0")}
             </h3>
             <Field label={`Tytuł kroku ${index + 1}`}>
-              <input className={fieldClass} value={step.title} onChange={(e) => updateStep(index, "title", e.target.value)} />
+              <input
+                className={fieldClass}
+                value={step.title}
+                onChange={(e) => updateStep(index, "title", e.target.value)}
+              />
             </Field>
             <Field label={`Opis kroku ${index + 1}`}>
-              <textarea rows={3} className={fieldClass} value={step.description} onChange={(e) => updateStep(index, "description", e.target.value)} />
+              <textarea
+                rows={3}
+                className={fieldClass}
+                value={step.description}
+                onChange={(e) => updateStep(index, "description", e.target.value)}
+              />
             </Field>
           </div>
         ))}
       </div>
       <div className="space-y-4 border-t border-[#e6e0d4] pt-6">
         <h2 className="font-display text-3xl text-[#1c3026]">Wygląd</h2>
-        <AdminSlider label="Wielkość nagłówka" min={65} max={150} value={ed.draft.headingScale} onChange={(v) => ed.update("headingScale", v)} />
+        <AdminSlider
+          label="Wielkość nagłówka"
+          min={65}
+          max={150}
+          value={ed.draft.headingScale}
+          onChange={(v) => ed.update("headingScale", v)}
+        />
       </div>
-      <SaveActions busy={ed.busy} unsaved={ed.unsaved} unpublished={ed.unpublished} onSave={(publish) => void ed.save(publish)} />
+      <SaveActions
+        busy={ed.busy}
+        unsaved={ed.unsaved}
+        unpublished={ed.unpublished}
+        onSave={(publish) => void ed.save(publish)}
+      />
     </EditorLayout>
   );
 }

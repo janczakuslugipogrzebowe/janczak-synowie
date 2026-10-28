@@ -47,7 +47,12 @@ export default function DocumentsDownloadsSection({
         )}
         {data.note && (
           <div className="mt-7 flex max-w-4xl items-start gap-3 text-sm leading-[1.8] text-[#637062] lg:mt-10">
-            <TbInfoCircle aria-hidden="true" size={22} strokeWidth={1.5} className="mt-0.5 shrink-0 text-[#ac8a56]" />
+            <TbInfoCircle
+              aria-hidden="true"
+              size={22}
+              strokeWidth={1.5}
+              className="mt-0.5 shrink-0 text-[#ac8a56]"
+            />
             <p>{data.note}</p>
           </div>
         )}

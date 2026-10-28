@@ -29,7 +29,10 @@ export default function DocumentsGuidanceSection({ data }: { data: GuidanceConte
               key={index}
               className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-4 border-b border-[#cbbfa8] py-[clamp(1.7rem,3vw,3.1rem)] sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6"
             >
-              <span aria-hidden="true" className="font-display text-[clamp(2rem,3vw,3.5rem)] leading-none text-[#ad9167]">
+              <span
+                aria-hidden="true"
+                className="font-display text-[clamp(2rem,3vw,3.5rem)] leading-none text-[#ad9167]"
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div>

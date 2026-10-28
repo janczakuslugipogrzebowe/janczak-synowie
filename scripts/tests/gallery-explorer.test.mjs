@@ -50,8 +50,11 @@ test("admin selection toolbar is always mounted, with drafts persisted via exist
   assert.match(page, /beforeunload/);
 });
 test("hero never renders duplicate legacy breadcrumb; internal sections share visual gold and new CTA", () => {
-  assert.match(hero, /isDuplicate/);
-  assert.match(hero, /!isDuplicate && label/);
+  // Current shared hero renders one real breadcrumb and no extra legacy eyebrow.
+  assert.match(hero, /aria-label="Okruszki"/);
+  assert.match(hero, /<span aria-current="page">\{data\.title\}<\/span>/);
+  assert.equal((hero.match(/aria-current="page"/g) ?? []).length, 1);
+  assert.doesNotMatch(hero, /\{data\.eyebrow\}|<SectionEyebrow|isDuplicate/);
   assert.match(hero, /E6C991/);
   assert.match(albums, /SectionEyebrow/);
   assert.match(cta, /SectionEyebrow/);

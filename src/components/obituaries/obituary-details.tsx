@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { TbArrowLeft, TbCalendarEvent, TbMapPin, TbFlower, TbCandle, TbCross } from "react-icons/tb";
 import { formatObituaryDate } from "./obituary-card";
-import type { ObituaryInput } from "@/lib/obituaries/schema";
+import type { ObituaryInput, ObituaryRecord } from "@/lib/obituaries/schema";
+import ObituaryShare from "./obituary-share";
+import { obituaryActionClass } from "./obituary-action-style";
 const icons = { cross: TbCross, candle: TbCandle, flower: TbFlower, none: null };
 export default function ObituaryDetails({
   entry,
   preview = false,
 }: {
-  entry: ObituaryInput;
+  entry: ObituaryInput | ObituaryRecord;
   preview?: boolean;
 }) {
   const Icon = icons[entry.symbol];
@@ -68,14 +70,12 @@ export default function ObituaryDetails({
           )}
         </div>
       )}
-      {!preview && (
-        <div className="relative mt-12">
-          <Link
-            href="/nekrologi"
-            className="inline-flex items-center gap-2 border-b border-[#bfa77c] pb-1 text-sm font-semibold text-[#675337] transition-colors hover:text-[#172b20]"
-          >
-            <TbArrowLeft size={17} /> Wróć do nekrologów
+      {!preview && "slug" in entry && (
+        <div className="relative mx-auto mt-12 flex max-w-[690px] flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:justify-between">
+          <Link href="/nekrologi" className={obituaryActionClass}>
+            <TbArrowLeft size={17} aria-hidden="true" /> Wróć do nekrologów
           </Link>
+          <ObituaryShare slug={entry.slug} name={`${entry.firstName} ${entry.lastName}`} />
         </div>
       )}
     </article>

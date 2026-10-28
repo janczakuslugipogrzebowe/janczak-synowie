@@ -1,7 +1,13 @@
 import { TbArrowUpRight, TbDownload, TbFileText } from "react-icons/tb";
 import type { PublicDocument } from "@/lib/documents/schema";
 
-export default function DocumentDownloadRow({ document, index }: { document: PublicDocument; index: number }) {
+export default function DocumentDownloadRow({
+  document,
+  index,
+}: {
+  document: PublicDocument;
+  index: number;
+}) {
   const external = document.href.startsWith("https://");
   return (
     <li>
@@ -30,7 +36,11 @@ export default function DocumentDownloadRow({ document, index }: { document: Pub
           )}
         </span>
         <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-[#c7b28a] text-[#8e724b] transition duration-300 group-hover:-translate-y-0.5 group-hover:border-[#1c3328] group-hover:bg-[#1c3328] group-hover:text-[#E6C991] sm:size-13">
-          {external ? <TbArrowUpRight aria-hidden="true" size={22} /> : <TbDownload aria-hidden="true" size={22} />}
+          {external ? (
+            <TbArrowUpRight aria-hidden="true" size={22} />
+          ) : (
+            <TbDownload aria-hidden="true" size={22} />
+          )}
         </span>
       </a>
     </li>

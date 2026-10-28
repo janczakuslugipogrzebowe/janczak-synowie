@@ -34,12 +34,13 @@
     "test:footer": "node --experimental-strip-types --test scripts/tests/footer-schema.test.mjs scripts/tests/footer-integration.test.mjs scripts/tests/footer-editorial.test.mjs",
     "test:gallery-pages": "node --test scripts/tests/gallery-pages.test.mjs",
     "test:gallery-explorer": "node --experimental-strip-types --test scripts/tests/gallery-explorer.test.mjs",
-    "test:documents-page": "node --experimental-strip-types --test scripts/tests/documents-page.test.mjs"
+    "test:documents-page": "node --experimental-strip-types --test scripts/tests/documents-page.test.mjs",
+    "test:obituaries-pages": "node --test scripts/tests/obituaries-pages.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",
     "firebase-admin": "13.10.0",
-    "next": "16.4.0",
+    "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-icons": "^5.5.0",
@@ -51,7 +52,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5",
     "prettier": "^3.6.2"

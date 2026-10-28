@@ -18,20 +18,40 @@ test("Dokumenty: defaults and strict validation of editable sections", () => {
   assert.ok(isDocumentsPageSection("downloads"));
   assert.ok(isDocumentsPageSection("guidance"));
   assert.equal(isDocumentsPageSection("bottom"), false);
-  assert.throws(() => parseDownloadsContent({ ...DEFAULT_DOWNLOADS, unexpected: true }), DocumentsPageValidationError);
-  assert.throws(() => parseGuidanceContent({ ...DEFAULT_GUIDANCE, steps: [] }), DocumentsPageValidationError);
   assert.throws(
-    () => parseGuidanceContent({ ...DEFAULT_GUIDANCE, steps: [{ title: "x", description: "x" }, ...DEFAULT_GUIDANCE.steps] }),
+    () => parseDownloadsContent({ ...DEFAULT_DOWNLOADS, unexpected: true }),
     DocumentsPageValidationError,
   );
-  assert.throws(() => parseDownloadsContent({ ...DEFAULT_DOWNLOADS, headingScale: Infinity }), DocumentsPageValidationError);
+  assert.throws(() => parseGuidanceContent({ ...DEFAULT_GUIDANCE, steps: [] }), DocumentsPageValidationError);
+  assert.throws(
+    () =>
+      parseGuidanceContent({
+        ...DEFAULT_GUIDANCE,
+        steps: [{ title: "x", description: "x" }, ...DEFAULT_GUIDANCE.steps],
+      }),
+    DocumentsPageValidationError,
+  );
+  assert.throws(
+    () => parseDownloadsContent({ ...DEFAULT_DOWNLOADS, headingScale: Infinity }),
+    DocumentsPageValidationError,
+  );
 });
 
 test("Dokumenty use the same hero and bottom CTA as Galeria, with dedicated middle content", () => {
   const page = code("src/app/(site)/dokumenty/page.tsx");
-  for (const name of ["SubpageHero", "DocumentsDownloadsSection", "DocumentsGuidanceSection", "SubpageBottomCta"])
+  for (const name of [
+    "SubpageHero",
+    "DocumentsDownloadsSection",
+    "DocumentsGuidanceSection",
+    "SubpageBottomCta",
+  ])
     assert.match(page, new RegExp(`<${name}\\b`));
-  for (const getter of ["getPublishedSubpageBlock", "getPublishedDocumentsPageSection", "getPublishedDocumentsLibrary", "getPublishedSiteSettings"])
+  for (const getter of [
+    "getPublishedSubpageBlock",
+    "getPublishedDocumentsPageSection",
+    "getPublishedDocumentsLibrary",
+    "getPublishedSiteSettings",
+  ])
     assert.ok(page.includes(getter), getter);
   assert.ok(page.includes('<main id="main"'));
   assert.ok(!page.includes("SubpageIntro"));
@@ -52,7 +72,8 @@ test("Dokumenty CMS has section navigation, authenticated draft/publish and cach
     '["downloads", "Dokumenty do pobrania"]',
     '["guidance", "Pomoc w formalnościach"]',
     '["bottom", "Kontaktowe CTA"]',
-  ]) assert.ok(shell.includes(label));
+  ])
+    assert.ok(shell.includes(label));
   const api = code("src/app/api/admin/documents-page/[section]/route.ts");
   assert.ok(api.includes("getAdminUid"));
   assert.ok(api.includes("isSameOrigin"));

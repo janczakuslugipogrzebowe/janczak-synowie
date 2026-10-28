@@ -80,6 +80,30 @@ const documentsDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "bo
   },
 };
 
+/** Dedicated Nekrologi imagery and copy; existing obituary CMS records are not changed. */
+const obituariesDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "bottom"> = {
+  hero: {
+    eyebrow: "",
+    title: "Nekrologi",
+    description:
+      "Z szacunkiem przekazujemy informacje o osobach, które odeszły, oraz o terminach i miejscach uroczystości pożegnalnych.",
+    imageUrl: "/hero-nekrologi.png",
+    overlay: 62,
+    headingScale: 100,
+    ctaText: "",
+  },
+  bottom: {
+    eyebrow: "JESTEŚMY DO PAŃSTWA DYSPOZYCJI",
+    title: "Służymy pomocą w organizacji pożegnania",
+    description:
+      "W trudnych chwilach ważne jest wsparcie i możliwość uzyskania rzetelnych informacji. Jesteśmy do Państwa dyspozycji, aby odpowiedzieć na pytania dotyczące organizacji uroczystości i pomóc w niezbędnych formalnościach.",
+    imageUrl: "/bottom-nekrologi.png",
+    overlay: 70,
+    headingScale: 100,
+    ctaText: "Przejdź do kontaktu",
+  },
+};
+
 /** Migrate only exact v2.0.0 default copy, preserving all custom CMS text. */
 export function migrateGalleryPresentation(
   slug: PageSlug,
@@ -123,8 +147,9 @@ export function migrateGalleryPresentation(
 }
 export function subpageDefault(slug: PageSlug, section: SubpageSection): SubpageBlock {
   if (slug === "galeria") return galleryDefaults[section];
-  if (slug === "dokumenty" && (section === "hero" || section === "bottom"))
-    return documentsDefaults[section];
+  if (slug === "nekrologi" && (section === "hero" || section === "bottom"))
+    return obituariesDefaults[section];
+  if (slug === "dokumenty" && (section === "hero" || section === "bottom")) return documentsDefaults[section];
   return {
     ...galleryDefaults[section],
     title: section === "hero" ? PAGE_LABELS[slug] : galleryDefaults[section].title,

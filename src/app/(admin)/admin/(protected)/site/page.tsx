@@ -23,7 +23,9 @@ export default function SiteEditorHome() {
         {PAGE_SLUGS.map((slug) => (
           <Link
             key={slug}
-            href={slug === "galeria" || slug === "dokumenty" ? `/admin/site/${slug}/hero` : `/admin/site/${slug}`}
+            href={
+              slug === "galeria" || slug === "dokumenty" ? `/admin/site/${slug}/hero` : `/admin/site/${slug}`
+            }
             className={`${surfaceClass} group p-7 transition hover:-translate-y-0.5 hover:shadow-md`}
           >
             <TbLayoutGrid className="size-8 text-[#a1835e]" />
