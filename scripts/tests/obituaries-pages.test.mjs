@@ -1,12 +1,19 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 const source = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 
 test("Nekrologi reuse the same hero and closing CTA as Galeria and Dokumenty", () => {
   const page = source("src/app/(site)/nekrologi/page.tsx");
   assert.match(page, /<main id="main"/);
-  for (const component of ["SubpageHero", "ObituariesListSection", "ObituariesInformationSection", "SubpageBottomCta"])
+  for (const component of [
+    "SubpageHero",
+    "ObituariesListSection",
+    "ObituariesInformationSection",
+    "SubpageBottomCta",
+  ])
     assert.match(page, new RegExp(`<${component}\\b`));
   assert.match(page, /getPublishedSubpageBlock\("nekrologi", "hero"\)/);
   assert.match(page, /getPublishedSubpageBlock\("nekrologi", "bottom"\)/);
@@ -32,7 +39,7 @@ test("Nekrologi use current public CMS records, filtering and safe feed paginati
   assert.match(list, /Następne nekrologi/);
   assert.match(list, /Nie znaleziono pasujących nekrologów/);
   assert.match(list, /Obecnie nie ma opublikowanych nekrologów/);
-  assert.ok(!list.includes('data-gallery-'), "Do not couple obituary listing to gallery module");
+  assert.ok(!list.includes("data-gallery-"), "Do not couple obituary listing to gallery module");
 });
 
 test("Single obituary retains canonical redirect, SEO privacy settings, breadcrumb and shared CTA", () => {
@@ -62,7 +69,11 @@ test("Nekrologi use concise copy without redundant instructional text and overla
   assert.doesNotMatch(listing, /W tym miejscu publikujemy nekrologi|prosimy skorzystać z wyszukiwarki/);
   assert.doesNotMatch(info, /Aby zapoznać się ze szczegółami|z powyższej listy/);
   assert.doesNotMatch(info, /absolute -top-px|relative border-y|border-y border-\[#dfd6c5\]/);
-  assert.equal((info.match(/border-t/g) ?? []).length, 1, "Keep just one separator between information items");
+  assert.equal(
+    (info.match(/border-t/g) ?? []).length,
+    1,
+    "Keep just one separator between information items",
+  );
 });
 
 test("Published obituaries offer accessible, opt-in Facebook and native sharing without touching CMS previews", () => {
@@ -105,7 +116,6 @@ test("Meta's preview crawlers may fetch obituary URLs while Google and others re
   assert.match(robots, /userAgent: "\*", disallow: "\/"/);
 });
 
-
 test("Facebook share URL rejects local/private origins and prefers configured public HTTPS host", () => {
   const helper = source("src/lib/obituaries/share-url.ts");
   assert.match(helper, /url\.protocol !== "https:"/);
@@ -114,7 +124,10 @@ test("Facebook share URL rejects local/private origins and prefers configured pu
   assert.match(helper, /publicOrigin\(configuredSiteUrl\) \?\? publicOrigin\(origin\)/);
   assert.match(helper, /encodeURIComponent\(slug\)/);
   const share = source("src/components/obituaries/obituary-share.tsx");
-  assert.match(share, /resolveObituaryShareUrl\(slug, window\.location\.origin, process\.env\.NEXT_PUBLIC_SITE_URL\)/);
+  assert.match(
+    share,
+    /resolveObituaryShareUrl\(slug, window\.location\.origin, process\.env\.NEXT_PUBLIC_SITE_URL\)/,
+  );
   assert.match(share, /Facebook wymaga publicznego adresu HTTPS/);
 });
 
@@ -127,4 +140,13 @@ test("Share button and back link have the same ghost action style in a single ro
   assert.doesNotMatch(share, /rounded-full border border-\[#bba278\]/);
   assert.match(share, /process\.env\.NEXT_PUBLIC_SITE_URL/);
   assert.match(share, /if \(!url\) return;/);
+});
+
+test("CMS edytora Nekrologów: walidacja, publikowanie i podgląd", () => {
+  const result = spawnSync(
+    process.execPath,
+    ["--experimental-strip-types", "--test", "scripts/tests/obituaries-page-editor.test.mjs"],
+    { cwd: fileURLToPath(new URL("../../", import.meta.url)), encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, `${result.stdout ?? ""}\n${result.stderr ?? ""}`);
 });

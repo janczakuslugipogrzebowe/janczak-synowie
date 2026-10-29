@@ -7,6 +7,7 @@ export type SiteSettings = {
   secondaryPhone: string;
   email: string;
   mapsUrl: string;
+  mapsEmbedUrl: string;
   availability: string;
   trustSubtitle: string;
 };
@@ -20,6 +21,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   secondaryPhone: "62 307 02 76",
   email: "",
   mapsUrl: "",
+  mapsEmbedUrl: "",
   availability: "Pomoc całodobowa",
   trustSubtitle: "Tradycja i zaufanie",
 };
@@ -62,6 +64,32 @@ export function directionsUrl(settings: SiteSettings): string | null {
   return settings.mapsUrl && isAllowedMapsUrl(settings.mapsUrl) ? settings.mapsUrl : null;
 }
 
+/** Maps -> Udostępnij -> Umieść mapę. CMS accepts either the iframe src or the entire embed snippet. */
+export function normalizeMapsEmbed(value: string): string | null {
+  const raw = value.trim();
+  if (!raw) return "";
+  // Never render arbitrary HTML: extract only the src URL from a Google iframe.
+  const iframe = /^<iframe\b[\s\S]*<\/iframe>\s*$/i.test(raw);
+  const candidate = iframe ? raw.match(/\bsrc\s*=\s*(["'])(.*?)\1/i)?.[2]?.replace(/&amp;/gi, "&") : raw;
+  if (!candidate || candidate.length > 4000) return null;
+  try {
+    const url = new URL(candidate);
+    if (url.protocol !== "https:" || url.username || url.password || url.port || url.hash) return null;
+    if (!["www.google.com", "google.com", "www.google.pl"].includes(url.hostname.toLowerCase())) return null;
+    if (url.pathname !== "/maps/embed" || !url.searchParams.has("pb")) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+export function googleMapsEmbedUrl(settings: SiteSettings): string {
+  const configured = normalizeMapsEmbed(settings.mapsEmbedUrl || "");
+  if (configured) return configured;
+  const address = `${settings.addressLine}, ${settings.postalCity}`;
+  return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+}
+
 /** Accept older published documents while strictly validating all new writes. */
 export function parseSiteSettings(value: unknown): SiteSettings {
   if (!value || typeof value !== "object" || Array.isArray(value))
@@ -75,11 +103,18 @@ export function parseSiteSettings(value: unknown): SiteSettings {
   for (const key of allowed as (keyof SiteSettings)[]) {
     const raw = merged[key];
     if (typeof raw !== "string") throw new SettingsValidationError(`Nieprawidłowe pole: ${key}`);
-    const v = raw.trim();
-    const optional = key === "email" || key === "mapsUrl";
+    const v = key === "mapsEmbedUrl" ? (normalizeMapsEmbed(raw) ?? raw.trim()) : raw.trim();
+    const optional = key === "email" || key === "mapsUrl" || key === "mapsEmbedUrl";
     if (
       (!optional && !v) ||
-      v.length > (key === "mapsUrl" ? 1800 : key === "companyDescription" ? 240 : 120) ||
+      v.length >
+        (key === "mapsEmbedUrl"
+          ? 4000
+          : key === "mapsUrl"
+            ? 1800
+            : key === "companyDescription"
+              ? 240
+              : 120) ||
       /[\u0000-\u001F\u007F]/u.test(v)
     )
       throw new SettingsValidationError(`Niepoprawna wartość: ${key}`);
@@ -92,6 +127,10 @@ export function parseSiteSettings(value: unknown): SiteSettings {
   if (!isAllowedMapsUrl(result.mapsUrl))
     throw new SettingsValidationError(
       "Wklej prawidłowy link Google Maps (maps.app.goo.gl lub google.com/maps).",
+    );
+  if (normalizeMapsEmbed(result.mapsEmbedUrl) === null)
+    throw new SettingsValidationError(
+      "Podaj kod iframe z Google Maps lub jego prawidłowy adres src (Udostępnij → Umieść mapę).",
     );
   return result;
 }

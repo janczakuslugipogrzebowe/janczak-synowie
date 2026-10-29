@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 import { notify } from "@/components/ui/toast-provider";
@@ -28,6 +28,15 @@ import {
   TbLayoutBottombar,
 } from "react-icons/tb";
 import { PAGE_LABELS, PAGE_SLUGS, type PageSlug } from "@/lib/pages/schema";
+
+// Route-dependent sidebar markup must be identical during SSR and the first
+// client render. Redirects and Next.js dev refreshes can otherwise hydrate a
+// different set of links/icons than the server produced.
+// useSyncExternalStore uses the server snapshot during hydration, and switches
+// to the client snapshot immediately afterward, without a setState effect.
+const subscribeHydration = () => () => {};
+const getClientHydration = () => true;
+const getServerHydration = () => false;
 
 const mainNav = [
   { href: "/admin", label: "Pulpit", Icon: TbLayoutDashboard },
@@ -125,6 +134,46 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
                       {label}
                     </Link>
                   ))
+                ) : slug === "nekrologi" ? (
+                  (
+                    [
+                      ["hero", "Hero"],
+                      ["listing", "Ostatnie pożegnania"],
+                      ["information", "Informacje dla bliskich"],
+                      ["bottom", "Kontaktowe CTA"],
+                    ] as const
+                  ).map(([section, label]) => (
+                    <Link
+                      key={section}
+                      href={`/admin/site/nekrologi/${section}`}
+                      onClick={onNavigate}
+                      aria-current={active(`/admin/site/nekrologi/${section}`) ? "page" : undefined}
+                      className={sectionStyle(`/admin/site/nekrologi/${section}`)}
+                    >
+                      <TbFileText size={17} strokeWidth={1.65} />
+                      {label}
+                    </Link>
+                  ))
+                ) : slug === "kontakt" ? (
+                  (
+                    [
+                      ["hero", "Hero"],
+                      ["details", "Dane kontaktowe"],
+                      ["form", "Formularz i informacje"],
+                      ["bottom", "Kontaktowe CTA"],
+                    ] as const
+                  ).map(([section, label]) => (
+                    <Link
+                      key={section}
+                      href={`/admin/site/kontakt/${section}`}
+                      onClick={onNavigate}
+                      aria-current={active(`/admin/site/kontakt/${section}`) ? "page" : undefined}
+                      className={sectionStyle(`/admin/site/kontakt/${section}`)}
+                    >
+                      <TbPhoneCall size={17} strokeWidth={1.65} />
+                      {label}
+                    </Link>
+                  ))
                 ) : slug === "dokumenty" ? (
                   (
                     [
@@ -177,9 +226,12 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname(),
     router = useRouter();
+  const hydrated = useSyncExternalStore(subscribeHydration, getClientHydration, getServerHydration);
+  // Do not render pathname-dependent links until the client has hydrated.
+  const stablePathname = hydrated ? pathname : "";
   const [opened, setOpened] = useState(false),
     [busy, setBusy] = useState(false);
-  const inSite = pathname === "/admin/site" || pathname.startsWith("/admin/site/");
+  const inSite = stablePathname === "/admin/site" || stablePathname.startsWith("/admin/site/");
   async function logout() {
     if (busy) return;
     setBusy(true);
@@ -219,7 +271,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           aria-label="Panel administracyjny"
         >
           {mainNav.map(({ href, label, Icon }) => {
-            const active = pathname === href;
+            const active = stablePathname === href;
             return (
               <Link
                 key={href}
@@ -236,13 +288,15 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           <Link
             href="/admin/site"
             onClick={() => setOpened(false)}
-            aria-current={pathname === "/admin/site" ? "page" : undefined}
+            aria-current={stablePathname === "/admin/site" ? "page" : undefined}
             className={`flex min-h-12 items-center gap-3 rounded-xl px-4 text-sm font-semibold transition-colors ${inSite ? "bg-[#e3c997]/15 text-champagne" : "text-white/75 hover:bg-white/10 hover:text-white"}`}
           >
             <TbLayoutGrid className="size-5 shrink-0" strokeWidth={1.7} />
             Edytor witryny
           </Link>
-          {inSite && <SiteTree key={pathname} pathname={pathname} onNavigate={() => setOpened(false)} />}
+          {inSite && (
+            <SiteTree key={stablePathname} pathname={stablePathname} onNavigate={() => setOpened(false)} />
+          )}
         </nav>
         <div className="shrink-0 space-y-1 border-t border-white/10 p-4">
           <Link

@@ -10,10 +10,12 @@ export default function SubpageBottomCta({
   data,
   settings,
   preview = false,
+  phoneOnly = false,
 }: {
   data: SubpageBlock;
   settings: SiteSettings;
   preview?: boolean;
+  phoneOnly?: boolean;
 }) {
   return (
     <section aria-label="Kontakt" className="relative isolate overflow-hidden bg-[#14251c] text-[#faf5ed]">
@@ -56,15 +58,19 @@ export default function SubpageBottomCta({
               {settings.primaryPhone}
             </span>
           </a>
-          <Link
-            href="/kontakt"
-            className="mt-8 inline-flex min-h-14 w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-[#E6C991] px-7 text-sm font-bold text-[#15251c] transition-all hover:-translate-y-0.5 hover:bg-[#f4dda9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E6C991] sm:w-auto sm:min-w-64"
-          >
-            {data.ctaText || "Przejdź do kontaktu"} <TbArrowUpRight size={20} />
-          </Link>
-          <p className="mt-4 text-sm leading-relaxed text-[#e4e6dc]/75">
-            Chętnie udzielimy informacji i pomożemy wybrać odpowiednie rozwiązanie.
-          </p>
+          {!phoneOnly && (
+            <Link
+              href="/kontakt"
+              className="mt-8 inline-flex min-h-14 w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-[#E6C991] px-7 text-sm font-bold text-[#15251c] transition-all hover:-translate-y-0.5 hover:bg-[#f4dda9] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#E6C991] sm:w-auto sm:min-w-64"
+            >
+              {data.ctaText || "Przejdź do kontaktu"} <TbArrowUpRight size={20} />
+            </Link>
+          )}
+          {!phoneOnly && (
+            <p className="mt-4 text-sm leading-relaxed text-[#e4e6dc]/75">
+              Chętnie udzielimy informacji i pomożemy wybrać odpowiednie rozwiązanie.
+            </p>
+          )}
         </div>
       </SubpageContainer>
     </section>

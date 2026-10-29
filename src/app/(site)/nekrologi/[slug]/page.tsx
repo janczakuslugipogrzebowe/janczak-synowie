@@ -17,7 +17,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!ob) return { title: "Nie znaleziono nekrologu", robots: { index: false, follow: false } };
   const title = `${ob.firstName} ${ob.lastName} – nekrolog`;
   const description = `Nekrolog: ${ob.firstName} ${ob.lastName}. Informacje o uroczystości pożegnalnej – Janczak i Synowie.`;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ||
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "https://janczak-synowie.vercel.app");
@@ -47,13 +48,22 @@ async function Content({ params }: Props) {
   if (slug !== ob.slug) permanentRedirect(`/nekrologi/${ob.slug}`);
   return (
     <>
-      <nav aria-label="Okruszki" className="mb-12 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[.16em] text-[#a38254]">
+      <nav
+        aria-label="Okruszki"
+        className="mb-12 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[.16em] text-[#a38254]"
+      >
         <span aria-hidden="true" className="mr-1 h-px w-8 bg-[#b89860]" />
-        <Link href="/" className="cursor-pointer hover:text-[#193027]">Strona główna</Link>
+        <Link href="/" className="cursor-pointer hover:text-[#193027]">
+          Strona główna
+        </Link>
         <span aria-hidden="true">/</span>
-        <Link href="/nekrologi" className="cursor-pointer hover:text-[#193027]">Nekrologi</Link>
+        <Link href="/nekrologi" className="cursor-pointer hover:text-[#193027]">
+          Nekrologi
+        </Link>
         <span aria-hidden="true">/</span>
-        <span aria-current="page" className="normal-case text-[#5a6b5d]">{ob.firstName} {ob.lastName}</span>
+        <span aria-current="page" className="normal-case text-[#5a6b5d]">
+          {ob.firstName} {ob.lastName}
+        </span>
       </nav>
       <ObituaryDetails entry={ob} />
     </>
@@ -67,9 +77,18 @@ export default async function ObituaryPage({ params }: Props) {
   ]);
   return (
     <main id="main" className="bg-[#f8f4ec]">
-      <section aria-label="Szczegóły nekrologu" className="min-h-[65dvh] pb-[clamp(5rem,8vw,9rem)] pt-[clamp(8rem,12vw,12rem)]">
+      <section
+        aria-label="Szczegóły nekrologu"
+        className="min-h-[65dvh] pb-[clamp(5rem,8vw,9rem)] pt-[clamp(8rem,12vw,12rem)]"
+      >
         <SubpageContainer>
-          <Suspense fallback={<div role="status" className="py-24 text-center text-sm text-[#586b5d]">Wczytywanie nekrologu…</div>}>
+          <Suspense
+            fallback={
+              <div role="status" className="py-24 text-center text-sm text-[#586b5d]">
+                Wczytywanie nekrologu…
+              </div>
+            }
+          >
             <Content params={params} />
           </Suspense>
         </SubpageContainer>

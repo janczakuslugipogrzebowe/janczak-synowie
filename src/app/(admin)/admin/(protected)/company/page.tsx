@@ -5,6 +5,8 @@ import {
   DEFAULT_SITE_SETTINGS,
   parseSiteSettings,
   isAllowedMapsUrl,
+  normalizeMapsEmbed,
+  googleMapsEmbedUrl,
   type SiteSettings,
 } from "@/lib/settings/schema";
 import {
@@ -42,6 +44,11 @@ const groups: Group[] = [
       { key: "addressLine", label: "Adres" },
       { key: "postalCity", label: "Kod pocztowy i miejscowość" },
       { key: "mapsUrl", label: "Link do wizytówki Google Maps", placeholder: "https://maps.app.goo.gl/..." },
+      {
+        key: "mapsEmbedUrl",
+        label: "Mapa osadzona (iframe)",
+        placeholder: "Wklej kod iframe z Map Google lub sam adres src=...",
+      },
     ],
   },
 ];
@@ -151,17 +158,55 @@ export default function CompanyPage() {
                 {group.fields.map((f) => (
                   <div
                     key={f.key}
-                    className={f.key === "mapsUrl" || f.key === "companyDescription" ? "md:col-span-2" : ""}
+                    className={
+                      f.key === "mapsUrl" || f.key === "mapsEmbedUrl" || f.key === "companyDescription"
+                        ? "md:col-span-2"
+                        : ""
+                    }
                   >
                     <Field label={f.label}>
-                      <input
-                        className={fieldClass}
-                        type={f.key === "email" ? "email" : f.key === "mapsUrl" ? "url" : "text"}
-                        value={data[f.key]}
-                        placeholder={f.placeholder}
-                        onChange={(e) => update(f.key, e.target.value)}
-                      />
+                      {f.key === "mapsEmbedUrl" ? (
+                        <textarea
+                          className={`${fieldClass} min-h-24 resize-y`}
+                          value={data.mapsEmbedUrl}
+                          placeholder={f.placeholder}
+                          onChange={(e) => update("mapsEmbedUrl", e.target.value)}
+                          rows={3}
+                          spellCheck={false}
+                        />
+                      ) : (
+                        <input
+                          className={fieldClass}
+                          type={f.key === "email" ? "email" : f.key === "mapsUrl" ? "url" : "text"}
+                          value={data[f.key]}
+                          placeholder={f.placeholder}
+                          onChange={(e) => update(f.key, e.target.value)}
+                        />
+                      )}
                     </Field>
+                    {f.key === "mapsEmbedUrl" && (
+                      <div className="mt-3 space-y-3">
+                        <p className="text-xs leading-relaxed text-[#617165]">
+                          Mapy Google → Udostępnij → Umieść mapę → Kopiuj HTML. Wklej cały kod lub sam adres z
+                          atrybutu src. Mapa będzie widoczna od razu na podstronie Kontakt.
+                        </p>
+                        {data.mapsEmbedUrl && normalizeMapsEmbed(data.mapsEmbedUrl) === null ? (
+                          <p role="alert" className="text-xs font-medium text-red-700">
+                            Nieprawidłowy kod mapy. Dozwolone są wyłącznie adresy osadzenia Google Maps.
+                          </p>
+                        ) : (
+                          <div className="overflow-hidden rounded-xl border border-[#ded9cd] bg-[#e6eae4]">
+                            <iframe
+                              title="Podgląd mapy firmy"
+                              src={googleMapsEmbedUrl(data)}
+                              loading="lazy"
+                              referrerPolicy="strict-origin-when-cross-origin"
+                              className="h-56 w-full border-0"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
                     {f.key === "mapsUrl" && (
                       <div className="mt-2 flex items-center gap-4">
                         {data.mapsUrl && isAllowedMapsUrl(data.mapsUrl) ? (

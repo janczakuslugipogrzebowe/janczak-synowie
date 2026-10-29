@@ -16,7 +16,8 @@ function publicOrigin(value: string | undefined): string | null {
       /^192\.168\.\d+\.\d+$/.test(host) ||
       /^169\.254\.\d+\.\d+$/.test(host) ||
       /^172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+$/.test(host)
-    ) return null;
+    )
+      return null;
     return url.origin;
   } catch {
     return null;
@@ -28,7 +29,11 @@ function publicOrigin(value: string | undefined): string | null {
  * Otherwise accept the current origin only when it is already public HTTPS.
  * Never pass localhost or a LAN address to the Facebook share dialog.
  */
-export function resolveObituaryShareUrl(slug: string, origin: string, configuredSiteUrl?: string): string | null {
+export function resolveObituaryShareUrl(
+  slug: string,
+  origin: string,
+  configuredSiteUrl?: string,
+): string | null {
   if (!slug.trim()) return null;
   const site = publicOrigin(configuredSiteUrl) ?? publicOrigin(origin);
   return site ? new URL(`/nekrologi/${encodeURIComponent(slug)}`, site).href : null;

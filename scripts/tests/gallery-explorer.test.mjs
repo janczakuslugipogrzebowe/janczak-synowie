@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 const root = new URL("../../", import.meta.url);
 const component = readFileSync(new URL("src/components/admin/gallery-explorer.tsx", root), "utf8");
 const page = readFileSync(new URL("src/app/(admin)/admin/(protected)/gallery/page.tsx", root), "utf8");

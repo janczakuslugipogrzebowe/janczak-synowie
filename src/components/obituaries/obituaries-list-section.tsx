@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { TbArrowRight, TbSearch, TbX } from "react-icons/tb";
 import { ObituaryCard } from "./obituary-card";
-import SectionEyebrow from "@/components/subpages/section-eyebrow";
-import SubpageContainer from "@/components/subpages/subpage-container";
+import ObituariesListFrame from "./obituaries-list-frame";
+import type { ObituariesListingContent } from "@/lib/obituaries-page/schema";
 import { getPublicObituaries } from "@/lib/obituaries/data";
 
 type SearchQuery = { q?: string | string[]; cursor?: string | string[] };
@@ -41,7 +41,9 @@ async function ObituariesResults({ searchParams }: { searchParams: Promise<Searc
       >
         <div className="flex min-h-15 w-full items-center gap-3 rounded-xl border border-[#d8cfbe] bg-white/80 px-5 shadow-[0_10px_35px_-30px_rgba(20,41,30,.25)] focus-within:border-[#b9945e] focus-within:ring-2 focus-within:ring-[#b9945e]/15">
           <TbSearch aria-hidden="true" className="shrink-0 text-[#a38254]" size={22} strokeWidth={1.5} />
-          <label htmlFor="obituary-search" className="sr-only">Imię lub nazwisko osoby zmarłej</label>
+          <label htmlFor="obituary-search" className="sr-only">
+            Imię lub nazwisko osoby zmarłej
+          </label>
           <input
             id="obituary-search"
             type="search"
@@ -75,9 +77,14 @@ async function ObituariesResults({ searchParams }: { searchParams: Promise<Searc
       )}
 
       {items.length > 0 ? (
-        <ul className="mt-10 grid list-none gap-[clamp(1rem,1.8vw,2rem)] sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-8" aria-label="Opublikowane nekrologi">
+        <ul
+          className="mt-10 grid list-none gap-[clamp(1rem,1.8vw,2rem)] sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-8"
+          aria-label="Opublikowane nekrologi"
+        >
           {items.map((item) => (
-            <li key={item.id} className="min-w-0"><ObituaryCard data={item} /></li>
+            <li key={item.id} className="min-w-0">
+              <ObituaryCard data={item} />
+            </li>
           ))}
         </ul>
       ) : (
@@ -91,7 +98,10 @@ async function ObituariesResults({ searchParams }: { searchParams: Promise<Searc
               : "Gdy pojawią się nowe informacje o uroczystościach pożegnalnych, zostaną opublikowane w tym miejscu."}
           </p>
           {search && (
-            <Link href="/nekrologi#lista-nekrologow" className="mt-6 inline-flex min-h-11 cursor-pointer items-center gap-2 border-b border-[#ad8b57] text-sm font-semibold text-[#7e633c] hover:text-[#193027]">
+            <Link
+              href="/nekrologi#lista-nekrologow"
+              className="mt-6 inline-flex min-h-11 cursor-pointer items-center gap-2 border-b border-[#ad8b57] text-sm font-semibold text-[#7e633c] hover:text-[#193027]"
+            >
               Pokaż wszystkie nekrologi <TbArrowRight aria-hidden="true" size={18} />
             </Link>
           )}
@@ -99,14 +109,23 @@ async function ObituariesResults({ searchParams }: { searchParams: Promise<Searc
       )}
 
       {!search && (following || cursor) && (
-        <nav aria-label="Stronicowanie nekrologów" className="mt-12 flex flex-wrap items-center justify-center gap-4">
+        <nav
+          aria-label="Stronicowanie nekrologów"
+          className="mt-12 flex flex-wrap items-center justify-center gap-4"
+        >
           {cursor && (
-            <Link href="/nekrologi#lista-nekrologow" className="inline-flex min-h-12 cursor-pointer items-center rounded-full border border-[#cabb9f] px-6 text-sm font-semibold text-[#4d5f51] transition hover:bg-white">
+            <Link
+              href="/nekrologi#lista-nekrologow"
+              className="inline-flex min-h-12 cursor-pointer items-center rounded-full border border-[#cabb9f] px-6 text-sm font-semibold text-[#4d5f51] transition hover:bg-white"
+            >
               Wróć do najnowszych
             </Link>
           )}
           {following && (
-            <Link href={following} className="inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full border border-[#b49a70] px-7 text-sm font-semibold text-[#193027] transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a38254]">
+            <Link
+              href={following}
+              className="inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full border border-[#b49a70] px-7 text-sm font-semibold text-[#193027] transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#a38254]"
+            >
               Następne nekrologi <TbArrowRight aria-hidden="true" size={18} />
             </Link>
           )}
@@ -116,18 +135,18 @@ async function ObituariesResults({ searchParams }: { searchParams: Promise<Searc
   );
 }
 
-export default function ObituariesListSection({ searchParams }: { searchParams: Promise<SearchQuery> }) {
+export default function ObituariesListSection({
+  searchParams,
+  data,
+}: {
+  searchParams: Promise<SearchQuery>;
+  data: ObituariesListingContent;
+}) {
   return (
-    <section id="lista-nekrologow" aria-labelledby="obituaries-list-heading" className="scroll-mt-24 bg-[#f8f4ec] py-[clamp(5rem,7.8vw,10rem)] text-[#193027]">
-      <SubpageContainer>
-        <div>
-          <SectionEyebrow className="mb-5">PAMIĘTAMY RAZEM</SectionEyebrow>
-          <h2 id="obituaries-list-heading" className="max-w-5xl font-display text-[clamp(2.9rem,4.6vw,6rem)] leading-[1.04] tracking-[-.045em]">Ostatnie pożegnania</h2>
-        </div>
-        <Suspense fallback={<SearchFallback />}>
-          <ObituariesResults searchParams={searchParams} />
-        </Suspense>
-      </SubpageContainer>
-    </section>
+    <ObituariesListFrame data={data}>
+      <Suspense fallback={<SearchFallback />}>
+        <ObituariesResults searchParams={searchParams} />
+      </Suspense>
+    </ObituariesListFrame>
   );
 }

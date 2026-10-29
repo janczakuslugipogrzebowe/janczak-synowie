@@ -24,18 +24,24 @@ export default function SiteEditorHome() {
           <Link
             key={slug}
             href={
-              slug === "galeria" || slug === "dokumenty" ? `/admin/site/${slug}/hero` : `/admin/site/${slug}`
+              slug === "galeria" || slug === "dokumenty" || slug === "nekrologi" || slug === "kontakt"
+                ? `/admin/site/${slug}/hero`
+                : `/admin/site/${slug}`
             }
             className={`${surfaceClass} group p-7 transition hover:-translate-y-0.5 hover:shadow-md`}
           >
             <TbLayoutGrid className="size-8 text-[#a1835e]" />
             <h2 className="mt-6 font-display text-4xl font-semibold">{PAGE_LABELS[slug]}</h2>
             <p className="mt-2 text-xs text-[#727d74]">
-              {slug === "galeria"
-                ? "4 sekcje · Hero · Albumy · O galerii · CTA"
-                : slug === "dokumenty"
-                  ? "4 sekcje · Hero · Formularze · Pomoc · CTA"
-                  : "Sekcja wprowadzająca"}
+              {slug === "kontakt"
+                ? "4 sekcje · Hero · Dane kontaktowe · Formularz i informacje · CTA"
+                : slug === "nekrologi"
+                  ? "4 sekcje · Hero · Lista nekrologów · Informacje · CTA"
+                  : slug === "galeria"
+                    ? "4 sekcje · Hero · Albumy · O galerii · CTA"
+                    : slug === "dokumenty"
+                      ? "4 sekcje · Hero · Formularze · Pomoc · CTA"
+                      : "Sekcja wprowadzająca"}
             </p>
             <TbArrowUpRight size={20} className="ml-auto mt-6 text-[#a1835e]" />
           </Link>

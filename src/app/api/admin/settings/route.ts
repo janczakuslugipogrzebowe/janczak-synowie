@@ -32,7 +32,7 @@ async function save(request: Request, publish: boolean) {
     return reply({ error: "Wymagany format JSON." }, 415);
   try {
     const raw = await request.text();
-    if (raw.length > 5000) return reply({ error: "Formularz jest za duży." }, 413);
+    if (raw.length > 12000) return reply({ error: "Formularz jest za duży." }, 413);
     const settings = parseSiteSettings(JSON.parse(raw));
     if (publish) {
       await publishSiteSettings(settings, access.uid);

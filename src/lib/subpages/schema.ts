@@ -104,6 +104,29 @@ const obituariesDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "b
   },
 };
 
+/** Shared hero and phone-only closing section for Kontakt. */
+const contactDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "bottom"> = {
+  hero: {
+    eyebrow: "",
+    title: "Kontakt",
+    description:
+      "Pozostajemy do Państwa dyspozycji w sprawach organizacji uroczystości pogrzebowych, formalności oraz naszych usług.",
+    imageUrl: "/hero-kontakt.png",
+    overlay: 62,
+    headingScale: 100,
+    ctaText: "",
+  },
+  bottom: {
+    eyebrow: "POMOC CAŁODOBOWA",
+    title: "Jesteśmy blisko, kiedy nas potrzebujesz",
+    description: "W sprawach wymagających pilnej pomocy pozostajemy dostępni telefonicznie przez całą dobę.",
+    imageUrl: "/bottom-kontakt.png",
+    overlay: 70,
+    headingScale: 100,
+    ctaText: "",
+  },
+};
+
 /** Migrate only exact v2.0.0 default copy, preserving all custom CMS text. */
 export function migrateGalleryPresentation(
   slug: PageSlug,
@@ -147,6 +170,7 @@ export function migrateGalleryPresentation(
 }
 export function subpageDefault(slug: PageSlug, section: SubpageSection): SubpageBlock {
   if (slug === "galeria") return galleryDefaults[section];
+  if (slug === "kontakt" && (section === "hero" || section === "bottom")) return contactDefaults[section];
   if (slug === "nekrologi" && (section === "hero" || section === "bottom"))
     return obituariesDefaults[section];
   if (slug === "dokumenty" && (section === "hero" || section === "bottom")) return documentsDefaults[section];

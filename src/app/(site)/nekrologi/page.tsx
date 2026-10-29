@@ -5,6 +5,7 @@ import ObituariesListSection from "@/components/obituaries/obituaries-list-secti
 import ObituariesInformationSection from "@/components/obituaries/obituaries-information-section";
 import { getPublishedSubpageBlock } from "@/lib/subpages/data";
 import { getPublishedSiteSettings } from "@/lib/settings/data";
+import { getPublishedObituariesPageSection } from "@/lib/obituaries-page/data";
 
 export const metadata: Metadata = {
   title: "Nekrologi | Janczak i Synowie",
@@ -15,16 +16,18 @@ export const metadata: Metadata = {
 type Query = { q?: string | string[]; cursor?: string | string[] };
 
 export default async function ObituariesPage({ searchParams }: { searchParams: Promise<Query> }) {
-  const [hero, bottom, settings] = await Promise.all([
+  const [hero, listing, information, bottom, settings] = await Promise.all([
     getPublishedSubpageBlock("nekrologi", "hero"),
+    getPublishedObituariesPageSection("listing"),
+    getPublishedObituariesPageSection("information"),
     getPublishedSubpageBlock("nekrologi", "bottom"),
     getPublishedSiteSettings(),
   ]);
   return (
     <main id="main" className="bg-[#f8f4ec]">
       <SubpageHero data={hero} />
-      <ObituariesListSection searchParams={searchParams} />
-      <ObituariesInformationSection />
+      <ObituariesListSection searchParams={searchParams} data={listing} />
+      <ObituariesInformationSection data={information} />
       <SubpageBottomCta data={bottom} settings={settings} />
     </main>
   );

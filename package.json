@@ -35,7 +35,9 @@
     "test:gallery-pages": "node --test scripts/tests/gallery-pages.test.mjs",
     "test:gallery-explorer": "node --experimental-strip-types --test scripts/tests/gallery-explorer.test.mjs",
     "test:documents-page": "node --experimental-strip-types --test scripts/tests/documents-page.test.mjs",
-    "test:obituaries-pages": "node --test scripts/tests/obituaries-pages.test.mjs"
+    "test:obituaries-pages": "node --test scripts/tests/obituaries-pages.test.mjs",
+    "test:obituaries-page-editor": "node --experimental-strip-types --test scripts/tests/obituaries-page-editor.test.mjs",
+    "test:contact-page": "node --experimental-strip-types --test scripts/tests/contact-page.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",
@@ -44,7 +46,8 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-icons": "^5.5.0",
-    "motion": "^12.0.0"
+    "motion": "^12.0.0",
+    "nodemailer": "^10.2.1"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

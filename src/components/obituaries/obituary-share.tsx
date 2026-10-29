@@ -47,7 +47,9 @@ export default function ObituaryShare({ slug, name }: Props) {
   function requirePublicUrl() {
     const url = publicUrl();
     if (!url) {
-      setStatus("Facebook wymaga publicznego adresu HTTPS. Ustaw NEXT_PUBLIC_SITE_URL na adres produkcyjny i uruchom dev ponownie.");
+      setStatus(
+        "Facebook wymaga publicznego adresu HTTPS. Ustaw NEXT_PUBLIC_SITE_URL na adres produkcyjny i uruchom dev ponownie.",
+      );
       setOpen(false);
     }
     return url;
@@ -169,7 +171,11 @@ export default function ObituaryShare({ slug, name }: Props) {
           className="mt-2 w-[min(290px,calc(100vw-4rem))] rounded-lg border border-[#ccb896] bg-white px-3 py-2 text-xs text-[#293d30] focus-visible:outline-2 focus-visible:outline-[#9c7c4b]"
         />
       )}
-      <span role="status" aria-live="polite" className={status ? "mt-2 max-w-[290px] text-xs leading-relaxed text-[#677465]" : "sr-only"}>
+      <span
+        role="status"
+        aria-live="polite"
+        className={status ? "mt-2 max-w-[290px] text-xs leading-relaxed text-[#677465]" : "sr-only"}
+      >
         {status.startsWith("Skopiowano") && <TbCheck aria-hidden="true" className="mr-1 inline" size={15} />}
         {status}
       </span>
