@@ -16,6 +16,7 @@ import HomeFloristSection from "@/components/home-florist/home-florist-section";
 import { getPublishedHomeFlorist } from "@/lib/home-florist/data";
 import HomeServicesSection from "@/components/home-services/home-services-section";
 import { getPublishedHomeServices } from "@/lib/home-services/data";
+import { getPublishedOfferServices } from "@/lib/offer/services-data";
 import HomeGuidanceSection from "@/components/home-guidance/home-guidance-section";
 import { getPublishedHomeGuidance } from "@/lib/home-guidance/data";
 import HomeAboutSection from "@/components/home-about/home-about-section";
@@ -29,12 +30,13 @@ export default async function Home() {
   const faqPromise = getPublishedHomeFaq();
   const contactPromise = getPublishedHomeContact();
   const documentsPromise = Promise.all([getPublishedHomeDocuments(), getPublishedDocumentsLibrary()]);
-  const [hero, settings, about, guidance, services, florist, obituaries, entries] = await Promise.all([
+  const [hero, settings, about, guidance, services, offerCatalog, florist, obituaries, entries] = await Promise.all([
     getPublishedHero(),
     getPublishedSiteSettings(),
     getPublishedHomeAbout(),
     getPublishedHomeGuidance(),
     getPublishedHomeServices(),
+    getPublishedOfferServices(),
     getPublishedHomeFlorist(),
     getPublishedHomeObituaries(),
     getLatestObituaries(),
@@ -52,7 +54,7 @@ export default async function Home() {
         <HomeAboutSection data={about} showBottomWave={false} />
       </div>
       <HomeGuidanceSection data={guidance} settings={settings} followedByServices />
-      <HomeServicesSection data={services} joinsGuidance followedByFlorist />
+      <HomeServicesSection data={services} joinsGuidance followedByFlorist validOfferTargets={[...offerCatalog.items.filter(item => item.visible && offerCatalog.categories.some(c => c.id === item.categoryId && c.visible)).map(item => `/oferta#${item.id}`), "/oferta#kwiaciarnia"]} />
       <HomeFloristSection data={florist} joinsServices followedByObituaries />
       <ObituariesDocumentsBoundary>
         <HomeObituariesSection data={obituaries} entries={entries} joinsFlorist />

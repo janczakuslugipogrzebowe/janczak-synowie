@@ -8,6 +8,7 @@ import { auth } from "@/lib/firebase/client";
 import { notify } from "@/components/ui/toast-provider";
 import {
   TbBuildingEstate,
+  TbListDetails,
   TbExternalLink,
   TbLogout,
   TbMenu2,
@@ -41,6 +42,7 @@ const getServerHydration = () => false;
 const mainNav = [
   { href: "/admin", label: "Pulpit", Icon: TbLayoutDashboard },
   { href: "/admin/company", label: "Firma i kontakt", Icon: TbBuildingEstate },
+  { href: "/admin/services", label: "Usługi", Icon: TbListDetails },
   { href: "/admin/obituaries", label: "Nekrologi", Icon: TbFileText },
   { href: "/admin/documents", label: "Dokumenty", Icon: TbFileText },
   { href: "/admin/gallery", label: "Galeria", Icon: TbPhoto },
@@ -152,6 +154,20 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
                     >
                       <TbFileText size={17} strokeWidth={1.65} />
                       {label}
+                    </Link>
+                  ))
+                ) : slug === "oferta" ? (
+                  (
+                    [
+                      ["hero", "Hero"], ["catalog", "Przegląd oferty"],
+                      ["formalities", "Formalności i rozliczenia"], ["process", "Etapy współpracy"],
+                      ["florist", "Kwiaciarnia"], ["bottom", "Kontaktowe CTA"],
+                    ] as const
+                  ).map(([section, label]) => (
+                    <Link key={section} href={`/admin/site/oferta/${section}`} onClick={onNavigate}
+                      aria-current={active(`/admin/site/oferta/${section}`) ? "page" : undefined}
+                      className={sectionStyle(`/admin/site/oferta/${section}`)}>
+                      <TbLayoutGrid size={17} strokeWidth={1.65}/>{label}
                     </Link>
                   ))
                 ) : slug === "kontakt" ? (

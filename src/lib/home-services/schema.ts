@@ -4,6 +4,7 @@ export type HomeService = {
   imageUrl: string;
   imagePositionX: number;
   imagePositionY: number;
+  offerTarget?: string;
 };
 
 export type HomeServicesContent = {
@@ -39,6 +40,7 @@ export const DEFAULT_HOME_SERVICES: HomeServicesContent = {
       description:
         "Kompleksowa organizacja ceremonii, pomoc w formalnościach ZUS i KRUS oraz bezgotówkowym rozliczeniu pogrzebu.",
       imageUrl: "/uslugi1-home.png",
+      offerTarget: "/oferta#organizacja-pogrzebow",
       imagePositionX: 50,
       imagePositionY: 50,
     },
@@ -47,6 +49,7 @@ export const DEFAULT_HOME_SERVICES: HomeServicesContent = {
       description:
         "Transport krajowy i międzynarodowy oraz organizacja pogrzebów na cmentarzach w kraju i za granicą.",
       imageUrl: "/uslugi2-home.png",
+      offerTarget: "/oferta#transport-zmarlych",
       imagePositionX: 50,
       imagePositionY: 50,
     },
@@ -55,6 +58,7 @@ export const DEFAULT_HOME_SERVICES: HomeServicesContent = {
       description:
         "Duży wybór trumien, urn i krzyży, dopasowanych do charakteru uroczystości oraz życzeń rodziny.",
       imageUrl: "/uslugi3-home.png",
+      offerTarget: "/oferta#trumny-i-urny",
       imagePositionX: 50,
       imagePositionY: 50,
     },
@@ -62,6 +66,7 @@ export const DEFAULT_HOME_SERVICES: HomeServicesContent = {
       title: "Oprawa florystyczna",
       description: "Wieńce, wiązanki i kompozycje kwiatowe przygotowywane przez naszą rodzinną kwiaciarnię.",
       imageUrl: "/uslugi4-home.png",
+      offerTarget: "/oferta#kwiaciarnia",
       imagePositionX: 50,
       imagePositionY: 50,
     },
@@ -136,7 +141,7 @@ export function parseHomeServices(value: unknown): HomeServicesContent {
     if (!raw || typeof raw !== "object" || Array.isArray(raw))
       throw new HomeServicesValidationError(`Usługa ${i + 1}: błędny format.`);
     const item = raw as Record<string, unknown>;
-    const known = new Set(["title", "description", "imageUrl", "imagePositionX", "imagePositionY"]);
+    const known = new Set(["title", "description", "imageUrl", "imagePositionX", "imagePositionY", "offerTarget"]);
     if (Object.keys(item).some((key) => !known.has(key)))
       throw new HomeServicesValidationError(`Usługa ${i + 1}: nieznane pole.`);
     const getText = (key: "title" | "description" | "imageUrl", max: number) => {
@@ -159,8 +164,12 @@ export function parseHomeServices(value: unknown): HomeServicesContent {
     const imageUrl = getText("imageUrl", 500);
     if (!safeServiceImage(imageUrl))
       throw new HomeServicesValidationError(`Usługa ${i + 1}: niedozwolony adres fotografii.`);
+    const offerTarget = item.offerTarget ?? DEFAULT_HOME_SERVICES.services[i].offerTarget;
+    if (typeof offerTarget !== "string" || !safeServicesHref(offerTarget))
+      throw new HomeServicesValidationError(`Usługa ${i + 1}: nieprawidłowy link do oferty.`);
     return {
       title: getText("title", 95),
+      offerTarget,
       description: getText("description", 300),
       imageUrl,
       imagePositionX: getPos("imagePositionX"),

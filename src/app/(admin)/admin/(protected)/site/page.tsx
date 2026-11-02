@@ -24,7 +24,7 @@ export default function SiteEditorHome() {
           <Link
             key={slug}
             href={
-              slug === "galeria" || slug === "dokumenty" || slug === "nekrologi" || slug === "kontakt"
+              slug === "galeria" || slug === "dokumenty" || slug === "nekrologi" || slug === "kontakt" || slug === "oferta"
                 ? `/admin/site/${slug}/hero`
                 : `/admin/site/${slug}`
             }
@@ -33,7 +33,9 @@ export default function SiteEditorHome() {
             <TbLayoutGrid className="size-8 text-[#a1835e]" />
             <h2 className="mt-6 font-display text-4xl font-semibold">{PAGE_LABELS[slug]}</h2>
             <p className="mt-2 text-xs text-[#727d74]">
-              {slug === "kontakt"
+              {slug === "oferta"
+                ? "6 sekcji · Hero · Przegląd oferty · Formalności · Etapy · Kwiaciarnia · CTA"
+                : slug === "kontakt"
                 ? "4 sekcje · Hero · Dane kontaktowe · Formularz i informacje · CTA"
                 : slug === "nekrologi"
                   ? "4 sekcje · Hero · Lista nekrologów · Informacje · CTA"

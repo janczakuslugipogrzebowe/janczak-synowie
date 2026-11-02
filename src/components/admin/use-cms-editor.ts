@@ -6,6 +6,7 @@ export function useCmsEditor<T extends object>(endpoint: string, defaults: T, pa
   const [draft, setDraft] = useState<T>(defaults),
     [saved, setSaved] = useState<T>(defaults),
     [published, setPublished] = useState<T>(defaults);
+  const [revision, setRevision] = useState<string | null>(null);
   const [phase, setPhase] = useState<EditorPhase>("loading"),
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
@@ -26,6 +27,7 @@ export function useCmsEditor<T extends object>(endpoint: string, defaults: T, pa
         if (disposed) return;
         const live = parse(p.published ?? defaults),
           edit = p.draft ? parse(p.draft) : live;
+        setRevision(typeof p.revision === "string" ? p.revision : null);
         setPublished(live);
         setSaved(edit);
         setDraft(edit);
@@ -67,12 +69,13 @@ export function useCmsEditor<T extends object>(endpoint: string, defaults: T, pa
       const r = await fetch(endpoint, {
         method: publish ? "POST" : "PUT",
         credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(revision !== null ? { "If-Match": revision } : {}) },
         body: JSON.stringify(validated),
         signal: AbortSignal.timeout(20000),
       });
       const p = await r.json();
       if (!r.ok) throw new Error(p.error ?? "Zapis nie powiódł się.");
+      if (typeof p.revision === "string") setRevision(p.revision);
       setDraft(validated);
       setSaved(validated);
       if (publish) setPublished(validated);
@@ -88,6 +91,7 @@ export function useCmsEditor<T extends object>(endpoint: string, defaults: T, pa
   }
   return {
     draft,
+    revision,
     phase,
     error,
     message,

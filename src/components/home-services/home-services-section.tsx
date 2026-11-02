@@ -16,12 +16,14 @@ type Props = {
   preview?: boolean;
   joinsGuidance?: boolean;
   followedByFlorist?: boolean;
+  validOfferTargets?: string[];
 };
 export default function HomeServicesSection({
   data,
   preview = false,
   joinsGuidance = false,
   followedByFlorist = false,
+  validOfferTargets,
 }: Props) {
   const reduce = useReducedMotion();
   const appear = (delay: number) => ({
@@ -103,6 +105,8 @@ export default function HomeServicesSection({
         <div className="grid grid-cols-1 items-stretch gap-[calc(clamp(1rem,1.5vw,2.3rem)*var(--services-gap))] sm:grid-cols-2 xl:grid-cols-4">
           {data.services.map((service, index) => {
             const Icon = ICONS[index];
+            const preferredTarget = service.offerTarget ?? data.buttonHref;
+            const target = validOfferTargets && preferredTarget.startsWith("/oferta#") && !validOfferTargets.includes(preferredTarget) ? "/oferta" : preferredTarget;
             const cardContent = (
               <>
                 <div
@@ -158,7 +162,7 @@ export default function HomeServicesSection({
                   <div className="flex h-full flex-col">{cardContent}</div>
                 ) : (
                   <Link
-                    href={data.buttonHref}
+                    href={target}
                     aria-label={`${service.title} – ${data.buttonLabel}`}
                     className="flex h-full flex-col transition-transform duration-500 ease-out hover:-translate-y-1 focus-visible:rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#957447]"
                   >

@@ -127,6 +127,22 @@ const contactDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "bott
   },
 };
 
+/** Oferta reuses the same hero and closing CTA; current stock photography
+ * is used until dedicated hero-oferta.png and bottom-oferta.png are added. */
+const offerDefaults: Pick<Record<SubpageSection, SubpageBlock>, "hero" | "bottom"> = {
+  hero: {
+    eyebrow: "", title: "Oferta",
+    description: "Organizacja uroczystości pogrzebowych, transport, wyposażenie, formalności oraz wsparcie dla rodzin w przygotowaniu ostatniego pożegnania.",
+    imageUrl: "/uslugi-home.png", overlay: 62, headingScale: 100, ctaText: "",
+  },
+  bottom: {
+    eyebrow: "JESTEŚMY DO PAŃSTWA DYSPOZYCJI",
+    title: "Porozmawiajmy o potrzebach Państwa rodziny",
+    description: "Chętnie wyjaśnimy zakres dostępnych usług i pomożemy ustalić szczegóły organizacji uroczystości.",
+    imageUrl: "/kontakt-home.png", overlay: 70, headingScale: 100, ctaText: "Przejdź do kontaktu",
+  },
+};
+
 /** Migrate only exact v2.0.0 default copy, preserving all custom CMS text. */
 export function migrateGalleryPresentation(
   slug: PageSlug,
@@ -170,6 +186,7 @@ export function migrateGalleryPresentation(
 }
 export function subpageDefault(slug: PageSlug, section: SubpageSection): SubpageBlock {
   if (slug === "galeria") return galleryDefaults[section];
+  if (slug === "oferta" && (section === "hero" || section === "bottom")) return offerDefaults[section];
   if (slug === "kontakt" && (section === "hero" || section === "bottom")) return contactDefaults[section];
   if (slug === "nekrologi" && (section === "hero" || section === "bottom"))
     return obituariesDefaults[section];

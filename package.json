@@ -37,7 +37,10 @@
     "test:documents-page": "node --experimental-strip-types --test scripts/tests/documents-page.test.mjs",
     "test:obituaries-pages": "node --test scripts/tests/obituaries-pages.test.mjs",
     "test:obituaries-page-editor": "node --experimental-strip-types --test scripts/tests/obituaries-page-editor.test.mjs",
-    "test:contact-page": "node --experimental-strip-types --test scripts/tests/contact-page.test.mjs"
+    "test:contact-page": "node --experimental-strip-types --test scripts/tests/contact-page.test.mjs",
+    "test:offer-page": "node --experimental-strip-types --test scripts/tests/offer-page.test.mjs",
+    "test:offer-management": "node --experimental-strip-types --test scripts/tests/offer-management.test.mjs",
+    "test:offer-explorer": "node --experimental-strip-types --test scripts/tests/offer-explorer.test.mjs"
   },
   "dependencies": {
     "firebase": "^13.0.0",
