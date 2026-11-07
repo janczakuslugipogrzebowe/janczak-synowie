@@ -5,13 +5,17 @@ import { getAdminOfferSection, writeOfferSection } from "@/lib/offer/data";
 import { isOfferSection, parseOfferSection, OfferValidationError } from "@/lib/offer/schema";
 
 type Ctx = { params: Promise<{ section: string }> };
-const json = (value: unknown, status = 200) => Response.json(value, { status, headers: { "Cache-Control": "private, no-store" } });
+const json = (value: unknown, status = 200) =>
+  Response.json(value, { status, headers: { "Cache-Control": "private, no-store" } });
 export async function GET(_: Request, { params }: Ctx) {
   const { section } = await params;
   if (!isOfferSection(section)) return json({ error: "Nie znaleziono sekcji." }, 404);
   if (!isAdminConfigured() || !(await getAdminUid())) return json({ error: "Brak dostępu." }, 401);
-  try { return json(await getAdminOfferSection(section)); }
-  catch { return json({ error: "Nie udało się pobrać sekcji." }, 500); }
+  try {
+    return json(await getAdminOfferSection(section));
+  } catch {
+    return json({ error: "Nie udało się pobrać sekcji." }, 500);
+  }
 }
 async function save(request: Request, { params }: Ctx, publish: boolean) {
   const { section } = await params;
@@ -20,7 +24,8 @@ async function save(request: Request, { params }: Ctx, publish: boolean) {
   if (!isAdminConfigured()) return json({ error: "Brak konfiguracji administratora." }, 503);
   const uid = await getAdminUid();
   if (!uid) return json({ error: "Brak dostępu." }, 401);
-  if (!request.headers.get("content-type")?.startsWith("application/json")) return json({ error: "Wymagany JSON." }, 415);
+  if (!request.headers.get("content-type")?.startsWith("application/json"))
+    return json({ error: "Wymagany JSON." }, 415);
   try {
     const raw = await request.text();
     if (raw.length > 160_000) return json({ error: "Za duży formularz." }, 413);
@@ -32,7 +37,8 @@ async function save(request: Request, { params }: Ctx, publish: boolean) {
     }
     return json({ ok: true });
   } catch (error) {
-    if (error instanceof OfferValidationError || error instanceof SyntaxError) return json({ error: error.message }, 400);
+    if (error instanceof OfferValidationError || error instanceof SyntaxError)
+      return json({ error: error.message }, 400);
     return json({ error: "Nie udało się zapisać sekcji." }, 500);
   }
 }

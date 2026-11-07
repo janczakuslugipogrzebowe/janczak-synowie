@@ -33,7 +33,5 @@ export function expandOfferService(
   defaultServiceId?: string,
 ): OfferOpenState {
   const current = openedServices(state, categoryId, defaultServiceId);
-  return current.includes(serviceId)
-    ? state
-    : { ...state, [categoryId]: [...current, serviceId] };
+  return current.includes(serviceId) ? state : { ...state, [categoryId]: [...current, serviceId] };
 }

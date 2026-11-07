@@ -106,7 +106,12 @@ export default function HomeServicesSection({
           {data.services.map((service, index) => {
             const Icon = ICONS[index];
             const preferredTarget = service.offerTarget ?? data.buttonHref;
-            const target = validOfferTargets && preferredTarget.startsWith("/oferta#") && !validOfferTargets.includes(preferredTarget) ? "/oferta" : preferredTarget;
+            const target =
+              validOfferTargets &&
+              preferredTarget.startsWith("/oferta#") &&
+              !validOfferTargets.includes(preferredTarget)
+                ? "/oferta"
+                : preferredTarget;
             const cardContent = (
               <>
                 <div

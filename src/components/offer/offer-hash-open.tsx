@@ -9,7 +9,7 @@ export default function OfferHashOpen() {
       const el = document.getElementById(id);
       if (el instanceof HTMLDetailsElement && el.matches("[data-offer-service]")) {
         el.open = true;
-        requestAnimationFrame(() => el.scrollIntoView({block:"start", behavior:"auto"}));
+        requestAnimationFrame(() => el.scrollIntoView({ block: "start", behavior: "auto" }));
       }
     };
     open();

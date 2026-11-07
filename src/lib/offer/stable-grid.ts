@@ -4,17 +4,14 @@ export type ServiceDimensions = {
   detail: number;
 };
 
-const validHeight = (value: number): number =>
-  Number.isFinite(value) ? Math.max(0, value) : 0;
+const validHeight = (value: number): number => (Number.isFinite(value) ? Math.max(0, value) : 0);
 
 /** Height needed by the tallest fully expanded service in the active category. */
-export function tallestServiceCardHeight(
-  entries: readonly ServiceDimensions[],
-): number {
+export function tallestServiceCardHeight(entries: readonly ServiceDimensions[]): number {
   if (!entries.length) return 0;
-  return Math.ceil(Math.max(...entries.map(({ header, detail }) =>
-    validHeight(header) + validHeight(detail),
-  )));
+  return Math.ceil(
+    Math.max(...entries.map(({ header, detail }) => validHeight(header) + validHeight(detail))),
+  );
 }
 
 /**
@@ -39,6 +36,6 @@ export function expandedOfferGridHeight(
   });
   const totalCollapsed = rowHeaders.reduce((sum, height) => sum + height, 0);
   const expanded = tallestServiceCardHeight(entries);
-  const mostSpaceNeeded = Math.max(...rowHeaders.map(height => totalCollapsed - height + expanded));
+  const mostSpaceNeeded = Math.max(...rowHeaders.map((height) => totalCollapsed - height + expanded));
   return Math.ceil(mostSpaceNeeded + Math.max(0, rowHeaders.length - 1) * validHeight(gap));
 }

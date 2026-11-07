@@ -1,5 +1,9 @@
 "use client";
-import { DEFAULT_SERVICE_CATALOG, parseServiceCatalog, type ManagedOfferService } from "@/lib/offer/service-catalog";
+import {
+  DEFAULT_SERVICE_CATALOG,
+  parseServiceCatalog,
+  type ManagedOfferService,
+} from "@/lib/offer/service-catalog";
 import { AdminSlider } from "@/components/ui/admin-slider";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -40,13 +44,23 @@ export default function ServicesEditor() {
   const [offerChoices, setOfferChoices] = useState<ManagedOfferService[]>(DEFAULT_SERVICE_CATALOG.items);
   useEffect(() => {
     const controller = new AbortController();
-    void fetch("/api/admin/services", { credentials: "same-origin", cache: "no-store", signal: controller.signal })
-      .then(r => r.ok ? r.json() : null)
-      .then(payload => {
+    void fetch("/api/admin/services", {
+      credentials: "same-origin",
+      cache: "no-store",
+      signal: controller.signal,
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((payload) => {
         if (controller.signal.aborted || !payload) return;
         const content = parseServiceCatalog(payload.draft ?? payload.published ?? DEFAULT_SERVICE_CATALOG);
-        setOfferChoices(content.items.filter(item => item.visible && content.categories.some(cat => cat.id === item.categoryId && cat.visible)));
-      }).catch(() => {});
+        setOfferChoices(
+          content.items.filter(
+            (item) =>
+              item.visible && content.categories.some((cat) => cat.id === item.categoryId && cat.visible),
+          ),
+        );
+      })
+      .catch(() => {});
     return () => controller.abort();
   }, []);
 
@@ -119,11 +133,22 @@ export default function ServicesEditor() {
                     />
                   </Field>
                   <Field label="Link do usługi na podstronie Oferta">
-                    <select className={fieldClass} value={card.offerTarget ?? "/oferta"}
-                      onChange={(e) => updateService(index, "offerTarget", e.target.value)}>
+                    <select
+                      className={fieldClass}
+                      value={card.offerTarget ?? "/oferta"}
+                      onChange={(e) => updateService(index, "offerTarget", e.target.value)}
+                    >
                       <option value="/oferta">Ogólna strona Oferty</option>
-                      {card.offerTarget && !["/oferta", "/oferta#kwiaciarnia"].includes(card.offerTarget) && !offerChoices.some(s=>`/oferta#${s.id}`===card.offerTarget) && <option value={card.offerTarget}>Nieaktualne powiązanie — wybierz inne</option>}
-                      {offerChoices.map(service => <option key={service.id} value={`/oferta#${service.id}`}>{service.title}</option>)}
+                      {card.offerTarget &&
+                        !["/oferta", "/oferta#kwiaciarnia"].includes(card.offerTarget) &&
+                        !offerChoices.some((s) => `/oferta#${s.id}` === card.offerTarget) && (
+                          <option value={card.offerTarget}>Nieaktualne powiązanie — wybierz inne</option>
+                        )}
+                      {offerChoices.map((service) => (
+                        <option key={service.id} value={`/oferta#${service.id}`}>
+                          {service.title}
+                        </option>
+                      ))}
                       <option value="/oferta#kwiaciarnia">Własna kwiaciarnia</option>
                     </select>
                   </Field>

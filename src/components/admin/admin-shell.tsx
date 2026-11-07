@@ -136,6 +136,28 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
                       {label}
                     </Link>
                   ))
+                ) : slug === "o-nas" ? (
+                  (
+                    [
+                      ["hero", "Hero"],
+                      ["history", "Rodzinna firma i historia"],
+                      ["people", "Właściciele i zespół"],
+                      ["values", "Nasze podejście"],
+                      ["village", "Żelazków"],
+                      ["bottom", "Kontaktowe CTA"],
+                    ] as const
+                  ).map(([section, label]) => (
+                    <Link
+                      key={section}
+                      href={`/admin/site/o-nas/${section}`}
+                      onClick={onNavigate}
+                      aria-current={active(`/admin/site/o-nas/${section}`) ? "page" : undefined}
+                      className={sectionStyle(`/admin/site/o-nas/${section}`)}
+                    >
+                      <TbArticle size={17} strokeWidth={1.65} />
+                      {label}
+                    </Link>
+                  ))
                 ) : slug === "nekrologi" ? (
                   (
                     [
@@ -159,15 +181,23 @@ function SiteTree({ pathname, onNavigate }: { pathname: string; onNavigate: () =
                 ) : slug === "oferta" ? (
                   (
                     [
-                      ["hero", "Hero"], ["catalog", "Przegląd oferty"],
-                      ["formalities", "Formalności i rozliczenia"], ["process", "Etapy współpracy"],
-                      ["florist", "Kwiaciarnia"], ["bottom", "Kontaktowe CTA"],
+                      ["hero", "Hero"],
+                      ["catalog", "Przegląd oferty"],
+                      ["formalities", "Formalności i rozliczenia"],
+                      ["process", "Etapy współpracy"],
+                      ["florist", "Kwiaciarnia"],
+                      ["bottom", "Kontaktowe CTA"],
                     ] as const
                   ).map(([section, label]) => (
-                    <Link key={section} href={`/admin/site/oferta/${section}`} onClick={onNavigate}
+                    <Link
+                      key={section}
+                      href={`/admin/site/oferta/${section}`}
+                      onClick={onNavigate}
                       aria-current={active(`/admin/site/oferta/${section}`) ? "page" : undefined}
-                      className={sectionStyle(`/admin/site/oferta/${section}`)}>
-                      <TbLayoutGrid size={17} strokeWidth={1.65}/>{label}
+                      className={sectionStyle(`/admin/site/oferta/${section}`)}
+                    >
+                      <TbLayoutGrid size={17} strokeWidth={1.65} />
+                      {label}
                     </Link>
                   ))
                 ) : slug === "kontakt" ? (

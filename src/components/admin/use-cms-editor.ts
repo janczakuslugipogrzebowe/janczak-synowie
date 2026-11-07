@@ -69,7 +69,10 @@ export function useCmsEditor<T extends object>(endpoint: string, defaults: T, pa
       const r = await fetch(endpoint, {
         method: publish ? "POST" : "PUT",
         credentials: "same-origin",
-        headers: { "Content-Type": "application/json", ...(revision !== null ? { "If-Match": revision } : {}) },
+        headers: {
+          "Content-Type": "application/json",
+          ...(revision !== null ? { "If-Match": revision } : {}),
+        },
         body: JSON.stringify(validated),
         signal: AbortSignal.timeout(20000),
       });

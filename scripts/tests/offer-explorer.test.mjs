@@ -34,7 +34,7 @@ test("service details reuse the public preview in admin; CMS copy is separated f
   const overview = read("src/components/admin/offer-page-editor.tsx");
   const shell = read("src/components/admin/admin-shell.tsx");
   assert.match(admin, /import \{ ServiceEntry \}/);
-  assert.match(admin, /<ServiceEntry item=/);
+  assert.match(admin, /<ServiceEntry\s+item\s*=/);
   assert.match(admin, /beforeunload/);
   assert.match(admin, /Podstawowe/);
   assert.match(admin, /Zakres i opis/);
@@ -52,14 +52,28 @@ test("category-scoped reordering does not disturb other category items", async (
     writeFileSync(temporary, contents);
     const { moveOfferService } = await import(pathToFileURL(temporary).href);
     const original = [
-      {id:"a1",categoryId:"a"}, {id:"b1",categoryId:"b"}, {id:"a2",categoryId:"a"},
-      {id:"b2",categoryId:"b"}, {id:"a3",categoryId:"a"},
+      { id: "a1", categoryId: "a" },
+      { id: "b1", categoryId: "b" },
+      { id: "a2", categoryId: "a" },
+      { id: "b2", categoryId: "b" },
+      { id: "a3", categoryId: "a" },
     ];
-    assert.deepEqual(moveOfferService(original,"a2",-1).map(x=>x.id), ["a2","b1","a1","b2","a3"]);
-    assert.deepEqual(moveOfferService(original,"a1",-1), original);
-    assert.deepEqual(moveOfferService(original,"b1",1).map(x=>x.id), ["a1","b2","a2","b1","a3"]);
-    assert.deepEqual(original.map(x=>x.id), ["a1","b1","a2","b2","a3"]);
-  } finally { rmSync(tmp,{recursive:true,force:true}); }
+    assert.deepEqual(
+      moveOfferService(original, "a2", -1).map((x) => x.id),
+      ["a2", "b1", "a1", "b2", "a3"],
+    );
+    assert.deepEqual(moveOfferService(original, "a1", -1), original);
+    assert.deepEqual(
+      moveOfferService(original, "b1", 1).map((x) => x.id),
+      ["a1", "b2", "a2", "b1", "a3"],
+    );
+    assert.deepEqual(
+      original.map((x) => x.id),
+      ["a1", "b1", "a2", "b2", "a3"],
+    );
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });
 
 test("catalog revision is guarded by Firestore transaction and HTTP conflict handling", () => {
@@ -70,11 +84,10 @@ test("catalog revision is guarded by Firestore transaction and HTTP conflict han
   assert.match(data, /current\.data\(\)\?\.revision/);
   assert.match(data, /OfferCatalogConflictError/);
   assert.match(api, /status/); // route preserves structured JSON statuses
-  assert.match(api, /,409/);
-  assert.match(api, /,428/);
+  assert.match(api, /,\s*409\s*\)/);
+  assert.match(api, /,\s*428\s*\)/);
   assert.match(hook, /If-Match/);
 });
-
 
 test("odd-numbered categories do not stretch the last service across two columns", () => {
   const source = read("src/components/offer/offer-explorer.tsx");
@@ -84,17 +97,26 @@ test("odd-numbered categories do not stretch the last service across two columns
 });
 
 test("expanded card height matches the tallest service, not the collapsed card", () => {
-  const services = [{header:120, detail:400}, {header:140, detail:270}];
+  const services = [
+    { header: 120, detail: 400 },
+    { header: 140, detail: 270 },
+  ];
   assert.equal(tallestServiceCardHeight(services), 520);
   assert.equal(tallestServiceCardHeight([...services].reverse()), 520);
-  assert.equal(tallestServiceCardHeight([{header:120,detail:400},{header:140,detail:670}]), 810);
+  assert.equal(
+    tallestServiceCardHeight([
+      { header: 120, detail: 400 },
+      { header: 140, detail: 670 },
+    ]),
+    810,
+  );
 });
 
 test("switching between expanded cards never changes the reserved grid height", () => {
   const services = [
-    {header:120, detail:250},
-    {header:100, detail:150},
-    {header:115, detail:350},
+    { header: 120, detail: 250 },
+    { header: 100, detail: 150 },
+    { header: 115, detail: 350 },
   ];
   // Two columns: the last service stays in its own LEFT card, not full width.
   // The tall expanded card may appear in either row without changing the
@@ -103,7 +125,7 @@ test("switching between expanded cards never changes the reserved grid height", 
   assert.equal(expandedOfferGridHeight(services, 2, 24), 609);
   assert.equal(expandedOfferGridHeight(services, 1, 24), 748);
   assert.equal(expandedOfferGridHeight([], 2, 24), 0);
-  assert.equal(tallestServiceCardHeight([{header:-4, detail:NaN}]), 0);
+  assert.equal(tallestServiceCardHeight([{ header: -4, detail: NaN }]), 0);
 });
 
 test("collapsed tiles keep their natural compact size; only open tile matches tallest height", () => {
@@ -114,7 +136,7 @@ test("collapsed tiles keep their natural compact size; only open tile matches ta
   assert.match(source, /tallestServiceCardHeight\(dimensions\)/);
   assert.match(source, /expandedOfferGridHeight\(dimensions, columns, gap\)/);
   assert.match(source, /minHeight: open && expandedHeight/);
-  assert.match(source, /minHeight: hasOpenService && measured\?\.gridHeight/);
+  assert.match(source, /minHeight:\s*hasOpenService\s*&&\s*measured\?\.gridHeight/);
   assert.match(source, /grid-cols-1 content-start items-start gap-6 xl:grid-cols-2/);
   assert.match(source, /data-offer-service[\s\S]*?h-fit self-start overflow-hidden/);
   assert.doesNotMatch(source, /gridAutoRows/);

@@ -141,7 +141,14 @@ export function parseHomeServices(value: unknown): HomeServicesContent {
     if (!raw || typeof raw !== "object" || Array.isArray(raw))
       throw new HomeServicesValidationError(`Usługa ${i + 1}: błędny format.`);
     const item = raw as Record<string, unknown>;
-    const known = new Set(["title", "description", "imageUrl", "imagePositionX", "imagePositionY", "offerTarget"]);
+    const known = new Set([
+      "title",
+      "description",
+      "imageUrl",
+      "imagePositionX",
+      "imagePositionY",
+      "offerTarget",
+    ]);
     if (Object.keys(item).some((key) => !known.has(key)))
       throw new HomeServicesValidationError(`Usługa ${i + 1}: nieznane pole.`);
     const getText = (key: "title" | "description" | "imageUrl", max: number) => {

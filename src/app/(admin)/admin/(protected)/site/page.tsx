@@ -24,7 +24,11 @@ export default function SiteEditorHome() {
           <Link
             key={slug}
             href={
-              slug === "galeria" || slug === "dokumenty" || slug === "nekrologi" || slug === "kontakt" || slug === "oferta"
+              slug === "galeria" ||
+              slug === "dokumenty" ||
+              slug === "nekrologi" ||
+              slug === "kontakt" ||
+              slug === "oferta"
                 ? `/admin/site/${slug}/hero`
                 : `/admin/site/${slug}`
             }
@@ -36,14 +40,14 @@ export default function SiteEditorHome() {
               {slug === "oferta"
                 ? "6 sekcji · Hero · Przegląd oferty · Formalności · Etapy · Kwiaciarnia · CTA"
                 : slug === "kontakt"
-                ? "4 sekcje · Hero · Dane kontaktowe · Formularz i informacje · CTA"
-                : slug === "nekrologi"
-                  ? "4 sekcje · Hero · Lista nekrologów · Informacje · CTA"
-                  : slug === "galeria"
-                    ? "4 sekcje · Hero · Albumy · O galerii · CTA"
-                    : slug === "dokumenty"
-                      ? "4 sekcje · Hero · Formularze · Pomoc · CTA"
-                      : "Sekcja wprowadzająca"}
+                  ? "4 sekcje · Hero · Dane kontaktowe · Formularz i informacje · CTA"
+                  : slug === "nekrologi"
+                    ? "4 sekcje · Hero · Lista nekrologów · Informacje · CTA"
+                    : slug === "galeria"
+                      ? "4 sekcje · Hero · Albumy · O galerii · CTA"
+                      : slug === "dokumenty"
+                        ? "4 sekcje · Hero · Formularze · Pomoc · CTA"
+                        : "Sekcja wprowadzająca"}
             </p>
             <TbArrowUpRight size={20} className="ml-auto mt-6 text-[#a1835e]" />
           </Link>

@@ -31,7 +31,10 @@ test("editor copy separate from services CRUD and source content is unchanged in
   const pub = read("src/app/(site)/oferta/page.tsx");
   const ui = read("src/components/offer/offer-sections.tsx");
   assert.match(ed, /Otwórz menedżer usług/);
-  const catalogEditor = ed.split("export function OfferCatalogEditor()")[1]?.split("export function OfferFormalitiesEditor()")[0] ?? "";
+  const catalogEditor =
+    ed
+      .split("export function OfferCatalogEditor()")[1]
+      ?.split("export function OfferFormalitiesEditor()")[0] ?? "";
   assert.ok(catalogEditor);
   assert.doesNotMatch(catalogEditor, /\.items\.map/);
   assert.match(pub, /getPublishedOfferServices\(\)/);
@@ -67,7 +70,14 @@ test("live migration parser preserves IDs, order, copy and data security", async
     const schemaUrl = pathToFileURL(resolve(root, "src/lib/offer/schema.ts")).href;
     const temp = join(tmp, "service-catalog.ts");
     writeFileSync(temp, source.replace('from "./schema"', `from "${schemaUrl}"`));
-    const { fromLegacyOffer, DEFAULT_SERVICE_CATALOG, parseServiceCatalog, uniqueOfferId, visibleOfferCategories, ServiceCatalogValidationError } = await import(pathToFileURL(temp).href);
+    const {
+      fromLegacyOffer,
+      DEFAULT_SERVICE_CATALOG,
+      parseServiceCatalog,
+      uniqueOfferId,
+      visibleOfferCategories,
+      ServiceCatalogValidationError,
+    } = await import(pathToFileURL(temp).href);
     const legacy = fromLegacyOffer();
     assert.deepEqual(legacy, DEFAULT_SERVICE_CATALOG);
     assert.equal(legacy.categories.length, 4);
@@ -91,7 +101,15 @@ test("live migration parser preserves IDs, order, copy and data security", async
     hidden.categories[0].visible = false;
     assert.equal(visibleOfferCategories(hidden).length, 3);
     const emptyCategory = structuredClone(legacy);
-    emptyCategory.categories.push({id:"nowa-kategoria",title:"Nowa kategoria",description:"",visible:true,imageUrl:""});
-    assert.equal(parseServiceCatalog(emptyCategory).categories.length,5);
-  } finally { rmSync(tmp, { recursive:true, force:true }); }
+    emptyCategory.categories.push({
+      id: "nowa-kategoria",
+      title: "Nowa kategoria",
+      description: "",
+      visible: true,
+      imageUrl: "",
+    });
+    assert.equal(parseServiceCatalog(emptyCategory).categories.length, 5);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });
