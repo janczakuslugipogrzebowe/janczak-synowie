@@ -66,3 +66,240 @@ body {
     @apply cursor-not-allowed;
   }
 }
+
+/* Home: the about image is ACTUALLY clipped to a wave on narrow screens.
+   The next section overlaps underneath the cut edge, so its photography is
+   visible immediately below the curve (no solid strip or fake overlay).
+   Desktop wave implementation is deliberately unchanged. */
+@media (max-width: 1023px) {
+  .home-about-mobile-seam,
+  .home-guidance-mobile-seam {
+    --home-seam-height: 72px;
+  }
+
+  .home-about-mobile-seam {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100.000% calc(100% - 0.70588 * var(--home-seam-height)),
+      98.523% calc(100% - 0.64681 * var(--home-seam-height)),
+      96.991% calc(100% - 0.59469 * var(--home-seam-height)),
+      95.411% calc(100% - 0.54927 * var(--home-seam-height)),
+      93.788% calc(100% - 0.51026 * var(--home-seam-height)),
+      92.128% calc(100% - 0.47739 * var(--home-seam-height)),
+      90.437% calc(100% - 0.45039 * var(--home-seam-height)),
+      88.721% calc(100% - 0.42898 * var(--home-seam-height)),
+      86.986% calc(100% - 0.41289 * var(--home-seam-height)),
+      85.237% calc(100% - 0.40185 * var(--home-seam-height)),
+      83.481% calc(100% - 0.39559 * var(--home-seam-height)),
+      81.723% calc(100% - 0.39382 * var(--home-seam-height)),
+      79.970% calc(100% - 0.39628 * var(--home-seam-height)),
+      78.227% calc(100% - 0.40270 * var(--home-seam-height)),
+      76.500% calc(100% - 0.41279 * var(--home-seam-height)),
+      74.795% calc(100% - 0.42629 * var(--home-seam-height)),
+      73.118% calc(100% - 0.44292 * var(--home-seam-height)),
+      71.474% calc(100% - 0.46241 * var(--home-seam-height)),
+      69.871% calc(100% - 0.48448 * var(--home-seam-height)),
+      68.312% calc(100% - 0.50887 * var(--home-seam-height)),
+      66.806% calc(100% - 0.53529 * var(--home-seam-height)),
+      64.875% calc(100% - 0.56851 * var(--home-seam-height)),
+      63.033% calc(100% - 0.59441 * var(--home-seam-height)),
+      61.271% calc(100% - 0.61351 * var(--home-seam-height)),
+      59.577% calc(100% - 0.62635 * var(--home-seam-height)),
+      57.941% calc(100% - 0.63346 * var(--home-seam-height)),
+      56.352% calc(100% - 0.63535 * var(--home-seam-height)),
+      54.800% calc(100% - 0.63257 * var(--home-seam-height)),
+      53.274% calc(100% - 0.62565 * var(--home-seam-height)),
+      51.765% calc(100% - 0.61510 * var(--home-seam-height)),
+      50.260% calc(100% - 0.60147 * var(--home-seam-height)),
+      48.751% calc(100% - 0.58528 * var(--home-seam-height)),
+      47.226% calc(100% - 0.56706 * var(--home-seam-height)),
+      45.674% calc(100% - 0.54734 * var(--home-seam-height)),
+      44.086% calc(100% - 0.52665 * var(--home-seam-height)),
+      42.450% calc(100% - 0.50551 * var(--home-seam-height)),
+      40.757% calc(100% - 0.48447 * var(--home-seam-height)),
+      38.995% calc(100% - 0.46404 * var(--home-seam-height)),
+      37.154% calc(100% - 0.44476 * var(--home-seam-height)),
+      35.224% calc(100% - 0.42716 * var(--home-seam-height)),
+      33.194% calc(100% - 0.41176 * var(--home-seam-height)),
+      31.152% calc(100% - 0.40189 * var(--home-seam-height)),
+      29.186% calc(100% - 0.39981 * var(--home-seam-height)),
+      27.292% calc(100% - 0.40451 * var(--home-seam-height)),
+      25.462% calc(100% - 0.41496 * var(--home-seam-height)),
+      23.691% calc(100% - 0.43015 * var(--home-seam-height)),
+      21.973% calc(100% - 0.44904 * var(--home-seam-height)),
+      20.301% calc(100% - 0.47061 * var(--home-seam-height)),
+      18.670% calc(100% - 0.49384 * var(--home-seam-height)),
+      17.073% calc(100% - 0.51770 * var(--home-seam-height)),
+      15.503% calc(100% - 0.54118 * var(--home-seam-height)),
+      13.956% calc(100% - 0.56324 * var(--home-seam-height)),
+      12.424% calc(100% - 0.58287 * var(--home-seam-height)),
+      10.902% calc(100% - 0.59904 * var(--home-seam-height)),
+      9.384% calc(100% - 0.61073 * var(--home-seam-height)),
+      7.862% calc(100% - 0.61691 * var(--home-seam-height)),
+      6.332% calc(100% - 0.61656 * var(--home-seam-height)),
+      4.787% calc(100% - 0.60866 * var(--home-seam-height)),
+      3.221% calc(100% - 0.59219 * var(--home-seam-height)),
+      1.627% calc(100% - 0.56611 * var(--home-seam-height)),
+      0.000% calc(100% - 0.52941 * var(--home-seam-height))
+    );
+  }
+
+  .home-guidance-mobile-seam {
+    margin-top: calc(-1 * var(--home-seam-height));
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .home-about-mobile-seam,
+  .home-guidance-mobile-seam {
+    --home-seam-height: 100px;
+  }
+}
+
+/* Scrollbars — Janczak i Synowie.
+   Give the document viewport explicit settings (not only :where(*)).
+   Chrome/Edge/Firefox use scrollbar-color and scrollbar-width;
+   Safari and older Chromium use ::-webkit-scrollbar. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #a9946c #14231d;
+}
+
+/* Apply to actual scroll containers, including the CMS sidebar. */
+body,
+*:not(html) {
+  scrollbar-width: thin;
+  scrollbar-color: #a9946c transparent;
+}
+
+/* Explicit root selector prevents the document scrollbar from inheriting
+   the transparent inner-panel track. */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: #14231d;
+}
+
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: #a9946c;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: #dfc494;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Preserve the carousel components that explicitly hide their scrollbar. */
+[class*="scrollbar-width:none"],
+[class*="scrollbar-width: none"] {
+  scrollbar-width: none;
+}
+[class*="scrollbar-width:none"]::-webkit-scrollbar,
+[class*="scrollbar-width: none"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Document scrollbar — neutral palette on the public-facing pages.
+   Style the viewport root directly: do not depend on the public header DOM. */
+html {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #686868;
+  border: 3px solid #121212;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #939393;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:active {
+  background: #b2b2b2;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+html::-webkit-scrollbar-corner {
+  background: #121212;
+}
+
+/* Firefox fallback; in Chrome/Edge the WebKit selectors above are used. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #686868 #121212;
+  }
+}
+
+/* Admin viewport: keep its previous dark-green / champagne scrollbar.
+   Its inner navigation scrollbar already retains the original global style. */
+html:has([data-admin-root]) {
+  scrollbar-width: thin;
+  scrollbar-color: #a9946c #14231d;
+}
+
+html:has([data-admin-root])::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html:has([data-admin-root])::-webkit-scrollbar-track {
+  background: #14231d;
+}
+
+html:has([data-admin-root])::-webkit-scrollbar-thumb {
+  background: #a9946c;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+html:has([data-admin-root])::-webkit-scrollbar-thumb:hover {
+  background: #dfc494;
+  background-clip: padding-box;
+}
+
+html:has([data-admin-root])::-webkit-scrollbar-corner {
+  background: transparent;
+}

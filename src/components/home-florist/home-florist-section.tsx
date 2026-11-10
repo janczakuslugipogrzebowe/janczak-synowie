@@ -94,7 +94,7 @@ export default function HomeFloristSection({
         className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-[#06100c]/50 via-transparent to-[#06100c]/15"
       />
       <div
-        className={`relative mx-auto grid w-[min(90%,1680px)] items-center gap-[calc(clamp(2rem,4vw,6rem)*var(--florist-gap))] pb-[clamp(8rem,11vw,15rem)] ${joinsServices ? "pt-[calc(clamp(48px,6.9vw,140px)+clamp(4rem,6vw,7rem))]" : "pt-[clamp(6rem,9vw,12rem)]"} lg:min-h-[clamp(630px,54vw,850px)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] 3xl:w-[min(88%,2200px)] 3xl:min-h-[900px] 3xl:gap-[clamp(5rem,7vw,12rem)] 4xl:w-[min(85%,3000px)]`}
+        className={`relative mx-auto grid w-[min(90%,1680px)] items-center gap-[calc(clamp(2rem,4vw,6rem)*var(--florist-gap))] pb-[clamp(8rem,11vw,15rem)] ${joinsServices ? "pt-[calc(clamp(48px,6.9vw,140px)+clamp(4rem,6vw,7rem))]" : "pt-[clamp(6rem,9vw,12rem)]"} md:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)] md:gap-x-8 md:gap-y-6 md:pb-[clamp(7rem,10vw,12rem)] lg:min-h-[clamp(630px,54vw,850px)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] 3xl:w-[min(88%,2200px)] 3xl:min-h-[900px] 3xl:gap-[clamp(5rem,7vw,12rem)] 4xl:w-[min(85%,3000px)]`}
       >
         <div className="relative max-w-[min(100%,650px)] 3xl:max-w-[940px]">
           <motion.p
@@ -131,7 +131,7 @@ export default function HomeFloristSection({
               </span>
             ) : (
               <Link
-                href={data.buttonHref}
+                href={data.buttonHref === "/oferta" ? "/oferta#kwiaciarnia" : data.buttonHref}
                 className="group inline-flex min-h-13 items-center justify-center gap-4 rounded-full bg-champagne px-7 py-3 font-bold text-forest-deep shadow-[0_14px_35px_-18px_rgba(0,0,0,.6)] transition-[transform,background-color,box-shadow] duration-300 hover:-translate-y-1 hover:bg-[#f1dbaf] hover:shadow-[0_17px_40px_-17px_rgba(0,0,0,.6)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 {data.buttonLabel}
@@ -146,9 +146,9 @@ export default function HomeFloristSection({
         </div>
         <motion.div
           {...reveal(0.16)}
-          className="relative w-full max-w-[520px] justify-self-end 3xl:max-w-[680px]"
+          className="relative w-full max-w-[520px] justify-self-start md:justify-self-end 3xl:max-w-[680px]"
         >
-          <ul className="divide-y divide-champagne/20 border-y border-champagne/20 bg-[#08140d]/25 px-[clamp(.5rem,1vw,1.3rem)] backdrop-blur-[2px] lg:bg-transparent lg:backdrop-blur-0">
+          <ul className="divide-y divide-champagne/20 border-y border-champagne/20 bg-[#08140d]/25 px-[clamp(.5rem,1vw,1.3rem)] backdrop-blur-[2px] md:px-2 md:backdrop-blur-[2px] lg:bg-transparent lg:backdrop-blur-0">
             {data.features.map((feature, index) => {
               const Icon = FEATURE_ICONS[index];
               return (

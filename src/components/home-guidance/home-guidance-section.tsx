@@ -50,7 +50,8 @@ export default function HomeGuidanceSection({
     "--guide-step-size": val(1, data.stepsScale, "rem"),
     "--guide-spacing": data.spacingScale / 100,
     // Clip the whole section, including its photo, to one continuous upper curve.
-    clipPath: "url(#home-guidance-top-wave)",
+    // On smaller screens the objectBoundingBox path stretched with section height.
+    // Apply the original curve only at desktop widths.
     ...(followedByServices
       ? {
           "--guidance-bottom-wave-height": "clamp(50px,6.5vw,135px)",
@@ -92,7 +93,7 @@ export default function HomeGuidanceSection({
       <section
         aria-labelledby="home-guidance-title"
         style={vars}
-        className={`@container/guidance relative isolate z-30 overflow-hidden bg-forest-deep text-ivory ${preview ? "" : "-mt-[clamp(3.25rem,5vw,5.75rem)]"}`}
+        className={`@container/guidance relative isolate z-30 overflow-hidden bg-forest-deep text-ivory ${preview ? "" : "home-guidance-mobile-seam"} lg:[clip-path:url(#home-guidance-top-wave)] ${preview ? "" : "lg:-mt-[clamp(3.25rem,5vw,5.75rem)]"}`}
       >
         <Image
           src={data.imageUrl}

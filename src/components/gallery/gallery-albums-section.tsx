@@ -35,7 +35,7 @@ export default function GalleryAlbumsSection({
           </p>
         </header>
         {active.length ? (
-          <div className="grid gap-5 md:grid-cols-2 3xl:gap-9">
+          <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5 md:grid-cols-2 3xl:gap-9">
             {active.map((a) => (
               <GalleryAlbumCard
                 key={a.id}

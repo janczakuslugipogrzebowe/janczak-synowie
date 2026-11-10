@@ -110,7 +110,7 @@ export function OfferFloristSection({ data }: { data: OfferFlorist }) {
     <section
       id="kwiaciarnia"
       aria-labelledby="offer-florist-heading"
-      className="bg-[#e9ebe3] py-[clamp(5rem,8vw,9rem)]"
+      className="scroll-mt-16 bg-[#e9ebe3] py-[clamp(5rem,8vw,9rem)]"
     >
       <SubpageContainer className="grid items-center gap-[clamp(2.5rem,5vw,7rem)] lg:grid-cols-[.92fr_1.08fr]">
         <div className="relative min-h-[320px] overflow-hidden rounded-[1.4rem] bg-[#d9e1d5] shadow-[0_20px_60px_-37px_rgba(27,42,29,.33)] lg:min-h-[560px]">

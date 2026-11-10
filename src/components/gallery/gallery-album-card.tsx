@@ -6,7 +6,7 @@ export default function GalleryAlbumCard({ album, count }: { album: GalleryAlbum
   return (
     <Link
       href={`/galeria/${album.slug}`}
-      className="group relative isolate block aspect-[1.75/1] min-h-[245px] overflow-hidden rounded-[14px] border border-[#bca983]/35 bg-[#193027] shadow-[13px_17px_35px_-27px_rgba(29,30,20,.48)] outline-offset-4 transition-transform duration-500 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-[#a88753]"
+      className="group relative isolate block aspect-[1.3/1] w-full min-w-0 max-w-full overflow-hidden rounded-[14px] border border-[#bca983]/35 bg-[#193027] shadow-[13px_17px_35px_-27px_rgba(29,30,20,.48)] outline-offset-4 transition-transform duration-500 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-[#a88753] sm:aspect-[1.5/1] xl:aspect-[1.75/1]"
     >
       <Image
         src={album.coverUrl}
@@ -17,8 +17,8 @@ export default function GalleryAlbumCard({ album, count }: { album: GalleryAlbum
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#08120d]/90 via-[#0b1711]/25 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-[#fbf7ee] sm:p-8">
-        <div>
-          <h3 className="font-display text-[clamp(1.65rem,2.7vw,2.7rem)] leading-none">{album.title}</h3>
+        <div className="min-w-0 flex-1">
+          <h3 className="break-words font-display text-[clamp(1.65rem,2.7vw,2.7rem)] leading-none">{album.title}</h3>
           <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#f4ebdb]/85 sm:text-sm">
             {album.description}
           </p>

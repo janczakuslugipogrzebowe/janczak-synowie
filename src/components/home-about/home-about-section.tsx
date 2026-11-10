@@ -59,7 +59,7 @@ export default function HomeAboutSection({
       <section
         aria-labelledby="home-about-title"
         style={style}
-        className="@container/about relative isolate overflow-hidden bg-ivory pt-[clamp(3.5rem,6vw,6rem)] text-[#1c2a21]"
+        className={`@container/about relative isolate overflow-hidden bg-ivory ${preview ? "" : "home-about-mobile-seam"} pt-[clamp(3.5rem,6vw,6rem)] text-[#1c2a21]`}
       >
         <div
           className="pointer-events-none absolute inset-y-0 right-0 hidden h-full lg:block lg:w-[var(--about-photo-width)]"
@@ -133,13 +133,13 @@ export default function HomeAboutSection({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#14241c]/20 to-transparent" />
         </div>
-        {showBottomWave && (
+        {(showBottomWave || !preview) && (
           <svg
             aria-hidden="true"
             focusable="false"
             viewBox="0 0 1440 170"
             preserveAspectRatio="none"
-            className="pointer-events-none absolute bottom-[-1px] left-0 z-20 h-[72px] w-full fill-[#14241c] sm:h-[100px] lg:h-[clamp(100px,8vw,170px)]"
+            className={`pointer-events-none absolute bottom-[-1px] left-0 z-20 h-[72px] w-full fill-[#14241c] sm:h-[100px] lg:h-[clamp(100px,8vw,170px)] ${showBottomWave ? "" : "hidden"}`}
           >
             <path d="M0 80 C158 32 278 116 478 100 C678 84 772 37 962 79 C1104 110 1301 121 1440 50 L1440 170 L0 170Z" />
           </svg>

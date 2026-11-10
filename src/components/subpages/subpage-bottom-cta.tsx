@@ -45,7 +45,7 @@ export default function SubpageBottomCta({
             {data.description}
           </p>
         </div>
-        <div className="w-full max-w-[500px] justify-self-start border-t border-[#E6C991]/45 pt-7 lg:justify-self-end">
+        <div className="w-full max-w-[500px] justify-self-start border-t border-[#E6C991]/45 pt-7 max-xl:flex max-xl:flex-col max-xl:items-start lg:justify-self-end">
           <p className="text-xs font-bold uppercase tracking-[.22em] text-[#E6C991]">Pomoc całodobowa</p>
           <a
             href={`tel:${normalizePhone(settings.primaryPhone)}`}

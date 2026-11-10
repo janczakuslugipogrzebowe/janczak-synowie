@@ -148,7 +148,7 @@ export default function HomeContactSection({
         </motion.div>
 
         <div
-          className={`mx-auto mt-[calc(clamp(3rem,5vw,7rem)*var(--contact-spacing-scale))] grid max-w-[1470px] grid-cols-1 gap-x-6 gap-y-9 sm:grid-cols-2 ${
+          className={`mx-auto mt-[calc(clamp(3rem,5vw,7rem)*var(--contact-spacing-scale))] grid w-full max-w-[480px] grid-cols-1 gap-x-6 gap-y-9 sm:max-w-[1470px] sm:grid-cols-2 ${
             items.length === 4
               ? "xl:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,1.4fr)]"
               : items.length === 2
@@ -163,9 +163,9 @@ export default function HomeContactSection({
             const displayLabel =
               at > 0 ? (
                 <>
-                  <span className="inline-block max-w-full break-all">{label.slice(0, at + 1)}</span>
+                  <span>{label.slice(0, at + 1)}</span>
                   <wbr />
-                  <span className="inline-block max-w-full break-all">{label.slice(at + 1)}</span>
+                  <span>{label.slice(at + 1)}</span>
                 </>
               ) : (
                 label
@@ -180,7 +180,7 @@ export default function HomeContactSection({
             return (
               <motion.div key={id} {...animation(0.08 + index * 0.075)} className="min-w-0">
                 {/* One direct child prevents unkeyed child arrays in motion/react. */}
-                <div className="flex min-w-0 items-center justify-center gap-4 text-left lg:gap-5">
+                <div className="flex min-w-0 items-center justify-start gap-4 text-left lg:gap-5 xl:justify-center">
                   <span
                     className="flex size-[calc(clamp(2.75rem,3.5vw,4.25rem)*var(--contact-icon-scale))] shrink-0 items-center justify-center rounded-full border border-[#e1c38a]/55 bg-[#0d1e16]/35 text-[#e8cf9d]"
                     aria-hidden="true"
@@ -191,7 +191,7 @@ export default function HomeContactSection({
                     {href && !preview ? (
                       <a
                         href={href}
-                        className={`cursor-pointer ${labelClass} ${id === "email" ? "inline-block max-w-full" : "break-words"} hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#dfc48b]`}
+                        className={`cursor-pointer ${labelClass} break-words hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#dfc48b]`}
                       >
                         {displayLabel}
                       </a>

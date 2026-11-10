@@ -28,7 +28,7 @@ export const DEFAULT_HOME_FLORIST: HomeFloristContent = {
   description:
     "Prowadzimy również własną kwiaciarnię Zielona Przystań. Tworzymy kompozycje kwiatowe na różne okazje, a także wieńce, wiązanki i dekoracje pogrzebowe. Dzięki temu możemy zadbać o organizację pożegnania i jego oprawę florystyczną w jednym miejscu.",
   buttonLabel: "Poznaj ofertę kwiaciarni",
-  buttonHref: "/oferta",
+  buttonHref: "/oferta#kwiaciarnia",
   imageUrl: "/kwiaciarnia-home.png",
   imagePositionX: 50,
   imagePositionY: 50,

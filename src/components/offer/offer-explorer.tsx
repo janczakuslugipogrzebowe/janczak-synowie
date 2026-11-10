@@ -240,6 +240,7 @@ export default function OfferExplorer({
   );
   const reduced = Boolean(useReducedMotion());
   const tabs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const categoryNav = useRef<HTMLDivElement>(null);
   const previouslySelected = useRef<string | undefined>(firstId);
   const scrollTarget = useRef<string | null>(null);
   const servicesGrid = useRef<HTMLDivElement>(null);
@@ -364,7 +365,9 @@ export default function OfferExplorer({
       const element = document.getElementById(target);
       if (!element) return;
       const header = window.matchMedia("(min-width: 768px)").matches ? 88 : 78;
-      const offset = header + 94;
+      // Mobile category navigation is a two-column grid, not a horizontal scroller.
+      // Account for its real height so deep-links are not hidden behind the sticky tabs.
+      const offset = header + (categoryNav.current?.offsetHeight ?? 78) + 16;
       const top = element.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top: Math.max(0, top), behavior: reduced ? "instant" : "smooth" });
     });
@@ -373,11 +376,15 @@ export default function OfferExplorer({
 
   useEffect(() => {
     if (previouslySelected.current !== active?.id) {
-      tabs.current[active?.id ?? ""]?.scrollIntoView({
-        block: "nearest",
-        inline: "nearest",
-        behavior: "auto",
-      });
+      // Only desktop/tablet has a horizontally scrollable tab strip.
+      // Calling scrollIntoView on the mobile grid would unexpectedly move the page.
+      if (window.matchMedia("(min-width: 640px)").matches) {
+        tabs.current[active?.id ?? ""]?.scrollIntoView({
+          block: "nearest",
+          inline: "nearest",
+          behavior: "auto",
+        });
+      }
     }
     previouslySelected.current = active?.id;
   }, [active?.id]);
@@ -391,7 +398,8 @@ export default function OfferExplorer({
             0,
             el.getBoundingClientRect().top +
               window.scrollY -
-              (window.matchMedia("(min-width: 768px)").matches ? 180 : 168),
+              ((window.matchMedia("(min-width: 768px)").matches ? 88 : 78) +
+                (categoryNav.current?.offsetHeight ?? 78) + 16),
           ),
           behavior: reduced ? "instant" : "smooth",
         });
@@ -449,6 +457,7 @@ export default function OfferExplorer({
       {categories.length > 0 ? (
         <>
           <div
+            ref={categoryNav}
             className="sticky top-[78px] z-30 border-y border-[#dfd4c2] bg-[#f8f4ec]/95 shadow-[0_16px_35px_-35px_rgba(18,43,26,.55)] backdrop-blur-xl md:top-[88px]"
             aria-label="Nawigacja po kategoriach oferty"
           >
@@ -456,7 +465,7 @@ export default function OfferExplorer({
               <div
                 role="tablist"
                 aria-label="Kategorie usług"
-                className="flex min-w-0 flex-1 snap-x gap-2 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="grid min-w-0 flex-1 grid-cols-2 gap-2 py-3 max-[359px]:grid-cols-1 sm:flex sm:snap-x sm:overflow-x-auto sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden"
               >
                 {categories.map((category, index) => (
                   <button
@@ -472,7 +481,7 @@ export default function OfferExplorer({
                     tabIndex={category.id === active?.id ? 0 : -1}
                     onKeyDown={(event) => onTabKey(event, index)}
                     onClick={() => setCategory(category.id)}
-                    className={`relative flex min-h-11 shrink-0 snap-start items-center gap-2.5 whitespace-nowrap rounded-full px-4 py-2 text-[.84rem] font-semibold transition-[color,background,border-color] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a88b5e] sm:px-5 ${category.id === active?.id ? "bg-[#183729] text-[#fff9ef] shadow-[0_8px_18px_-12px_#12291c]" : "border border-[#e1d4c2] bg-[#fffdf9]/75 text-[#36503e] hover:border-[#bda783] hover:bg-white"}`}
+                    className={`relative flex min-h-12 min-w-0 w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-[.77rem] leading-snug font-semibold whitespace-normal break-words transition-[color,background,border-color] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a88b5e] sm:min-h-11 sm:w-auto sm:shrink-0 sm:snap-start sm:gap-2.5 sm:whitespace-nowrap sm:rounded-full sm:px-5 sm:py-2 sm:text-[.84rem] ${category.id === active?.id ? "bg-[#183729] text-[#fff9ef] shadow-[0_8px_18px_-12px_#12291c]" : "border border-[#e1d4c2] bg-[#fffdf9]/75 text-[#36503e] hover:border-[#bda783] hover:bg-white"}`}
                   >
                     <span
                       aria-hidden="true"

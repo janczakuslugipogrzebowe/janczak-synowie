@@ -51,7 +51,7 @@ export default async function Home() {
   return (
     <main id="main" className="min-h-dvh bg-forest-deep">
       <HeroSection data={hero} settings={settings} showWave={false} />
-      <div className="relative z-10 -mt-[clamp(3.25rem,5vw,5.75rem)]">
+      <div className="relative z-40 -mt-[clamp(3.25rem,5vw,5.75rem)] lg:z-10">
         <HomeAboutSection data={about} showBottomWave={false} />
       </div>
       <HomeGuidanceSection data={guidance} settings={settings} followedByServices />

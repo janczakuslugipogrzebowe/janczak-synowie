@@ -11,7 +11,7 @@ test("defaults keep approved florist texts and image path", () => {
   assert.deepEqual(parseHomeFlorist(DEFAULT_HOME_FLORIST), DEFAULT_HOME_FLORIST);
   assert.equal(DEFAULT_HOME_FLORIST.imageUrl, "/kwiaciarnia-home.png");
   assert.equal(DEFAULT_HOME_FLORIST.features.length, 3);
-  assert.equal(DEFAULT_HOME_FLORIST.buttonHref, "/oferta");
+  assert.equal(DEFAULT_HOME_FLORIST.buttonHref, "/oferta#kwiaciarnia");
 });
 test("reject unexpected fields and tampered feature data", () => {
   assert.throws(() => parseHomeFlorist({ ...DEFAULT_HOME_FLORIST, uid: "admin" }));
